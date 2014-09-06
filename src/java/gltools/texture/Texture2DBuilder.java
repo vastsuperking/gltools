@@ -16,7 +16,6 @@ public class Texture2DBuilder {
 	
 	private ByteBuffer m_data = null;
 
-	//TODO: Update to code standard
 	public Texture2DBuilder setUnit(int unit) { m_unit = unit; return this; }
 	public Texture2DBuilder setTarget(TextureTarget target) { m_target = target; return this; }
 	public Texture2DBuilder setFormat(TextureFormat format) { m_format = format; return this; }

@@ -1,6 +1,7 @@
 package gltools.shader;
 
 import gltools.vector.Matrix2f;
+import gltools.vector.Matrix3f;
 import gltools.vector.Matrix4f;
 import gltools.vector.Vector;
 import gltools.vector.Vector2f;
@@ -27,6 +28,7 @@ public abstract class Input {
 	public abstract void setValue(Vector3f val);
 	public abstract void setValue(Vector4f val);
 	public abstract void setValue(Matrix2f val);
+	public abstract void setValue(Matrix3f val);
 	public abstract void setValue(Matrix4f val);
 	
 	public void setValue(DataType type, Vector v) {
@@ -45,6 +47,7 @@ public abstract class Input {
 		case VEC3: setValue((Vector3f) o); break;
 		case VEC4: setValue((Vector4f) o); break;
 		case MAT2: setValue((Matrix2f) o); break;
+		case MAT3: setValue((Matrix3f) o); break;
 		case MAT4: setValue((Matrix4f) o); break;
 		}
 	}

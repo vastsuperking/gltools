@@ -1,6 +1,5 @@
 package glextra.material;
 
-import gltools.GLMatrix4f;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
@@ -9,6 +8,7 @@ import gltools.shader.Program.ProgramValidateException;
 import gltools.shader.Shader;
 import gltools.shader.Shader.ShaderCompileException;
 import gltools.shader.ShaderSource;
+import gltools.utils.Loadable;
 
 import java.util.HashMap;
 
@@ -17,12 +17,13 @@ public class Technique {
 	private Program m_program;
 
 	private HashMap<InputUsage, String> m_defines = new HashMap<InputUsage, String>();
-	private boolean m_needsReload = false;
+	private boolean m_needsRecompile = false;
 	
 	public Technique(String name, Program program) { 
 		m_name = name;
 		m_program = program;
 	}
+	public boolean needsRecompile() { return m_needsRecompile; }
 	public Program getProgram() { return m_program; }
 	public String getName() { return m_name; }
 	
@@ -33,20 +34,19 @@ public class Technique {
 	public void addDefine(InputUsage usage, String define) {
 		m_defines.put(usage, define);
 		//We could possibly need a reload
-		m_needsReload = true;
+		m_needsRecompile = true;
 	}
 	
 	public void parameterChanged(String param) {
 		//TODO: Only need reload if define has gone from on to off
 		//or off to on
-		if (m_defines.containsKey(param)) m_needsReload = true;
+		if (m_defines.containsKey(param)) m_needsRecompile = true;
 	}
 	
 	/**
-	 * Will load the technique, not the parameters
+	 * Will recompile the technique if need be
 	 */
-	public void load(HashMap<String, MatParam> params) {
-		if (!m_needsReload) return;
+	public void recompile(HashMap<String, MatParam> params) {
 		for (Shader s : m_program.getShaders()) {
 			//Setup shader source and defines
 			ShaderSource source = s.getSource();
@@ -78,21 +78,13 @@ public class Technique {
 		}
 	}
 	
-	public void bind(HashMap<String, MatParam> params) {
-		//make sure the program is loaded
-		load(params);
+	public void bind(HashMap<String, MatParam> params, HashMap<String, Loadable> globals) {
+		//make sure the program is compiled correctly
+		if (m_needsRecompile) recompile(params);
 		m_program.bind();
-		//Set the params
-		for (MatParam p : params.values()) {
-			p.load();
-		}
-		//Load the matrices
-		//Eventually, these will be part of the
-		//Global params
-		GLMatrix4f.s_model.load();
-		GLMatrix4f.s_normal.load();
-		GLMatrix4f.s_projection.load();
-		GLMatrix4f.s_view.load();
+
+		load(params, globals);
+		
 		try {
 			m_program.validate();
 		} catch (ProgramValidateException e) {
@@ -105,6 +97,17 @@ public class Technique {
 			if (p instanceof MatTexParam) {
 				((MatTexParam) p).getValue().unbind();
 			}
+		}
+	}
+	public void load(HashMap<String, MatParam> params, HashMap<String, Loadable> globals) {
+		//Set the params
+		for (MatParam p : params.values()) {
+			p.load();
+		}
+		//Now globals
+		for (Loadable l : globals.values()) {
+			System.out.println("Loading: " + l);
+			l.load();
 		}
 	}
 }

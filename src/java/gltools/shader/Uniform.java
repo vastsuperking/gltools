@@ -1,6 +1,7 @@
 package gltools.shader;
 
 import gltools.vector.Matrix2f;
+import gltools.vector.Matrix3f;
 import gltools.vector.Matrix4f;
 import gltools.vector.Vector2f;
 import gltools.vector.Vector3f;
@@ -69,6 +70,14 @@ public class Uniform extends Input {
 		mat.storeTranspose(buffer);
 		buffer.flip();
 		GL20.glUniformMatrix2(getID(), false, buffer);
+	}
+	public void setValue(Matrix3f mat) {
+		if (!isActive()) return;
+		checkProgBound();
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(9);
+		mat.storeTranspose(buffer);
+		buffer.flip();
+		GL20.glUniformMatrix3(getID(), false, buffer);
 	}
 	public void setValue(Matrix4f mat) {
 		if (!isActive()) return;

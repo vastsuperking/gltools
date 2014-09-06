@@ -1,12 +1,13 @@
 package gltools.display;
 
-import gltools.GLMatrix4f;
+import gltools.utils.GLMatrix4f;
+import gltools.vector.Matrix3f;
 import gltools.vector.Matrix4f;
 import gltools.vector.MatrixFactory;
 import gltools.vector.Vector3f;
 import gltools.vector.Vector4f;
 
-public class Camera {
+public class Camera3D {
 	Vector3f m_position = new Vector3f(0f, 0f, 0f);
 
 	float m_pitch = 0f;
@@ -18,13 +19,13 @@ public class Camera {
 	public static Vector3f ROLL_NORM = new Vector3f(1.0f, 0.0f, 1.0f);
 	
 
-	public Camera(Vector3f position, float pitch, float yaw, float roll) {
+	public Camera3D(Vector3f position, float pitch, float yaw, float roll) {
 		m_position = position;
 		m_pitch = pitch;
 		m_yaw = yaw;
 		m_roll = roll;
 	}
-	public Camera() {}
+	public Camera3D() {}
 	
 	public void setX(float x) {m_position.setX(x);}
 	public void setY(float y) {m_position.setY(y);}
@@ -40,18 +41,21 @@ public class Camera {
 	public float getRoll() {return m_roll;}
 	public Vector3f getPosition() {return m_position;}
 
-	public void apply() {
-		GLMatrix4f.s_view.getMatrix().mul(MatrixFactory.createRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f)));
-		GLMatrix4f.s_view.getMatrix().mul(MatrixFactory.createRotationMatrix((float) Math.toRadians(m_yaw), new Vector3f(0f, 1f, 0f)));
+	public void apply(GLMatrix4f matrix) {
+		apply(matrix.getCurrentMatrix());
+	}
+	public void apply(Matrix4f matrix) {
+		matrix.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f)));
+		matrix.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_yaw), new Vector3f(0f, 1f, 0f)));
 		//Create a translation matrix from the position negated into a new vector
-		GLMatrix4f.s_view.getMatrix().mul(MatrixFactory.createTranslationMatrix(m_position.negate(null)));
+		matrix.mul(MatrixFactory.createTranslationMatrix3D(m_position.negate(null)));
 		//Update the view matrix
 		//GLMatrix4f.s_view.load();
 	}
 	public Matrix4f getRotateMatrix() {
 		Matrix4f mat = new Matrix4f().setIdentity();
-		mat.mul(MatrixFactory.createRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f)));
-		mat.mul(MatrixFactory.createRotationMatrix((float) Math.toRadians(m_yaw), new Vector3f(0f, 1f, 0f)));
+		mat.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f)));
+		mat.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_yaw), new Vector3f(0f, 1f, 0f)));
 		return mat;
 	}
 	public Vector3f getViewDirection() {

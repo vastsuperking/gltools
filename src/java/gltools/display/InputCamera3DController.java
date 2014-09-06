@@ -12,7 +12,7 @@ import gltools.vector.Vector2f;
  * (Essentially make the camera a "Flycam")
  * TODO: Rewrite using InputManager
  */
-public class InputCameraController implements CameraController {
+public class InputCamera3DController implements Camera3DController {
 	private Keyboard m_keyboard;
 	private Mouse m_mouse;
 	private int m_dx;
@@ -21,7 +21,7 @@ public class InputCameraController implements CameraController {
 	private float m_mouseSensitivity;
 	
 	
-	public InputCameraController(Keyboard keyboard, Mouse m, float speed, float mouseSensitivity) {
+	public InputCamera3DController(Keyboard keyboard, Mouse m, float speed, float mouseSensitivity) {
 		m_keyboard = keyboard;
 		m_mouse = m;
 		m_moveSpeed = speed;
@@ -58,38 +58,38 @@ public class InputCameraController implements CameraController {
 	public void setKeyboard(Keyboard keyboard) {
 		m_keyboard = keyboard;
 	}
-	private void up(Camera cam, float amount) {
+	private void up(Camera3D cam, float amount) {
 		cam.getPosition().y += amount;
 	}
-	private void down(Camera cam, float amount) {
+	private void down(Camera3D cam, float amount) {
 		cam.getPosition().y -= amount;
 	}
-	private void yaw(Camera cam, float amount) {
+	private void yaw(Camera3D cam, float amount) {
 		cam.setYaw(cam.getYaw() + amount);
 	}
-	private void pitch(Camera cam, float amount) {
+	private void pitch(Camera3D cam, float amount) {
 		cam.setPitch(cam.getPitch() + amount);
 	}
-	private void walkForward(Camera cam, float distance) {
+	private void walkForward(Camera3D cam, float distance) {
 		cam.getPosition().x += distance * (float)Math.sin(Math.toRadians(cam.getYaw()));
 		cam.getPosition().z -= distance * (float)Math.cos(Math.toRadians(cam.getYaw()));
 	}
-	private void walkBackwards(Camera cam, float distance) {
+	private void walkBackwards(Camera3D cam, float distance) {
 		cam.getPosition().x -= distance * (float)Math.sin(Math.toRadians(cam.getYaw()));
 		cam.getPosition().z += distance * (float)Math.cos(Math.toRadians(cam.getYaw()));
 	}
 
-	private void strafeLeft(Camera cam, float distance) {
+	private void strafeLeft(Camera3D cam, float distance) {
 		cam.getPosition().x += distance * (float)Math.sin(Math.toRadians(cam.getYaw() - 90));
 		cam.getPosition().z -= distance * (float)Math.cos(Math.toRadians(cam.getYaw() - 90));
 	}
 
-	private void strafeRight(Camera cam, float distance) {
+	private void strafeRight(Camera3D cam, float distance) {
 		cam.getPosition().x += distance * (float)Math.sin(Math.toRadians(cam.getYaw() + 90));
 		cam.getPosition().z -= distance * (float)Math.cos(Math.toRadians(cam.getYaw() + 90));
 	}
 	
-	public void update(Camera camera, long deltaMillis) {
+	public void update(Camera3D camera, long deltaMillis) {
 		//TODO: Find a way to use the Mouse class to encompass this feature
 		
 		yaw(camera, m_dx * m_mouseSensitivity);

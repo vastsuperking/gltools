@@ -1,6 +1,7 @@
 package gltools.shader;
 
 import gltools.vector.Matrix2f;
+import gltools.vector.Matrix3f;
 import gltools.vector.Matrix4f;
 import gltools.vector.Vector2f;
 import gltools.vector.Vector3f;
@@ -71,10 +72,9 @@ public class Attribute extends Input {
 		checkBound();
 		GL20.glVertexAttrib4f(getID(), vec.getX(), vec.getY(), vec.getZ(), vec.getW());
 	}
-	@Deprecated
-	public void setValue(Matrix2f vec) { throw new RuntimeException("Cannot set an attribute to a mat2"); }
-	@Deprecated
-	public void setValue(Matrix4f vec) { throw new RuntimeException("Cannot set an attribute to a mat4"); }
+	public void setValue(Matrix2f mat) { throw new RuntimeException("Cannot set an attribute to a mat2"); }
+	public void setValue(Matrix3f mat) { throw new RuntimeException("Cannot set an attribute to a mat3"); }
+	public void setValue(Matrix4f mat) { throw new RuntimeException("Cannot set an attribute to a mat4"); }
 	
 	public void enable() {
 		GL20.glEnableVertexAttribArray(getID());

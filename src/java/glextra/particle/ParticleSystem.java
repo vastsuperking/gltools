@@ -1,6 +1,6 @@
 package glextra.particle;
 
-import gltools.display.Camera;
+import gltools.display.Camera3D;
 import gltools.vector.Vector3f;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class ParticleSystem {
 		m_technique.render(this);
 	}
 	
-	public void update(long deltaMillis, Camera cam) {
+	public void update(long deltaMillis, Camera3D cam) {
 		Vector3f camPos = cam.getPosition();
 		Vector3f viewDir = cam.getViewDirection();
 		

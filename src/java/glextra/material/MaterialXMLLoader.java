@@ -66,7 +66,7 @@ public class MaterialXMLLoader {
 		}
 		
 		mat.selectTechnique();
-		mat.load();
+		mat.ready();
 		return mat;
 	}
 	private static MatParam s_parseParam(Element p, ResourceLocator locator) throws IOException {

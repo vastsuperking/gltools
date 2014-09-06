@@ -4,8 +4,9 @@ import gltools.shader.DataType;
 import gltools.shader.Input;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
+import gltools.utils.Loadable;
 
-public class MatParam {
+public class MatParam implements Loadable {
 	protected DataType m_type = null;
 	protected String m_name = null;
 	protected InputUsage m_usage = null;

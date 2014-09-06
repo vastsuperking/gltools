@@ -111,7 +111,14 @@ public class Matrix4f extends Matrix {
 	public Vector4f transform(Vector4f right, Vector4f dest) {
 		return transform(this, right, dest);
 	}
-		
+	
+	public Matrix3f getInnerMat3f() {
+		float[][] inner = {{m00, m01, m02},
+							{m10, m11, m12},
+							{m20, m21, m22}};
+		return new Matrix3f(inner);
+	}
+	
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[").append(m00).append(", ").append(m01).append(", ")

@@ -1,6 +1,5 @@
 package glextra.particle;
 
-import gltools.GLMatrix4f;
 import gltools.Mode;
 import gltools.ResourceLocator.ClasspathResourceLocator;
 import gltools.buffer.AttribArray;
@@ -13,6 +12,7 @@ import gltools.shader.ProgramXMLLoader;
 import gltools.shader.Uniform;
 import gltools.texture.Texture1D;
 import gltools.texture.Texture2D;
+import gltools.utils.GLMatrix4f;
 import gltools.vector.Vector3f;
 
 import java.nio.FloatBuffer;
@@ -34,6 +34,9 @@ public class PointSpriteParticleTechnique implements ParticleTechnique {
 	private VertexBuffer m_buffer = new VertexBuffer(BufferUsage.STREAM_DRAW);
 	private Geometry m_particleGeo = null;
 	private Program m_program;
+	private GLMatrix4f m_model 		 = null;
+	private GLMatrix4f m_view 		 = null;
+	private GLMatrix4f m_projection = null;
 
 	//Particle data
 	private Texture2D m_particleTexture;
@@ -50,6 +53,12 @@ public class PointSpriteParticleTechnique implements ParticleTechnique {
 	public void setSizeTexture(Texture1D sizeTex) { m_sizeTexture = sizeTex; }
 	public void setSizeFactor(float size) { m_sizeFactor = size; } 
 
+	public PointSpriteParticleTechnique(GLMatrix4f model, GLMatrix4f view, GLMatrix4f projection) {
+		m_model = model;
+		m_view = view;
+		m_projection = projection;
+	}
+	
 	@Override
 	public void init() throws Exception {
 		m_particleGeo = new Geometry();
@@ -75,10 +84,9 @@ public class PointSpriteParticleTechnique implements ParticleTechnique {
 	public void render(ParticleSystem system) {
 		m_program.bind();
 		
-		GLMatrix4f.s_projection.load();
-		GLMatrix4f.s_model.load();
-		GLMatrix4f.s_normal.load();
-		GLMatrix4f.s_view.load();
+		m_projection.load();
+		m_model.load();
+		m_view.load();
 
 		//Set point size factor
 		Program.s_getCurrent()

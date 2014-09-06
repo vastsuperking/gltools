@@ -1,4 +1,4 @@
-package gltools;
+package gltools.utils;
 
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
@@ -12,14 +12,15 @@ import java.util.Stack;
  * Combines Matrix4f and InputUsage...
  * Also contains a matrix stack for pushing and popping
  */
-public class GLMatrix4f {
+public class GLMatrix4f implements Loadable {
+	/*
 	//Temporarily in here....
 	public static GLMatrix4f s_model 		= new GLMatrix4f(InputUsage.MODEL_MATRIX); 
 	public static GLMatrix4f s_view 		= new GLMatrix4f(InputUsage.VIEW_MATRIX); 
 	public static GLMatrix4f s_projection	= new GLMatrix4f(InputUsage.PROJECTION_MATRIX); 
 	//TODO: Should be 3f, but matrix3f not yet implemented
 	public static GLMatrix4f s_normal 		= new GLMatrix4f(InputUsage.NORMAL_MATRIX);
-	
+	*/
 	private Matrix4f m_matrix = new Matrix4f();
 	private Stack<Matrix4f> m_stack = new Stack<Matrix4f>();
 	private InputUsage m_usage = null;
@@ -29,9 +30,9 @@ public class GLMatrix4f {
 		m_usage = usage;
 	}
 
-	public Matrix4f getMatrix() { return m_matrix; }
+	public Matrix4f getCurrentMatrix() { return m_matrix; }
 	public InputUsage getUsage() { return m_usage; }
-	public void setMatrix(Matrix4f mat) { m_matrix = mat; }
+	public void setCurrentMatrix(Matrix4f mat) { m_matrix = mat; }
 	public void setUsage(InputUsage usage) { m_usage = usage; }
 	 
 	public void push() {

@@ -1,6 +1,6 @@
 package gltools.extra;
 
-import gltools.display.Camera;
+import gltools.display.Camera3D;
 import gltools.vector.Vector3f;
 
 public class Billboard {
@@ -17,14 +17,14 @@ public class Billboard {
 		m_height = height;
 	}
 	
-	public Vector3f[] generate(Camera cam) {
+	public Vector3f[] generate(Camera3D cam) {
 		switch(m_mode) {
 		case MATCH_ALL: return s_generateBillboardMatchAll(cam, m_pos, m_width, m_height);
 		default: return null;
 		}
 	}
 	
-	public static Vector3f[] s_generateBillboardMatchAll(Camera cam, Vector3f pos, float width, float height) {
+	public static Vector3f[] s_generateBillboardMatchAll(Camera3D cam, Vector3f pos, float width, float height) {
 		
 		Vector3f camUp = cam.getUpDirection();
 		Vector3f camRight = cam.getRightDirection();

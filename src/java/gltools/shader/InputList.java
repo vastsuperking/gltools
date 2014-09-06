@@ -1,6 +1,7 @@
 package gltools.shader;
 
 import gltools.vector.Matrix2f;
+import gltools.vector.Matrix3f;
 import gltools.vector.Matrix4f;
 import gltools.vector.Vector2f;
 import gltools.vector.Vector3f;
@@ -99,7 +100,12 @@ public class InputList<T extends Input> extends Input implements Iterable<T> {
 			i.setValue(val);
 		}
 	}
-	
+	@Override
+	public void setValue(Matrix3f val) {
+		for (Input i : m_inputs) {
+			i.setValue(val);
+		}
+	}
 	@Override
 	public void setValue(Matrix4f val) {
 		for (Input i : m_inputs) {

@@ -2,8 +2,6 @@ package gltools.shader;
 
 
 public class InputUsage {
-	//TODO: Input typed usages: Attribute or Uniform?
-	//Maybe through generics? Or maybe through extra constructor parameter?
 	public static final InputUsage VERTEX_POSITION_3D = new InputUsage("VERTEX_POSITION", DataType.VEC3, Attribute.class);
 	public static final InputUsage VERTEX_POSITION_2D = new InputUsage("VERTEX_POSITION", DataType.VEC2, Attribute.class);
 	public static final InputUsage VERTEX_COLOR = new InputUsage("VERTEX_COLOR", DataType.VEC4, Attribute.class);
@@ -38,8 +36,7 @@ public class InputUsage {
 	public static final InputUsage MODEL_MATRIX = new InputUsage("MODEL_MATRIX", DataType.MAT4, Uniform.class);
 	public static final InputUsage VIEW_MATRIX = new InputUsage("VIEW_MATRIX", DataType.MAT4, Uniform.class);
 	public static final InputUsage PROJECTION_MATRIX = new InputUsage("PROJECTION_MATRIX", DataType.MAT4, Uniform.class);
-	//TODO: Should be mat3, but Matrix3f not yet implemented
-	public static final InputUsage NORMAL_MATRIX = new InputUsage("NORMAL_MATRIX", DataType.MAT4, Uniform.class);
+	public static final InputUsage NORMAL_MATRIX = new InputUsage("NORMAL_MATRIX", DataType.MAT3, Uniform.class);
 
 	//----------------------------------------
 	private final String m_usage;

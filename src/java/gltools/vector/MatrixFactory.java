@@ -63,12 +63,19 @@ public class MatrixFactory {//useful for creating projection matricies
 	 * Will create a translation matrix given the x y and z coordinates to translate by, given in a vector3f
 	 * @param translation the x, y, z vector with the translation
 	 */
-	public static Matrix4f createTranslationMatrix(Vector3f translation) {
+	public static Matrix4f createTranslationMatrix3D(Vector3f translation) {
 		float[][] m = {{1f, 0f, 0f, translation.getX()},
 					   {0f, 1f, 0f, translation.getY()},
 					   {0f, 0f, 1f, translation.getZ()},
 					   {0f, 0f, 0f, 1f				 }};
 		Matrix4f matrix = new Matrix4f(m);
+		return matrix;
+	}
+	public static Matrix3f createTranslationMatrix2D(Vector2f translation) {
+		float[][] m = {{1f, 0f, translation.getX()},
+					   {0f, 1f, translation.getY()},
+					   {0f, 0f, 1f				  }};
+		Matrix3f matrix = new Matrix3f(m);
 		return matrix;
 	}
 	/**
@@ -90,7 +97,7 @@ public class MatrixFactory {//useful for creating projection matricies
 	 * @param theta the rotation in radians
 	 * @param axis the axis around which to rotate
 	 */
-	public static Matrix4f createRotationMatrix(float theta, Vector3f axis) {
+	public static Matrix4f create3DRotationMatrix(float theta, Vector3f axis) {
 		float x = axis.getX();
 		float y = axis.getY();
 		float z = axis.getZ();
@@ -117,5 +124,50 @@ public class MatrixFactory {//useful for creating projection matricies
 
 		return new Matrix4f(m);
 	}
+	/**
+	 * Creates a rotation matrix around a certain axis that will rotate a point by theta radians
+	 * @param theta the rotation in radians
+	 * @param axis the axis around which to rotate
+	 */
+	public static Matrix3f create3DRotationMatrix3f(float theta, Vector3f axis) {
+		float x = axis.getX();
+		float y = axis.getY();
+		float z = axis.getZ();
+		float C = (float) Math.cos(theta);
+		float S = (float) Math.sin(theta);
+		float iC = 1 - C;
+		//Don't know why this one wasn't used...
+		//float iS = 1 - S;
+		
+		float m00 = x * x + (1 - x * x) * C;
+		float m01 = iC * x * y - z * S;
+		float m02 = iC * x * z + y * S;
+		float m10 = iC * x * y + z * S;
+		float m11 = y * y + (1 - y * y) * C;
+		float m12 = iC * y * z - x * S;
+		float m20 = iC * x * z - y * S;
+		float m21 = iC * y * z + x * S;
+		float m22 = z * z + (1 - z * z) * C;
 
+		float [][] m = {{m00, m01, m02},
+						{m10, m11, m12},
+						{m20, m21, m22}};
+
+		return new Matrix3f(m);
+	}
+	public static Matrix3f create2DRotationMatrix(float theta) {
+		float sin = (float) Math.sin(theta);
+		float cos = (float) Math.sin(theta);
+		float[][] m = {{cos,  	sin, 0},
+						{-sin, 	cos, 0},
+						{0,    	0,   1}};
+		return new Matrix3f(m);
+	}
+	public static Matrix2f create2DRotationMatrix2f(float theta) {
+		float sin = (float) Math.sin(theta);
+		float cos = (float) Math.sin(theta);
+		float[][] m = {{cos,  	sin},
+						{-sin, 	cos}};
+		return new Matrix2f(m);
+	}
 }

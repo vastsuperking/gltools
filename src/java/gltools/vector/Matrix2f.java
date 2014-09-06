@@ -10,6 +10,9 @@ public class Matrix2f extends Matrix {
 	public Matrix2f(Matrix2f src) {
 		load(src);
 	}
+	public Matrix2f(float[][] floats) {
+		load(floats);
+	}
 	
 	public float[][] toFloats() { 
 		float[][] floats = {{m00, m01},
