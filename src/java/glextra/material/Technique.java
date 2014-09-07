@@ -106,7 +106,6 @@ public class Technique {
 		}
 		//Now globals
 		for (Loadable l : globals.values()) {
-			System.out.println("Loading: " + l);
 			l.load();
 		}
 	}

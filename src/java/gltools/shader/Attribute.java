@@ -12,7 +12,6 @@ import org.lwjgl.opengl.GL20;
 public class Attribute extends Input {
 	private int m_id;
 	private Program m_program;
-	private String m_name;
 	
 	public Attribute(Program program, String name) {
 		setName(name);
@@ -26,13 +25,11 @@ public class Attribute extends Input {
 	}
 	protected Attribute() {}
 	
-	public String getName() { return m_name; }
 	public Program getProgram() { return m_program; }
 	public int getID() {return m_id;}
 	public int getIndex() { return m_id; }//index and id are the same, I hope
 
 	public void setProgram(Program p) { m_program = p; }
-	public void setName(String name) { m_name = name; } 
 	public void setID(int id) {m_id = id;}
 
 	/**
@@ -105,6 +102,11 @@ public class Attribute extends Input {
 			setActive(true);
 		}
 		m_id = id;		
+	}
+	
+	@Override
+	public String toString() {
+		return "Attribute(" + getName() + ", " + m_id + ", Active: " + isActive() + ")";
 	}
 	
 	//-------------------

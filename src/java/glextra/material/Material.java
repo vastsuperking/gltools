@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class Material {
 	private String m_name = "";
-
+	//TODO: Create GlobalParam class with InputUsage as well as string nam
 	private HashMap<String, Loadable> m_globalParameters = new HashMap<String, Loadable>();
 	private HashMap<String, MatParam> m_parameters = new HashMap<String, MatParam>();
 	private Technique m_currentTechnique = null;
@@ -29,6 +29,7 @@ public class Material {
 	public void setDefaultTechnique(Technique technique) { m_defaultTechnique = technique; }
 	public String getName() { return m_name; }
 	public Technique getDefaultTechnique() { return m_defaultTechnique; }
+	public HashMap<String, Loadable> getGlobals() { return m_globalParameters; }
 	
 	public void addTechnique(Technique technique) {
 		m_techniques.put(technique.getName(), technique);
@@ -39,7 +40,7 @@ public class Material {
 	public void addParameter(MatParam param) {
 		m_parameters.put(param.getName(), param);
 	}
-	public void setGlobalParam(String param, Loadable global) {
+	public void addGlobalParam(String param, Loadable global) {
 		if (param == null || param.equals("")) m_globalParameters.remove(param);
 		m_globalParameters.put(param, global);
 	}

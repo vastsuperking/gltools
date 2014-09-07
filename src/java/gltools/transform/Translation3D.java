@@ -19,6 +19,6 @@ public class Translation3D extends MatOp4f {
 	public Vector3f getTranslation() { return m_translate; }
 	
 	public Matrix4f getTransform() {
-		return MatrixFactory.createTranslationMatrix3D(m_translate);
+		return MatrixFactory.create3DTranslationMatrix(m_translate);
 	}
 }

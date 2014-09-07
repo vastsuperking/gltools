@@ -48,7 +48,7 @@ public class Camera3D {
 		matrix.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f)));
 		matrix.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_yaw), new Vector3f(0f, 1f, 0f)));
 		//Create a translation matrix from the position negated into a new vector
-		matrix.mul(MatrixFactory.createTranslationMatrix3D(m_position.negate(null)));
+		matrix.mul(MatrixFactory.create3DTranslationMatrix(m_position.negate(null)));
 		//Update the view matrix
 		//GLMatrix4f.s_view.load();
 	}

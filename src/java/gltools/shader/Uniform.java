@@ -115,6 +115,11 @@ public class Uniform extends Input {
 	}
 	
 	@Override
+	public String toString() {
+		return "Uniform(" + getName() + ", " + m_id + ", Active: " + isActive() + ")";
+	}
+	
+	@Override
 	public boolean equals(Object o) {
 		//If the object is a uniform and the uniform id and program id match, they are the same
 		return o instanceof Uniform && ((Uniform) o).getID() == getID() 
