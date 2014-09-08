@@ -49,13 +49,6 @@ public class Matrix3f extends Matrix {
 	public Matrix3f storeTranspose(FloatBuffer buf) {
 		return storeTranspose(this, buf);
 	}
-	
-	public Matrix3f invert() {
-		return invert(this, this);
-	}
-	public Matrix3f invert(Matrix3f dest) {
-		return invert(this, dest);
-	}
 	public Matrix3f transpose() {
 		return transpose(this, this);
 	}
@@ -74,13 +67,6 @@ public class Matrix3f extends Matrix {
 	}
 	public Matrix3f mul(Matrix3f right, Matrix3f dest) {
 		return mul(this, right, dest);
-	}
-	
-	public float determinant() {
-		float d = m00 * (m11 * m22 - m12 * m21)
-					+ m01 * (m12 * m20 - m10 * m22)
-					+ m02 * (m10 * m21 - m11 * m20);
-		return d;
 	}
 	
 	public String toString() {
@@ -183,14 +169,14 @@ public class Matrix3f extends Matrix {
 	public static Matrix3f negate(Matrix3f src, Matrix3f dest) {
 		if (dest == null) dest = new Matrix3f();
 		dest.m00 = -src.m00;
-		dest.m01 = -src.m02;
-		dest.m02 = -src.m01;
+		dest.m01 = -src.m01;
+		dest.m02 = -src.m02;
 		dest.m10 = -src.m10;
-		dest.m11 = -src.m12;
-		dest.m12 = -src.m11;
+		dest.m11 = -src.m11;
+		dest.m12 = -src.m12;
 		dest.m20 = -src.m20;
-		dest.m21 = -src.m22;
-		dest.m22 = -src.m21;
+		dest.m21 = -src.m21;
+		dest.m22 = -src.m22;
 		return dest;
 	}
 	public static Matrix3f transpose(Matrix3f src, Matrix3f dest) {
@@ -235,31 +221,33 @@ public class Matrix3f extends Matrix {
 		if (dest == null) dest = new Matrix3f();
 
 		float m00 =	left.m00 * right.m00 + 
-					left.m10 * right.m01 + 
-					left.m20 * right.m02;
-		float m01 =	left.m01 * right.m00 +
-					left.m11 * right.m01 + 
-					left.m21 * right.m02;
-		float m02 =	left.m02 * right.m00 +
-					left.m12 * right.m01 +
-					left.m22 * right.m02;
-		float m10 =	left.m00 * right.m10 +
-					left.m10 * right.m11 +
-					left.m20 * right.m12;
-		float m11 =	left.m01 * right.m10 +
+					left.m01 * right.m10 + 
+					left.m02 * right.m20;
+		float m01 =	left.m00 * right.m01 +
+					left.m01 * right.m11 + 
+					left.m02 * right.m21;
+		float m02 =	left.m00 * right.m02 +
+					left.m01 * right.m12 +
+					left.m02 * right.m22;
+		
+		float m10 =	left.m10 * right.m00 +
+					left.m11 * right.m10 +
+					left.m12 * right.m20;
+		float m11 =	left.m10 * right.m01 +
 					left.m11 * right.m11 +
-					left.m21 * right.m12;
-		float m12 =	left.m02 * right.m10 +
-					left.m12 * right.m11 +
-					left.m22 * right.m12;
-		float m20 =	left.m00 * right.m20 +
-					left.m10 * right.m21 +
-					left.m20 * right.m22;
-		float m21 =	left.m01 * right.m20 +
-					left.m11 * right.m21 +
-					left.m21 * right.m22;
-		float m22 =	left.m02 * right.m20 +
-					left.m12 * right.m21 +
+					left.m12 * right.m21;
+		float m12 =	left.m10 * right.m02 +
+					left.m11 * right.m12 +
+					left.m12 * right.m22;
+		
+		float m20 =	left.m20 * right.m00 +
+					left.m21 * right.m10 +
+					left.m22 * right.m20;
+		float m21 =	left.m20 * right.m01 +
+					left.m21 * right.m11 +
+					left.m22 * right.m21;
+		float m22 =	left.m20 * right.m02 +
+					left.m21 * right.m12 +
 					left.m22 * right.m22;
 
 		dest.m00 = m00;
@@ -273,34 +261,5 @@ public class Matrix3f extends Matrix {
 		dest.m22 = m22;
 
 		return dest;
-	}
-	public static Matrix3f invert(Matrix3f src, Matrix3f dest) {
-		float determinant = src.determinant();
-
-		if (determinant != 0) {
-			if (dest == null) dest = new Matrix3f();
-			 float determinant_inv = 1f/determinant;
-
-			 float t00 = src.m11 * src.m22 - src.m12* src.m21;
-			 float t01 = - src.m10 * src.m22 + src.m12 * src.m20;
-			 float t02 = src.m10 * src.m21 - src.m11 * src.m20;
-			 float t10 = - src.m01 * src.m22 + src.m02 * src.m21;
-			 float t11 = src.m00 * src.m22 - src.m02 * src.m20;
-			 float t12 = - src.m00 * src.m21 + src.m01 * src.m20;
-			 float t20 = src.m01 * src.m12 - src.m02 * src.m11;
-			 float t21 = -src.m00 * src.m12 + src.m02 * src.m10;
-			 float t22 = src.m00 * src.m11 - src.m01 * src.m10;
-
-			 dest.m00 = t00*determinant_inv;
-			 dest.m11 = t11*determinant_inv;
-			 dest.m22 = t22*determinant_inv;
-			 dest.m01 = t10*determinant_inv;
-			 dest.m10 = t01*determinant_inv;
-			 dest.m20 = t02*determinant_inv;
-			 dest.m02 = t20*determinant_inv;
-			 dest.m12 = t21*determinant_inv;
-			 dest.m21 = t12*determinant_inv;
-			 return dest;
-		} else return null;
 	}
 }

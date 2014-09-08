@@ -3,7 +3,8 @@ package gltools.vector;
 import java.nio.FloatBuffer;
 
 public class Matrix2f extends Matrix {
-	public float m00, m01, m10, m11;
+	public float m00, m01, 
+				  m10, m11;
 	
 	public Matrix2f() {}
 	
@@ -56,9 +57,6 @@ public class Matrix2f extends Matrix {
 	public Matrix2f negate() {
 		return negate(this, this);
 	}
-	public float determinant() {
-		return determinant(this);
-	}
 	public Matrix2f sub(Matrix2f right, Matrix2f dest) {
 		return sub(this, right, dest);
 	}
@@ -75,27 +73,15 @@ public class Matrix2f extends Matrix {
 	public Vector2f transform(Vector2f right, Vector2f dest) {
 		return transform(this, right, dest);
 	}
-	
-	public Matrix2f invert() {
-		return invert(this);
-	}
-	public Matrix2f invert(Matrix2f dest) {
-		return invert(this, dest);
-	}
-
 	public String toString() {
 		StringBuilder buf = new StringBuilder();
-		buf.append(m00).append(' ').append(m10).append(' ').append('\n');
-		buf.append(m01).append(' ').append(m11).append(' ').append('\n');
+		buf.append('[').append(m00).append(", ").append(m10).append(']').append('\n');
+		buf.append('[').append(m10).append(", ").append(m11).append(']').append('\n');
 		return buf.toString();
 	}
 	
 	public Matrix2f clone() {
 		return new Matrix2f(this);
-	}
-	
-	public static float determinant(Matrix2f mat) {
-		return mat.m00 * mat.m11 - mat.m01 * mat.m10;
 	}
 	public static Matrix2f load(Matrix2f src, Matrix2f dest) {
 		if (dest == null) dest = new Matrix2f();
@@ -169,10 +155,20 @@ public class Matrix2f extends Matrix {
 	}
 	public static Matrix2f mul(Matrix2f left, Matrix2f right, Matrix2f dest) {
 		if (dest == null) dest = new Matrix2f();
-		float m00 = left.m00 * right.m00 + left.m10 * right.m01;
-		float m01 = left.m01 * right.m00 + left.m11 * right.m01;
-		float m10 = left.m00 * right.m10 + left.m10 * right.m11;
-		float m11 = left.m01 * right.m10 + left.m11 * right.m11;
+		
+		float m00 =	left.m00 * right.m00 + 
+					left.m01 * right.m10;
+		
+		float m01 =	left.m00 * right.m01 +
+					left.m01 * right.m11;
+		
+		//Next row
+		
+		float m10 =	left.m10 * right.m00 + 
+					left.m11 * right.m10;
+		
+		float m11 =	left.m10 * right.m01 + 
+				 	left.m11 * right.m11;
 
 		dest.m00 = m00;
 		dest.m01 = m01;
@@ -182,8 +178,11 @@ public class Matrix2f extends Matrix {
 	}
 	public static Vector2f transform(Matrix2f left, Vector2f right, Vector2f dest) {
 		if (dest == null) dest = new Vector2f();
-		float x = left.m00 * right.x + left.m10 * right.y;
-		float y = left.m01 * right.x + left.m11 * right.y;
+		float x =	left.m00 * right.x + 
+					left.m01 * right.y;
+		
+		float y = 	left.m10 * right.x + 
+					left.m11 * right.y;
 
 		dest.x = x;
 		dest.y = y;
@@ -197,21 +196,5 @@ public class Matrix2f extends Matrix {
 		dest.m11 = -src.m11;
 
 		return dest;
-	}
-	public static Matrix2f invert(Matrix2f src, Matrix2f dest) {
-		float determinant = determinant(src);
-		if (determinant != 0) {
-			float determinant_inv = 1f/determinant;
-			float t00 =  src.m11 * determinant_inv;
-			float t01 = -src.m01 * determinant_inv;
-			float t11 =  src.m00 * determinant_inv;
-			float t10 = -src.m10 * determinant_inv;
-
-			dest.m00 = t00;
-			dest.m01 = t01;
-			dest.m10 = t10;
-			dest.m11 = t11;
-			return dest;
-		} else return null;
 	}
 }

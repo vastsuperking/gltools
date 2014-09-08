@@ -45,10 +45,20 @@ public class Camera3D {
 		apply(matrix.getCurrentMatrix());
 	}
 	public void apply(Matrix4f matrix) {
-		matrix.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f)));
-		matrix.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_yaw), new Vector3f(0f, 1f, 0f)));
-		//Create a translation matrix from the position negated into a new vector
+
+
+		Matrix4f pitchRot = MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f));
+		Matrix4f yawRot = MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_yaw), new Vector3f(0f, 1f, 0f));
+		System.out.println("PitchRot: \n" + pitchRot);
+		System.out.println("YawRot: \n" + yawRot);
+
+
+		matrix.mul(pitchRot);
+		matrix.mul(yawRot);
+
 		matrix.mul(MatrixFactory.create3DTranslationMatrix(m_position.negate(null)));
+
+		//Create a translation matrix from the position negated into a new vector
 		//Update the view matrix
 		//GLMatrix4f.s_view.load();
 	}
@@ -60,17 +70,17 @@ public class Camera3D {
 	}
 	public Vector3f getViewDirection() {
 		//transform a straight looking vector by the rotation matrix and place the value into itself
-		Vector4f vec4 = getRotateMatrix().transform(new Vector4f(0f, 0f, -1f, 1f));
+		Vector4f vec4 = getRotateMatrix().mul(new Vector4f(0f, 0f, -1f, 1f));
 		Vector3f vec = new Vector3f(vec4);
 		return vec;
 	}
 	public Vector3f getRightDirection() {
-		Vector4f vec = getRotateMatrix().transform(new Vector4f(1f, 0f, 0f, 1f));
+		Vector4f vec = getRotateMatrix().mul(new Vector4f(1f, 0f, 0f, 1f));
 		return new Vector3f(vec);
 	}
 	public Vector3f getUpDirection() {
 		//transform a up vector by the rotation matrix and place the value into itself
-		Vector4f vec = getRotateMatrix().transform(new Vector4f(0f, 1f, 0f, 1f));
+		Vector4f vec = getRotateMatrix().mul(new Vector4f(0f, 1f, 0f, 1f));
 		return new Vector3f(vec.getX(), vec.getY(), vec.getZ());
 	}
 

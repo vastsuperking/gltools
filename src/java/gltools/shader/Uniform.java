@@ -1,5 +1,6 @@
 package gltools.shader;
 
+import gltools.BufferUtils;
 import gltools.vector.Matrix2f;
 import gltools.vector.Matrix3f;
 import gltools.vector.Matrix4f;
@@ -9,7 +10,6 @@ import gltools.vector.Vector4f;
 
 import java.nio.FloatBuffer;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
 
 
@@ -83,9 +83,13 @@ public class Uniform extends Input {
 		if (!isActive()) return;
 		checkProgBound();
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
-		mat.storeTranspose(buffer);
+		mat.store(buffer);
+		/*System.out.println("\n\n\n------------------Storing Matrix----------------\n\n\n");
+		System.out.println("Original: " + mat);
+		System.out.println("In buffer:");
+		System.out.println(BufferUtils.asString(buffer));*/
 		buffer.flip();
-		GL20.glUniformMatrix4(getID(), false, buffer);
+		GL20.glUniformMatrix4(getID(), true, buffer);
 	}
 	/**
 	 * If the uniform ID(or location) has changed(due to recompilation or other),

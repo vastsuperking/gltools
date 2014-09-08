@@ -7,9 +7,9 @@ public abstract class Matrix {
 		super();
 	}
 	
-	public abstract float determinant();
+	//public abstract float determinant();
 
-	public abstract Matrix invert();
+	//public abstract Matrix invert();
 	public abstract Matrix negate();
 	public abstract Matrix transpose();
 
