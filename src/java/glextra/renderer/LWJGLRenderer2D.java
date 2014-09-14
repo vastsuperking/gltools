@@ -103,7 +103,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	}
 	@Override
 	public void popModel() {
-		m_viewMat.pop();
+		m_modelMat.pop();
 	}	
 	
 	@Override

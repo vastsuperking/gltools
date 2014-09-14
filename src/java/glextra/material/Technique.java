@@ -33,12 +33,12 @@ public class Technique {
 	 */
 	public void addDefine(InputUsage usage, String define) {
 		m_defines.put(usage, define);
-		//We could possibly need a reload
+		//We could possibly need a recompile
 		m_needsRecompile = true;
 	}
 	
 	public void parameterChanged(String param) {
-		//TODO: Only need reload if define has gone from on to off
+		//TODO: Only need recompile if define has gone from on to off
 		//or off to on
 		if (m_defines.containsKey(param)) m_needsRecompile = true;
 	}

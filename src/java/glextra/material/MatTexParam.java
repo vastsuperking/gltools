@@ -24,6 +24,7 @@ public class MatTexParam extends MatParam {
 	@Override
 	public void setValue(Object o) {
 		if (o instanceof Texture) m_texture = (Texture) o;
+		else if (o == null) m_texture = null;
 		else throw new RuntimeException("Not a texture!");
 	}
 	

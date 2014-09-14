@@ -36,7 +36,7 @@ public class ShaderSource {
 	public String getFullSource() {
 		StringBuilder builder = new StringBuilder();
 		for (String d : m_defines) {
-			builder.append("#DEFINE " + d).append('\n');
+			builder.append("#define " + d).append('\n');
 		}
 		builder.append(m_source);
 		return builder.toString();

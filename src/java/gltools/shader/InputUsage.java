@@ -25,7 +25,7 @@ public class InputUsage {
 	public static final InputUsage GBUFFER_SPECULAR_SAMPLER = new InputUsage("GBUFFER_SPECULAR_SAMPLER", DataType.SAMPLER2D, Uniform.class);
 	
 	public static final InputUsage DIFFUSE_COLOR = new InputUsage("DIFFUSE_COLOR", DataType.VEC4, Uniform.class);
-	public static final InputUsage DIFFUSE_SAMPLER = new InputUsage("DIFFUSE_SAMPLER", DataType.FLOAT, Uniform.class);
+	public static final InputUsage DIFFUSE_SAMPLER = new InputUsage("DIFFUSE_SAMPLER", DataType.SAMPLER2D, Uniform.class);
 
 	public static final InputUsage LIGHT_AMBIENT = new InputUsage("LIGHT_AMBIENT", DataType.VEC4, Uniform.class);
 	public static final InputUsage LIGHT_DIFFUSE = new InputUsage("LIGHT_DIFFUSE", DataType.VEC4, Uniform.class);

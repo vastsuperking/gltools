@@ -49,9 +49,6 @@ public class Camera3D {
 
 		Matrix4f pitchRot = MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f));
 		Matrix4f yawRot = MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_yaw), new Vector3f(0f, 1f, 0f));
-		System.out.println("PitchRot: \n" + pitchRot);
-		System.out.println("YawRot: \n" + yawRot);
-
 
 		matrix.mul(pitchRot);
 		matrix.mul(yawRot);
