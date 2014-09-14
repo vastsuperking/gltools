@@ -161,10 +161,10 @@ public class MaterialXMLLoader {
 		 if (value == null || value.equals("")) return new Vector4f();
 		 try {
 			 value = value.trim();
-			 if (value.contains("(") && value.contains(")")) {
-				 value = value.split("(")[1].split(")")[0].replaceAll(",", " ");
+			 if (value.indexOf('(') != -1 && value.indexOf(')') != -1) {
+				 value = value.split("\\(")[1].split("\\)")[0].replaceAll(",", " ");
 			 }
-			 String[] floats = value.split(" ");
+			 String[] floats = value.split("\\s+");
 			 if (floats.length > 4) throw new RuntimeException("Too many arguments!");
 			 return new Vector4f(Integer.parseInt(floats[0]), Integer.parseInt(floats[1]),
 					 			  Integer.parseInt(floats[2]), Integer.parseInt(floats[3]));
@@ -176,10 +176,10 @@ public class MaterialXMLLoader {
 		 if (value == null || value.equals("")) return new Vector3f();
 		 try {
 			 value = value.trim();
-			 if (value.contains("(") && value.contains(")")) {
-				 value = value.split("(")[1].split(")")[0].replaceAll(",", " ");
+			 if (value.indexOf('(') != -1 && value.indexOf(')') != -1) {
+				 value = value.split("\\(")[1].split("\\)")[0].replaceAll(",", " ");
 			 }
-			 String[] floats = value.split(" ");
+			 String[] floats = value.split("\\s+");
 			 if (floats.length > 3) throw new RuntimeException("Too many arguments!");
 			 return new Vector3f(Integer.parseInt(floats[0]), Integer.parseInt(floats[1]),
 					 			  Integer.parseInt(floats[2]));
@@ -191,10 +191,10 @@ public class MaterialXMLLoader {
 		 if (value == null || value.equals("")) return new Vector2f();
 		 try {
 			 value = value.trim();
-			 if (value.contains("(") && value.contains(")")) {
-				 value = value.split("(")[1].split(")")[0].replaceAll(",", " ");
+			 if (value.indexOf('(') != -1 && value.indexOf(')') != -1) {
+				 value = value.split("\\(")[1].split("\\)")[0].replaceAll(",", " ");
 			 }
-			 String[] floats = value.split(" ");
+			 String[] floats = value.split("\\s+");
 			 if (floats.length > 2) throw new RuntimeException("Too many arguments!");
 			 return new Vector2f(Integer.parseInt(floats[0]), Integer.parseInt(floats[1]));
 		 } catch (Exception e) {

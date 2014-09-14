@@ -1,13 +1,13 @@
 package glextra.material;
 
 import gltools.shader.DataType;
-import gltools.shader.InputUsage;
 import gltools.shader.Program;
 import gltools.shader.Program.ProgramLinkException;
 import gltools.shader.Program.ProgramValidateException;
 import gltools.shader.Shader;
 import gltools.shader.Shader.ShaderCompileException;
 import gltools.shader.ShaderSource;
+import gltools.texture.Texture;
 import gltools.utils.Loadable;
 
 import java.util.HashMap;
@@ -98,7 +98,9 @@ public class Technique {
 		m_program.unbind();
 		for (MatParam p : params.values()) {
 			if (p instanceof MatTexParam) {
-				((MatTexParam) p).getValue().unbind();
+				Texture t = ((MatTexParam) p).getValue();
+				if (t != null) t.unbind();
+				
 			}
 		}
 	}
