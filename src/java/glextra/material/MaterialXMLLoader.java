@@ -92,8 +92,21 @@ public class MaterialXMLLoader {
 		String programLocation = programElement.attr("resource");
 		Program program = ProgramXMLLoader.s_load(programLocation, locator).get(0);
 		Technique technique = new Technique(name, program);
+		Elements definesElements = t.getElementsByTag("defines");
+		if (definesElements.size() > 0) s_parseDefines(definesElements.first(), technique);
 		return technique;
 	}
+	private static void s_parseDefines(Element d, Technique t) {
+		Elements defines = d.children();
+		for (Element defineElement : defines) {
+			if (defineElement.tagName().equals("define")) {
+				String paramName = defineElement.attr("param");
+				String define = defineElement.text();
+				t.addDefine(paramName, define);
+			}
+		}
+	}
+	
 	/**
 	 * Returns the parameter type given a string
 	 * textures are represented by their corresponding simplerXX datatypes
@@ -109,6 +122,9 @@ public class MaterialXMLLoader {
 		else if (type.equals("tex1d")) return DataType.SAMPLER1D;
 		else throw new RuntimeException("Unknown ParamType: " + type);
 	}
+	
+	
+	
 	/**
 	 * Sampler2D corresponds to Texture2D
 	 * and Sampler1D corresponds to Texture1D 

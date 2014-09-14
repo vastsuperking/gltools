@@ -16,7 +16,7 @@ public class Technique {
 	private final String m_name;
 	private Program m_program;
 
-	private HashMap<InputUsage, String> m_defines = new HashMap<InputUsage, String>();
+	private HashMap<String, String> m_defines = new HashMap<String, String>();
 	private boolean m_needsRecompile = false;
 	
 	public Technique(String name, Program program) { 
@@ -31,8 +31,8 @@ public class Technique {
 	 * When a parameter with inputusage usage is set,
 	 * then the define will be added to all shaders in this technique
 	 */
-	public void addDefine(InputUsage usage, String define) {
-		m_defines.put(usage, define);
+	public void addDefine(String paramName, String define) {
+		m_defines.put(paramName, define);
 		//We could possibly need a recompile
 		m_needsRecompile = true;
 	}
@@ -40,7 +40,9 @@ public class Technique {
 	public void parameterChanged(String param) {
 		//TODO: Only need recompile if define has gone from on to off
 		//or off to on
-		if (m_defines.containsKey(param)) m_needsRecompile = true;
+		if (m_defines.containsKey(param)) {
+			m_needsRecompile = true;
+		}
 	}
 	
 	/**
@@ -53,12 +55,13 @@ public class Technique {
 			source.clearDefines();
 			for (MatParam p : params.values()) {
 				if (p == null || p.getValue() == null) continue;
-				InputUsage usage = p.getUsage();
 				//If the param is a boolean and the value is false, ignore the param
-				if (usage.getDataType() == DataType.BOOL && !(Boolean) p.getValue()) continue;
+				if (p.getUsage().getDataType() == DataType.BOOL && !(Boolean) p.getValue()) continue;
+				
 				//See if we have a define related the the param
-				if (m_defines.containsKey(usage)) {
-					String define = m_defines.get(usage);
+				String paramName = p.getName();
+				if (m_defines.containsKey(paramName)) {
+					String define = m_defines.get(paramName);
 					if (define != null) source.addDefine(define);
 				}
 			}
