@@ -30,7 +30,7 @@ public class Attribute extends Input {
 	public int getIndex() { return m_id; }//index and id are the same, I hope
 
 	public void setProgram(Program p) { m_program = p; }
-	public void setID(int id) {m_id = id;}
+	protected void setID(int id) {m_id = id;}
 
 	/**
 	 * All attribute setValue() functions are deprecated
@@ -94,6 +94,7 @@ public class Attribute extends Input {
 	 */
 	public void updateID(boolean autoActivate) {
 		int id = s_getAttributeID(m_program, getName());
+		setID(id);
 		if (autoActivate && id == -1) {
 			if (isActive()) System.out.println("Deactivating Attribute: " + this + " due to invalid id(-1)");
 			setActive(false);
@@ -101,7 +102,6 @@ public class Attribute extends Input {
 			if (!isActive()) System.out.println("Reactivating Attribute: " + this + " due to valid id: " + id);
 			setActive(true);
 		}
-		m_id = id;		
 	}
 	
 	@Override

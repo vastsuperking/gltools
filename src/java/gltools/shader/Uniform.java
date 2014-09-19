@@ -30,7 +30,7 @@ public class Uniform extends Input {
 	public int getID() {return m_id;}
 	public Program getProgram() { return m_program; }
 	
-	public void setID(int id) { m_id = id; }
+	protected void setID(int id) { m_id = id; }
 	public void setProgram(Program prog) { m_program = prog; }
 	
 	public void setValue(int val) {
@@ -100,6 +100,7 @@ public class Uniform extends Input {
 	 */
 	public void updateID(boolean autoActivate) {
 		int id = s_getUniformID(m_program, getName());
+		setID(id);
 		if (autoActivate && id == -1) {
 			if (isActive()) System.out.println("Deactivating Uniform: " + this + " due to invalid id(-1)");
 			setActive(false);
@@ -107,7 +108,6 @@ public class Uniform extends Input {
 			if (!isActive()) System.out.println("Reactivating Uniform " + this + " due to valid id: " + id);
 			setActive(true);
 		}
-		m_id = id;
 	}
 	
 	@Override

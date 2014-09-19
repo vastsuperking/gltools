@@ -24,5 +24,7 @@ public interface Renderer2D {
 	public void startGeometry();
 	public void fillRect(int x, int y, int width, int height);
 	public void finishGeometry();
+	
+	public void clear();
 }
 

@@ -1,5 +1,7 @@
 package glextra.renderer;
 
+import org.lwjgl.opengl.GL11;
+
 import glextra.material.Material;
 import gltools.Mode;
 import gltools.buffer.AttribArray;
@@ -154,6 +156,13 @@ public class LWJGLRenderer2D implements Renderer2D {
 	
 	@Override
 	public void finishGeometry() {}
+	
+	@Override
+	public void clear() {
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | 
+					 GL11.GL_DEPTH_BUFFER_BIT |
+					 GL11.GL_STENCIL_BUFFER_BIT);
+	}
 	
 	public static LWJGLRenderer2D getInstance() {
 		if (INSTANCE == null) INSTANCE = new LWJGLRenderer2D();
