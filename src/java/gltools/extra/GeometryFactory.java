@@ -40,7 +40,7 @@ public class GeometryFactory {
 	 * necessary attributes
 	 */
 	@SuppressWarnings("unchecked")
-	public static <P extends Primitive> Geometry s_generateVAO(P... primitives) {
+	public static <P extends Primitive> Geometry s_generateGeometry(P... primitives) {
 		if (primitives.length < 1) throw new IllegalArgumentException("Need at least 1 triangle to build VAO");
 
 		P firstPrimitive = primitives[0];

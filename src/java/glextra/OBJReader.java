@@ -1,11 +1,14 @@
-package gltools.extra;
+package glextra;
 
+import glextra.material.Material;
 import gltools.ResourceLocator;
 import gltools.Triangle;
 import gltools.TriangleFactory;
 import gltools.Vertex;
 import gltools.Vertex.TexCoord;
 import gltools.Vertex.VertexNormal;
+import gltools.buffer.Geometry;
+import gltools.extra.GeometryFactory;
 import gltools.vector.Vector2f;
 import gltools.vector.Vector3f;
 
@@ -14,23 +17,30 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class OBJReader {
-	public List<Triangle> read(String resource, ResourceLocator locator) throws IOException {
+	public Mesh read(String resource, ResourceLocator locator) throws IOException {
 		return read(locator.getResource(resource));
 	}
 	/**
 	 * Will read and parse a .obj file from an InputStream
 	 * @param input the stream to read text from
 	 */
-	public List<Triangle> read(InputStream input) throws IOException {
+	public Mesh read(InputStream input) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		
+		Mesh mesh = new Mesh();
+		
+		HashMap<String, Material> materials = new HashMap<String, Material>();
 		
 		ArrayList<Vertex> vertices = new ArrayList<Vertex>();
 		ArrayList<Triangle> primitives = new ArrayList<Triangle>();
 		ArrayList<VertexNormal> normals = new ArrayList<VertexNormal>();
 		ArrayList<TexCoord> texcoords = new ArrayList<TexCoord>();
+		
+		Material currentMaterial = null;
 		
 		String line;
 		while((line = reader.readLine()) != null) {
@@ -39,8 +49,25 @@ public class OBJReader {
 			else if (line.startsWith("vn ")) normals.add(s_parseNormal(line.substring(3)));	
 			else if (line.startsWith("vp "));
 			else if (line.startsWith("f ")) primitives.addAll(s_parseFace(line.substring(2), vertices, normals, texcoords));
+			else if (line.startsWith("usemtl ")) {
+				//Finish the old geometry
+				if (primitives.size() > 0) {
+					Geometry geo = GeometryFactory.s_generateGeometry(primitives.toArray(new Triangle[0]));
+					mesh.addGeometry(geo, currentMaterial);
+				}
+				//Set next material
+				String matName = line.substring(7);
+				currentMaterial = materials.get(matName);
+				if (currentMaterial == null) throw new RuntimeException("Could not find material: " + matName);
+			}
 		}
-		return primitives;
+		//Finish last geometry
+		if (primitives.size() > 0) {
+			Geometry geo = GeometryFactory.s_generateGeometry(primitives.toArray(new Triangle[0]));
+			mesh.addGeometry(geo, currentMaterial);
+		}
+		
+		return mesh;
 	}
 	
 	private static Vertex s_parseVertex(String vertex) {
