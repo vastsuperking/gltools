@@ -48,59 +48,66 @@ public class Material {
 		if (!m_parameters.containsKey(param)) throw new RuntimeException("Could not find param: " + param);
 		if (m_parameters.get(param).getDataType() != DataType.VEC4) throw new RuntimeException("Param is not a vec4!");
 		
+		Object old = m_parameters.get(param).getValue();
 		m_parameters.get(param).setValue(color.toVector4f());
-		notifyParamChanged(param);
+		notifyParamChanged(param, old, color);
 	}
 	public void setVector4f(String param, Vector4f vec) {
 		if (!m_parameters.containsKey(param)) throw new RuntimeException("Could not find param: " + param);
 		if (m_parameters.get(param).getDataType() != DataType.VEC4) throw new RuntimeException("Param is not a vec4!");
 		
+		Object old = m_parameters.get(param).getValue();
 		m_parameters.get(param).setValue(vec);
-		notifyParamChanged(param);
+		notifyParamChanged(param, old, vec);
 	}
 	public void setVector3f(String param, Vector3f vec) {
 		if (!m_parameters.containsKey(param)) throw new RuntimeException("Could not find param: " + param);
 		if (m_parameters.get(param).getDataType() != DataType.VEC3) throw new RuntimeException("Param is not a vec3!");
 		
+		Object old = m_parameters.get(param).getValue();
 		m_parameters.get(param).setValue(vec);
-		notifyParamChanged(param);
+		notifyParamChanged(param, old, vec);
 	}
 	
 	public void setVector2f(String param, Vector2f vec) {
 		if (!m_parameters.containsKey(param)) throw new RuntimeException("Could not find param: " + param);
 		if (m_parameters.get(param).getDataType() != DataType.VEC2) throw new RuntimeException("Param is not a vec2!");
 		
+		Object old = m_parameters.get(param).getValue();
 		m_parameters.get(param).setValue(vec);
-		notifyParamChanged(param);
+		notifyParamChanged(param, old, vec);
 	}
 	
 	public void setFloat(String param, float f) {
 		if (!m_parameters.containsKey(param)) throw new RuntimeException("Could not find param: " + param);
 		if (m_parameters.get(param).getDataType() != DataType.FLOAT) throw new RuntimeException("Param is not a float!");
 		
+		Object old = m_parameters.get(param).getValue();
 		m_parameters.get(param).setValue(f);
-		notifyParamChanged(param);
+		notifyParamChanged(param, old, f);
 	}
 	public void setTexture2D(String param, Texture2D texture) {
 		if (!m_parameters.containsKey(param)) throw new RuntimeException("Could not find param: " + param);
 		if (m_parameters.get(param).getDataType() != DataType.SAMPLER2D) throw new RuntimeException("Param is not a texture!");
 		
+		Object old = m_parameters.get(param).getValue();
 		m_parameters.get(param).setValue(texture);
-		notifyParamChanged(param);
+		notifyParamChanged(param, old, texture);
 	}
 	public void setTexture1D(String param, Texture1D texture) {
 		if (!m_parameters.containsKey(param)) throw new RuntimeException("Could not find param: " + param);
 		if (m_parameters.get(param).getDataType() != DataType.SAMPLER1D) throw new RuntimeException("Param is not a texture!");
 		
+		Object old = m_parameters.get(param).getValue();
 		m_parameters.get(param).setValue(texture);
-		notifyParamChanged(param);
+		notifyParamChanged(param, old, texture);
 	}
 	
-	private void notifyParamChanged(String param) {		
+	private void notifyParamChanged(String param, Object oldValue, Object newValue) {		
 		//Notify that an update is necessary
-		m_defaultTechnique.parameterChanged(param);
+		m_defaultTechnique.parameterChanged(param, oldValue, newValue);
 		for (Technique t : m_techniques.values()) {
-			t.parameterChanged(param);
+			t.parameterChanged(param, oldValue, newValue);
 		}
 	}
 	

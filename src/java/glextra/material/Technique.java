@@ -37,16 +37,19 @@ public class Technique {
 		m_needsRecompile = true;
 	}
 	
-	public void parameterChanged(String param) {
-		//TODO: Only need recompile if define has gone from on to off
-		//or off to on
-		if (m_defines.containsKey(param)) {
+	public void parameterChanged(String param, Object oldValue, Object newValue) {
+		//The define could go from on to off if:
+		//oldValue is null and newValue is not
+		//or vice versa
+		if (m_defines.containsKey(param) && 
+			((oldValue == null && newValue != null) || 
+			(oldValue != null && newValue == null))) {
 			m_needsRecompile = true;
 		}
 	}
 	
 	/**
-	 * Will recompile the technique if need be
+	 * Will recompile the technique
 	 */
 	public void recompile(HashMap<String, MatParam> params) {
 		for (Shader s : m_program.getShaders()) {
@@ -79,6 +82,7 @@ public class Technique {
 		} catch (ProgramLinkException e) {
 			e.printStackTrace();
 		}
+		m_needsRecompile = false;
 	}
 	
 	public void bind(HashMap<String, MatParam> params, HashMap<String, Loadable> globals) {
