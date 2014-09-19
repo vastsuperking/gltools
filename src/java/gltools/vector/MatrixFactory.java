@@ -41,7 +41,7 @@ public class MatrixFactory {//useful for creating projection matricies
 	}
 	/**
 	 * Creates a orthographic projection matrix with the given values
-	 * 
+	 * left and top are negative
 	 */
 	public static Matrix4f createOrthographicProjection(float left, float right,
 														float top, float bottom, 
@@ -61,6 +61,7 @@ public class MatrixFactory {//useful for creating projection matricies
 	}
 	/**
 	 * Creates a 2D projection matrix
+	 * left and top are negative
 	 */
 	public static Matrix3f create2DProjectionMatrix(float left, float right, float top, float bottom) {
 		float x = (2)/(right - left);
