@@ -51,6 +51,7 @@ public class Geometry {
 		if (m_ibo != null) {
 			GL11.glDrawElements(m_mode.getMode(), m_vertexCount, GL11.GL_UNSIGNED_INT, m_ibo.getOffset());
 		} else GL11.glDrawArrays(m_mode.getMode(), 0, m_vertexCount);
+		
 		unbind();
 	}
 
@@ -59,13 +60,15 @@ public class Geometry {
 			a.enable();
 			a.point();
 		}
+		
 		if (m_ibo != null) m_ibo.bind();
 	}
 	
 	public void unbind() {
+		if (m_ibo != null) m_ibo.unbind();
+		
 		for (AttribArray a : m_arrays) {
 			a.disable();
 		}
-		if (m_ibo != null) m_ibo.unbind();
 	}
 }

@@ -1,36 +1,55 @@
 package gltools.extra;
 
+import gltools.BufferUtils;
 import gltools.Mode;
 import gltools.Primitive;
 import gltools.Vertex;
 import gltools.Vertex.VertexAttribute;
 import gltools.buffer.AttribArray;
-import gltools.buffer.IndexBuffer;
 import gltools.buffer.Geometry;
+import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
+import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import org.lwjgl.BufferUtils;
 
 /**
  * This is a optional helper class responsible for creating a vbo (actually a vao) from a
  * set of a triangles
  */
 public class GeometryFactory {
-	public static boolean DEBUG = false;
+	public static final boolean DEBUG = false;
 	//VBO format:
-	//Position[x, y, z], TexCoord[t, s],  Normal[x, y, z]
-	private static final float[] QUAD_VBO = new float[] {
-		+1.0f, +1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
-		-1.0f, +1.0f, 0.0f, 0f,   1.0f, 0.0f, 0.0f, -1.0f,
-		-1.0f, -1.0f, 0.0f, 0f,   0f,   0.0f, 0.0f, -1.0f,
-		+1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f
+	//Position[x, y], TexCoord[t, s],  Normal[x, y, z]
+	public static final float[] QUAD_VBO = {
+		+1.0f, +1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
+		-1.0f, +1.0f, 0f,   1.0f, 0.0f, 0.0f, -1.0f,
+		-1.0f, -1.0f, 0f,   0f,   0.0f, 0.0f, -1.0f,
+		+1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f
 	};
-	private static final int[] QUAD_IBO = new int[] {
+	public static final float[] QUAD_VBO_VERTICES = {
+		1.0f, 1.0f,
+		-1.0f, 1.0f,
+		-1.0f, -1.0f,
+		1.0f, -1.0f
+	};
+	public static final float[] QUAD_VBO_TEXCOORDS = {
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f
+	};
+	public static final float[] QUAD_VBO_NORMALS = {
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f
+	};
+	public static final int[] QUAD_IBO = {
         0, 1, 2, 0, 2, 3
     };
 	
@@ -108,7 +127,7 @@ public class GeometryFactory {
 			}
 		}
 		vboBuffer.flip();
-		if (DEBUG) System.out.println(vboBuffer);
+		if (DEBUG) System.out.println(BufferUtils.asString(vboBuffer.asFloatBuffer()));
 		vbo.bind();
 		vbo.bufferData(vboBuffer);
 		vbo.unbind();
@@ -125,10 +144,12 @@ public class GeometryFactory {
 	}
 	public static Geometry s_generateFullScreenQuad() {
 		VertexBuffer vbo = new VertexBuffer();
+		IndexBuffer ibo = new IndexBuffer();
+
 		vbo.bind();
 		vbo.setValues(QUAD_VBO);
 		vbo.unbind();
-		IndexBuffer ibo = new IndexBuffer();
+		
 		ibo.bind();
 		ibo.setValues(QUAD_IBO);
 		ibo.unbind();
@@ -138,10 +159,46 @@ public class GeometryFactory {
 		geometry.setVertexCount(6);
 		geometry.setIndexBuffer(ibo);
 
-		geometry.addArray(new AttribArray(vbo, InputUsage.VERTEX_POSITION_3D, 	8 * Float.SIZE, 0 * Float.SIZE));
-		geometry.addArray(new AttribArray(vbo, InputUsage.VERTEX_TEX_COORD,		8 * Float.SIZE, 3 * Float.SIZE));
-		geometry.addArray(new AttribArray(vbo, InputUsage.VERTEX_NORMAL, 		8 * Float.SIZE, 5 * Float.SIZE));
+		int stride = 7 * DataType.FLOAT.getSize();
+		geometry.addArray(new AttribArray(vbo, InputUsage.VERTEX_POSITION_2D, 	stride, 0 * DataType.FLOAT.getSize()));
+		geometry.addArray(new AttribArray(vbo, InputUsage.VERTEX_TEX_COORD,		stride, 2 * DataType.FLOAT.getSize()));
+		geometry.addArray(new AttribArray(vbo, InputUsage.VERTEX_NORMAL, 		stride, 4 * DataType.FLOAT.getSize()));
 
 		return geometry;
-	}
+	}//*/
+	/*public static Geometry s_generateFullScreenQuad() {
+		VertexBuffer vertices = new VertexBuffer();
+		VertexBuffer texCoords = new VertexBuffer();
+		VertexBuffer normals = new VertexBuffer();
+		
+		IndexBuffer ibo = new IndexBuffer();
+		
+		ibo.bind();
+		ibo.setValues(QUAD_IBO);
+		ibo.unbind();
+		
+		vertices.bind();
+		vertices.setValues(QUAD_VBO_VERTICES);
+		vertices.unbind();
+		
+		texCoords.bind();
+		texCoords.setValues(QUAD_VBO_TEXCOORDS);
+		texCoords.unbind();
+		
+		normals.bind();
+		normals.setValues(QUAD_VBO_NORMALS);
+		normals.unbind();
+		
+		Geometry geo = new Geometry();
+		geo.setIndexBuffer(ibo);
+		
+		geo.setMode(Mode.TRIANGLES);
+		geo.setVertexCount(6);
+
+		geo.addArray(new AttribArray(vertices, InputUsage.VERTEX_POSITION_2D, 0, 0));
+		geo.addArray(new AttribArray(texCoords, InputUsage.VERTEX_NORMAL, 0, 0));
+		geo.addArray(new AttribArray(normals, InputUsage.VERTEX_NORMAL, 0, 0));
+		
+		return geo;
+	}//*/
 }

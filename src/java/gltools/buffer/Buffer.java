@@ -30,6 +30,16 @@ public class Buffer {
 	public void setTarget(BufferTarget target) { m_target = target; }
 	public void setUsage(BufferUsage usage) { m_usage = usage; }
 	
+	public void getData(long offset, FloatBuffer dest) {
+		checkBound();
+		GL15.glGetBufferSubData(m_target.getID(), offset, dest);
+	}
+	public void getData(long offset, IntBuffer dest) {
+		checkBound();
+		GL15.glGetBufferSubData(m_target.getID(), offset, dest);
+	}
+	
+	
 	/**
 	 * This function will buffer an array of bytes, overriding any existing data
 	 * It assumes that the data has been flipped, as do all the following functions
