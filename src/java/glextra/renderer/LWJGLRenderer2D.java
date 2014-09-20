@@ -62,24 +62,24 @@ public class LWJGLRenderer2D implements Renderer2D {
 		mat.addGlobalParam("projectionMat", m_projMat);
 	}
 	@Override
-	public void viewTrans(int x, int y) {
+	public void viewTrans(float x, float y) {
 		m_viewMat.getCurrentMatrix().mul(
 				MatrixFactory.create2DTranslationMatrix(new Vector2f(x, y)));
 	}
 	@Override
-	public void viewScale(int x, int y) {
+	public void viewScale(float x, float y) {
 		m_viewMat.getCurrentMatrix().mul(
 				MatrixFactory.create2DScaleMatrix(new Vector2f(x, y)));
 	}
 	
 	
 	@Override
-	public void translate(int x, int y) {
+	public void translate(float x, float y) {
 		m_modelMat.getCurrentMatrix().mul(
 				MatrixFactory.create2DTranslationMatrix(new Vector2f(x, y)));
 	}
 	@Override
-	public void scale(int x, int y) {
+	public void scale(float x, float y) {
 		m_modelMat.getCurrentMatrix().mul(
 				MatrixFactory.create2DScaleMatrix(new Vector2f(x, y)));
 		
@@ -115,7 +115,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	}
 	
 	@Override
-	public void fillRect(int x, int y, int width, int height) {
+	public void fillRect(float x, float y, float width, float height) {
 		if (m_material == null) throw new RuntimeException("Must call setMaterial() first!");
 		
 		m_material.bind();

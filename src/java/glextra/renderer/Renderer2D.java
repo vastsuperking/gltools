@@ -8,11 +8,11 @@ public interface Renderer2D {
 	public void setMaterial(Material mat);
 	public Material getMaterial();
 		
-	public void viewTrans(int x, int y);
-	public void viewScale(int x, int y);
+	public void viewTrans(float x, float y);
+	public void viewScale(float x, float y);
 	
-	public void translate(int x, int y);
-	public void scale(int x, int y);
+	public void translate(float x, float y);
+	public void scale(float x, float y);
 	public void rotate(float radians);
 	
 	public void pushView();
@@ -22,7 +22,7 @@ public interface Renderer2D {
 	public void popModel();
 	
 	public void startGeometry();
-	public void fillRect(int x, int y, int width, int height);
+	public void fillRect(float x, float y, float width, float height);
 	public void finishGeometry();
 	
 	public void clear();
