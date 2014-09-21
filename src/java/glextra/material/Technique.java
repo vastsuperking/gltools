@@ -11,6 +11,7 @@ import gltools.shader.ShaderSource;
 import gltools.texture.Texture;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 
 public class Technique {
@@ -19,7 +20,7 @@ public class Technique {
 
 	private HashMap<String, String> m_defines = new HashMap<String, String>();
 	
-	private HashMap<GlobalParam, InputUsage> m_globalParams = new HashMap<GlobalParam, InputUsage>();
+	private HashSet<GlobalParam> m_globalParams = new HashSet<GlobalParam>();
 	
 	private boolean m_needsRecompile = false;
 	
@@ -44,9 +45,8 @@ public class Technique {
 	/**
 	 * Adds a world parameter to this technique
 	 */
-	public void addGlobalParam(GlobalParam param, InputUsage usage) {
-		if (usage.getDataType() != param.getDataType()) throw new RuntimeException("Param datatype and usage datatype do not match!");
-		m_globalParams.put(param, usage);
+	public void addGlobalParam(GlobalParam param) {
+		m_globalParams.add(param);
 	}
 	
 	public void parameterChanged(String param, Object oldValue, Object newValue) {
@@ -126,8 +126,8 @@ public class Technique {
 			p.load();
 		}
 		//Now globals
-		for (Entry<GlobalParam, InputUsage> p : m_globalParams.entrySet()) {
-			p.getKey().load(p.getValue());
+		for (GlobalParam p : m_globalParams) {
+			p.load();
 		}
 	}
 }

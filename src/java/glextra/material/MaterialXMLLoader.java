@@ -116,13 +116,12 @@ public class MaterialXMLLoader {
 		for (Element e : params) {
 			DataType type = s_parseGlobalParamType(e.tagName());
 			
-			String name = e.attr("name");
 			InputUsage usage = new InputUsage(e.attr("usage"), type, Uniform.class);
-			if (provider.hasParam(name, type)){
-				GlobalParam param = provider.getParam(name, type);
-				technique.addGlobalParam(param, usage);
+			if (provider.hasParam(usage)){
+				GlobalParam param = provider.getParam(usage);
+				technique.addGlobalParam(param);
 			} else {
-				throw new RuntimeException("Could not find global param for: " + name + " " + type + " in provider " + provider);
+				throw new RuntimeException("Could not find global param for: " + usage + " in provider " + provider);
 			}
 		}
 	}
@@ -154,9 +153,9 @@ public class MaterialXMLLoader {
 		else if (type.equals("boolean") || type.equals("bool")) return DataType.BOOL;
 		else if (type.equals("tex2d")) return DataType.SAMPLER2D;
 		else if (type.equals("tex1d")) return DataType.SAMPLER1D;
-		else if (type.equals("mat2")) return DataType.MAT3;
+		else if (type.equals("mat2")) return DataType.MAT2;
 		else if (type.equals("mat3")) return DataType.MAT3;
-		else if (type.equals("mat4")) return DataType.MAT3;
+		else if (type.equals("mat4")) return DataType.MAT4;
 		else throw new RuntimeException("Unknown ParamType: " + type);
 	}
 	

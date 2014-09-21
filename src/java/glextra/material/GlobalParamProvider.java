@@ -1,17 +1,16 @@
 package glextra.material;
 
-import gltools.shader.DataType;
-import gltools.utils.Pair;
+import gltools.shader.InputUsage;
 
 import java.util.HashMap;
 
 public interface GlobalParamProvider {
-	public boolean hasParam(String name, DataType type);
-	public GlobalParam getParam(String name, DataType type);
+	public boolean hasParam(InputUsage usage);
+	public GlobalParam getParam(InputUsage usage);
 	
 	public class ListParamProvider implements GlobalParamProvider {
-		private HashMap<Pair<String, DataType>, GlobalParam> m_paramMap = 
-				new HashMap<Pair<String, DataType>, GlobalParam>();
+		private HashMap<InputUsage, GlobalParam> m_paramMap = 
+				new HashMap<InputUsage, GlobalParam>();
 		
 		public ListParamProvider(GlobalParam... params) {
 			for (GlobalParam p : params) {
@@ -24,17 +23,16 @@ public interface GlobalParamProvider {
 		}
 		
 		public void addParam(GlobalParam param) {
-			System.out.println("Param name: " + param.getName() + " " + param.getDataType());
-			m_paramMap.put(new Pair<String, DataType>(param.getName(), param.getDataType()), param);
+			m_paramMap.put(param.getUsage(), param);
 		}
 		
 		@Override
-		public boolean hasParam(String name, DataType type) {
-			return m_paramMap.containsKey(new Pair<String, DataType>(name, type));
+		public boolean hasParam(InputUsage usage) {
+			return m_paramMap.containsKey(usage);
 		}
 		@Override
-		public GlobalParam getParam(String name, DataType type) {
-			return m_paramMap.get(new Pair<String, DataType>(name, type));
+		public GlobalParam getParam(InputUsage usage) {
+			return m_paramMap.get(usage);
 		}
 	}	
 }

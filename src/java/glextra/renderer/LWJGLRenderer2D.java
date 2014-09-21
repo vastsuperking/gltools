@@ -42,9 +42,9 @@ public class LWJGLRenderer2D implements Renderer2D {
 		m_viewMat = new GLMatrix3f();
 		m_projMat = new GLMatrix3f();
 		
-		m_provider = new ListParamProvider(new GlobalParam("modelMat", DataType.MAT3, m_modelMat),
-											new GlobalParam("viewMat", DataType.MAT3, m_viewMat),
-											new GlobalParam("projMat", DataType.MAT3, m_projMat));
+		m_provider = new ListParamProvider(new GlobalParam(InputUsage.MODEL_MATRIX_2D, m_modelMat),
+											new GlobalParam(InputUsage.VIEW_MATRIX_2D, m_viewMat),
+											new GlobalParam(InputUsage.PROJECTION_MATRIX_2D, m_projMat));
 		
 		m_projMat.setCurrentMatrix(
 				MatrixFactory.create2DProjectionMatrix(left, right, top, bottom));

@@ -1,32 +1,31 @@
 package glextra.material;
 
-import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.utils.Loadable;
 
 public class GlobalParam implements Loadable {
-	private DataType m_type;
-	private String m_name;
+	private InputUsage m_usage = null;
 	private Loadable m_loadable = null;
 	
-	public GlobalParam(String name, DataType type) {
-		m_type = type;
-		m_name = name;
+	public GlobalParam(InputUsage usage) {
+		m_usage = usage;		
 	}
-	public GlobalParam(String name, DataType type, Loadable loader) {
-		m_name = name;
-		m_type = type;
+	public GlobalParam(InputUsage usage, Loadable loader) {
+		m_usage = usage;
 		m_loadable = loader;
 	}
 	public GlobalParam(GlobalParam param) {
-		m_type = param.m_type;
-		m_name = param.m_name;
+		m_usage = param.m_usage;
 		m_loadable = param.m_loadable;
 	}
 	
 	public Loadable getLoader() { return m_loadable; }
-	public String getName() { return m_name; }
-	public DataType getDataType() { return m_type; }
+	public InputUsage getUsage() { return m_usage; }
+	
+	
+	public void load() { 
+		m_loadable.load(m_usage);
+	}
 	
 	@Override
 	public void load(InputUsage usage) {
