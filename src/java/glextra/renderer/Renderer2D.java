@@ -1,5 +1,6 @@
 package glextra.renderer;
 
+import glextra.material.GlobalParamProvider;
 import glextra.material.Material;
 
 public interface Renderer2D {
@@ -7,6 +8,7 @@ public interface Renderer2D {
 	
 	public void setMaterial(Material mat);
 	public Material getMaterial();
+	public GlobalParamProvider getGlobalParams();
 		
 	public void viewTrans(float x, float y);
 	public void viewScale(float x, float y);

@@ -2,14 +2,13 @@ package glextra.renderer;
 
 import glextra.material.GlobalParam;
 import glextra.material.GlobalParamProvider;
-import glextra.material.GlobalParamProvider.ListParamProvider;
+import glextra.material.GlobalParams;
 import glextra.material.Material;
 import gltools.Mode;
 import gltools.buffer.AttribArray;
 import gltools.buffer.Geometry;
 import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
-import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.utils.GLMatrix3f;
 import gltools.vector.MatrixFactory;
@@ -30,7 +29,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	private VertexBuffer m_texCoordsBuf;
 	private IndexBuffer m_indicesBuf;
 	
-	private GlobalParamProvider m_provider;
+	//private GlobalParamProvider m_provider;
 	
 	private Material m_material;
 	
@@ -42,9 +41,12 @@ public class LWJGLRenderer2D implements Renderer2D {
 		m_viewMat = new GLMatrix3f();
 		m_projMat = new GLMatrix3f();
 		
-		m_provider = new ListParamProvider(new GlobalParam(InputUsage.MODEL_MATRIX_2D, m_modelMat),
-											new GlobalParam(InputUsage.VIEW_MATRIX_2D, m_viewMat),
-											new GlobalParam(InputUsage.PROJECTION_MATRIX_2D, m_projMat));
+		//m_provider = new ListParamProvider(new GlobalParam(InputUsage.MODEL_MATRIX_2D, m_modelMat),
+											//new GlobalParam(InputUsage.VIEW_MATRIX_2D, m_viewMat),
+											//new GlobalParam(InputUsage.PROJECTION_MATRIX_2D, m_projMat));
+		GlobalParams.getInstance().addParam(new GlobalParam(InputUsage.MODEL_MATRIX_2D, m_modelMat));
+		GlobalParams.getInstance().addParam(new GlobalParam(InputUsage.VIEW_MATRIX_2D, m_viewMat));
+		GlobalParams.getInstance().addParam(new GlobalParam(InputUsage.PROJECTION_MATRIX_2D, m_projMat));
 		
 		m_projMat.setCurrentMatrix(
 				MatrixFactory.create2DProjectionMatrix(left, right, top, bottom));
@@ -61,9 +63,9 @@ public class LWJGLRenderer2D implements Renderer2D {
 	}
 	@Override
 	public Material getMaterial() { return m_material; }
-
+	@Override
 	public GlobalParamProvider getGlobalParams() {
-		return m_provider;
+		return GlobalParams.getInstance();
 	}
 	@Override
 	public void viewTrans(float x, float y) {
