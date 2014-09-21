@@ -29,8 +29,14 @@ public class MatParam implements Loadable {
 	public void setName(String name) { m_name = name; }
 	
 	public void load() {
-		Input input = Program.s_getCurrent().getInputs(m_usage.getInputType(), m_usage);
-		input.setValue(m_type, m_value);
+		load(m_usage);
+	}
+	/**
+	 * Like load(), but only sets inputs with the specified usage
+	 */
+	public void load(InputUsage usage) {
+		Input input = Program.s_getCurrent().getInputs(usage.getInputType(), usage);
+		input.setValue(m_type, m_value);		
 	}
 	
 	@Override

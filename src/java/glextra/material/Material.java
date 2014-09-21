@@ -4,7 +4,6 @@ import gltools.shader.DataType;
 import gltools.texture.Color;
 import gltools.texture.Texture1D;
 import gltools.texture.Texture2D;
-import gltools.utils.Loadable;
 import gltools.vector.Vector2f;
 import gltools.vector.Vector3f;
 import gltools.vector.Vector4f;
@@ -13,8 +12,6 @@ import java.util.HashMap;
 
 public class Material {
 	private String m_name = "";
-	//TODO: Create GlobalParam class with InputUsage as well as string nam
-	private HashMap<String, Loadable> m_globalParameters = new HashMap<String, Loadable>();
 	private HashMap<String, MatParam> m_parameters = new HashMap<String, MatParam>();
 	private Technique m_currentTechnique = null;
 	private Technique m_defaultTechnique = null;
@@ -29,7 +26,6 @@ public class Material {
 	public void setDefaultTechnique(Technique technique) { m_defaultTechnique = technique; }
 	public String getName() { return m_name; }
 	public Technique getDefaultTechnique() { return m_defaultTechnique; }
-	public HashMap<String, Loadable> getGlobals() { return m_globalParameters; }
 	
 	public void addTechnique(Technique technique) {
 		m_techniques.put(technique.getName(), technique);
@@ -39,10 +35,6 @@ public class Material {
 	}
 	public void addParameter(MatParam param) {
 		m_parameters.put(param.getName(), param);
-	}
-	public void addGlobalParam(String param, Loadable global) {
-		if (param == null || param.equals("")) m_globalParameters.remove(param);
-		m_globalParameters.put(param, global);
 	}
 	public void setColor(String param, Color color) {
 		if (!m_parameters.containsKey(param)) throw new RuntimeException("Could not find param: " + param);
@@ -128,13 +120,13 @@ public class Material {
 	 * Will load the mat params again
 	 */
 	public void load() {
-		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters, m_globalParameters);
+		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters);
 		else System.err.println("Warning, currentTechnique null!, params not updated");
 	}
 	
 	public void bind() {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
-		m_currentTechnique.bind(m_parameters, m_globalParameters);
+		m_currentTechnique.bind(m_parameters);
 	}
 	public void unbind() {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");

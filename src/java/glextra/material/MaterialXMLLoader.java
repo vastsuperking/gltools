@@ -30,21 +30,21 @@ import org.jsoup.select.Elements;
 
 public class MaterialXMLLoader {
 	private static final boolean DEBUG = false;
-	public static List<Material> s_load(String resource, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
-		return s_load(locator.getResource(resource), locator);
+	public static List<Material> s_load(String resource, ResourceLocator locator, GlobalParamProvider paramProvider) throws IOException, ShaderCompileException, ProgramLinkException {
+		return s_load(locator.getResource(resource), locator, paramProvider);
 	}
-	public static List<Material> s_load(InputStream in, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
+	public static List<Material> s_load(InputStream in, ResourceLocator locator, GlobalParamProvider paramProvider) throws IOException, ShaderCompileException, ProgramLinkException {
 		String content = FileUtils.s_readAll(in);
 		Document doc = Jsoup.parse(content, "", Parser.xmlParser());
 		Elements mats = doc.getElementsByTag("material");
 		
 		List<Material> materials = new ArrayList<Material>();
 		for (Element m : mats) {
-			materials.add(s_parseMaterial(m, locator));
+			materials.add(s_parseMaterial(m, locator, paramProvider));
 		}
 		return materials;
 	}
-	private static Material s_parseMaterial(Element m, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
+	private static Material s_parseMaterial(Element m, ResourceLocator locator, GlobalParamProvider paramProvider) throws IOException, ShaderCompileException, ProgramLinkException {
 		Material mat = new Material(m.attr("name"));
 		
 		Elements paramsElements = m.getElementsByTag("parameters");
@@ -60,7 +60,7 @@ public class MaterialXMLLoader {
 		Elements techniques = m.getElementsByTag("technique");
 		for (Element t : techniques) {
 			boolean def = Boolean.parseBoolean(t.attr("default"));
-			Technique technique = s_parseTechnique(t, locator);
+			Technique technique = s_parseTechnique(t, locator, paramProvider);
 			if (def) mat.setDefaultTechnique(technique);
 			else mat.addTechnique(technique);
 		}
@@ -83,7 +83,7 @@ public class MaterialXMLLoader {
 			return new MatTexParam(type, name, usage, (Texture) value, unit);
 		} else return new MatParam(type, name, usage, value);
 	}
-	private static Technique s_parseTechnique(Element t, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
+	private static Technique s_parseTechnique(Element t, ResourceLocator locator, GlobalParamProvider provider) throws IOException, ShaderCompileException, ProgramLinkException {
 		String name = t.attr("name");
 		
 		Elements programs = t.getElementsByTag("program");
@@ -94,8 +94,11 @@ public class MaterialXMLLoader {
 		Technique technique = new Technique(name, program);
 		Elements definesElements = t.getElementsByTag("defines");
 		if (definesElements.size() > 0) s_parseDefines(definesElements.first(), technique);
+		Elements globalParamsElements = t.getElementsByTag("globalParams");
+		if (globalParamsElements.size() > 0) s_parseGlobalParams(globalParamsElements.first().children(), technique, provider);
 		return technique;
 	}
+	
 	private static void s_parseDefines(Element d, Technique t) {
 		Elements defines = d.children();
 		for (Element defineElement : defines) {
@@ -103,6 +106,23 @@ public class MaterialXMLLoader {
 				String paramName = defineElement.attr("param");
 				String define = defineElement.text();
 				t.addDefine(paramName, define);
+			}
+		}
+	}
+	
+	private static void s_parseGlobalParams(Elements params, Technique technique, GlobalParamProvider provider) {
+		if (provider == null && params.size() != 0) throw new IllegalArgumentException("No global param provider specified, and mat has global params!");
+		else if (provider == null) return;
+		for (Element e : params) {
+			DataType type = s_parseGlobalParamType(e.tagName());
+			
+			String name = e.attr("name");
+			InputUsage usage = new InputUsage(e.attr("usage"), type, Uniform.class);
+			if (provider.hasParam(name, type)){
+				GlobalParam param = provider.getParam(name, type);
+				technique.addGlobalParam(param, usage);
+			} else {
+				throw new RuntimeException("Could not find global param for: " + name + " " + type + " in provider " + provider);
 			}
 		}
 	}
@@ -120,9 +140,25 @@ public class MaterialXMLLoader {
 		else if (type.equals("boolean") || type.equals("bool")) return DataType.BOOL;
 		else if (type.equals("tex2d")) return DataType.SAMPLER2D;
 		else if (type.equals("tex1d")) return DataType.SAMPLER1D;
+		//else if (type.equals("mat2")) return DataType.MAT3;
+		//else if (type.equals("mat3")) return DataType.MAT3;
+		//else if (type.equals("mat4")) return DataType.MAT3;
 		else throw new RuntimeException("Unknown ParamType: " + type);
 	}
 	
+	private static DataType s_parseGlobalParamType(String type) {
+		type = type.toLowerCase();
+		if (type.equals("float")) return DataType.FLOAT;
+		else if (type.equals("vec2")) return DataType.VEC2;
+		else if (type.equals("vec3")) return DataType.VEC3;
+		else if (type.equals("boolean") || type.equals("bool")) return DataType.BOOL;
+		else if (type.equals("tex2d")) return DataType.SAMPLER2D;
+		else if (type.equals("tex1d")) return DataType.SAMPLER1D;
+		else if (type.equals("mat2")) return DataType.MAT3;
+		else if (type.equals("mat3")) return DataType.MAT3;
+		else if (type.equals("mat4")) return DataType.MAT3;
+		else throw new RuntimeException("Unknown ParamType: " + type);
+	}
 	
 	
 	/**

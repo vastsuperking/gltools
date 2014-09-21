@@ -1,5 +1,6 @@
 package gltools.utils;
 
+import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
 import gltools.shader.Uniform;
@@ -23,16 +24,19 @@ public class GLMatrix3f implements Loadable {
 	*/
 	private Matrix3f m_matrix = new Matrix3f();
 	private Stack<Matrix3f> m_stack = new Stack<Matrix3f>();
-	private InputUsage m_usage = null;
+	
+	//Default usage if none is specified with load()
+	private InputUsage m_fallbackUsage = null;
 
+	public GLMatrix3f() { m_fallbackUsage = null; }
 	public GLMatrix3f(InputUsage usage) {
-		m_usage = usage;
+		m_fallbackUsage = usage;
 	}
 
 	public Matrix3f getCurrentMatrix() { return m_matrix; }
-	public InputUsage getUsage() { return m_usage; }
+	public InputUsage getUsage() { return m_fallbackUsage; }
 	public void setCurrentMatrix(Matrix3f mat) { m_matrix = mat; }
-	public void setUsage(InputUsage usage) { m_usage = usage; }
+	public void setUsage(InputUsage usage) { m_fallbackUsage = usage; }
 	 
 	public void push() {
 		m_stack.push(new Matrix3f(m_matrix));
@@ -42,13 +46,20 @@ public class GLMatrix3f implements Loadable {
 	}
 	 
 	/**
-	 * Will update the matrix so the openGL and local matrices are in sync
+	 * Will update the matrix so the openGL and local matrices are in sync,
+	 * using the default usage
 	 */
 	public void load() {
+		if (m_fallbackUsage == null) throw new RuntimeException("No default usage!");
+		load(m_fallbackUsage);
+	}
+	@Override
+	public void load(InputUsage usage) {
+		if (usage.getDataType() != DataType.MAT3) throw new RuntimeException("Not a mat3!");
 		if (Program.s_getCurrent() == null) {
 			System.err.println("Warning! No current program, matrix value not set!");
 			return;
 		}
-		Program.s_getCurrent().getInputs(Uniform.class, m_usage).setValue(m_matrix);
+		Program.s_getCurrent().getInputs(Uniform.class, usage).setValue(m_matrix);
 	}
 }

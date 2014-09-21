@@ -1,17 +1,21 @@
 package glextra.renderer;
 
-import org.lwjgl.opengl.GL11;
-
+import glextra.material.GlobalParam;
+import glextra.material.GlobalParamProvider;
+import glextra.material.GlobalParamProvider.ListParamProvider;
 import glextra.material.Material;
 import gltools.Mode;
 import gltools.buffer.AttribArray;
 import gltools.buffer.Geometry;
 import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
+import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.utils.GLMatrix3f;
 import gltools.vector.MatrixFactory;
 import gltools.vector.Vector2f;
+
+import org.lwjgl.opengl.GL11;
 
 
 public class LWJGLRenderer2D implements Renderer2D {
@@ -26,6 +30,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	private VertexBuffer m_texCoordsBuf;
 	private IndexBuffer m_indicesBuf;
 	
+	private GlobalParamProvider m_provider;
 	
 	private Material m_material;
 	
@@ -33,9 +38,13 @@ public class LWJGLRenderer2D implements Renderer2D {
 	
 	@Override
 	public void init(float left, float right, float top, float bottom) {
-		m_modelMat = new GLMatrix3f(InputUsage.MODEL_MATRIX_2D);
-		m_viewMat = new GLMatrix3f(InputUsage.VIEW_MATRIX_2D);
-		m_projMat = new GLMatrix3f(InputUsage.PROJECTION_MATRIX_2D);
+		m_modelMat = new GLMatrix3f();
+		m_viewMat = new GLMatrix3f();
+		m_projMat = new GLMatrix3f();
+		
+		m_provider = new ListParamProvider(new GlobalParam("modelMat", DataType.MAT3, m_modelMat),
+											new GlobalParam("viewMat", DataType.MAT3, m_viewMat),
+											new GlobalParam("projMat", DataType.MAT3, m_projMat));
 		
 		m_projMat.setCurrentMatrix(
 				MatrixFactory.create2DProjectionMatrix(left, right, top, bottom));
@@ -49,17 +58,12 @@ public class LWJGLRenderer2D implements Renderer2D {
 	@Override
 	public void setMaterial(Material mat) {
 		m_material = mat;
-		if (mat.getGlobals().size() == 0) {
-			initMaterialGlobals(mat);
-		}
 	}
 	@Override
 	public Material getMaterial() { return m_material; }
-	
-	private void initMaterialGlobals(Material mat) {
-		mat.addGlobalParam("modelMat", m_modelMat);
-		mat.addGlobalParam("viewMat", m_viewMat);
-		mat.addGlobalParam("projectionMat", m_projMat);
+
+	public GlobalParamProvider getGlobalParams() {
+		return m_provider;
 	}
 	@Override
 	public void viewTrans(float x, float y) {

@@ -1,6 +1,7 @@
 package glextra.material;
 
 import gltools.shader.DataType;
+import gltools.shader.InputUsage;
 import gltools.shader.Program;
 import gltools.shader.Program.ProgramLinkException;
 import gltools.shader.Program.ProgramValidateException;
@@ -8,15 +9,18 @@ import gltools.shader.Shader;
 import gltools.shader.Shader.ShaderCompileException;
 import gltools.shader.ShaderSource;
 import gltools.texture.Texture;
-import gltools.utils.Loadable;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class Technique {
 	private final String m_name;
 	private Program m_program;
 
 	private HashMap<String, String> m_defines = new HashMap<String, String>();
+	
+	private HashMap<GlobalParam, InputUsage> m_globalParams = new HashMap<GlobalParam, InputUsage>();
+	
 	private boolean m_needsRecompile = false;
 	
 	public Technique(String name, Program program) { 
@@ -35,6 +39,14 @@ public class Technique {
 		m_defines.put(paramName, define);
 		//We could possibly need a recompile
 		m_needsRecompile = true;
+	}
+	
+	/**
+	 * Adds a world parameter to this technique
+	 */
+	public void addGlobalParam(GlobalParam param, InputUsage usage) {
+		if (usage.getDataType() != param.getDataType()) throw new RuntimeException("Param datatype and usage datatype do not match!");
+		m_globalParams.put(param, usage);
 	}
 	
 	public void parameterChanged(String param, Object oldValue, Object newValue) {
@@ -85,12 +97,12 @@ public class Technique {
 		m_needsRecompile = false;
 	}
 	
-	public void bind(HashMap<String, MatParam> params, HashMap<String, Loadable> globals) {
+	public void bind(HashMap<String, MatParam> params) {
 		//make sure the program is compiled correctly
 		if (m_needsRecompile) recompile(params);
 		m_program.bind();
 
-		load(params, globals);
+		load(params);
 		
 		try {
 			m_program.validate();
@@ -108,14 +120,14 @@ public class Technique {
 			}
 		}
 	}
-	public void load(HashMap<String, MatParam> params, HashMap<String, Loadable> globals) {
+	public void load(HashMap<String, MatParam> params) {
 		//Set the params
 		for (MatParam p : params.values()) {
 			p.load();
 		}
 		//Now globals
-		for (Loadable l : globals.values()) {
-			l.load();
+		for (Entry<GlobalParam, InputUsage> p : m_globalParams.entrySet()) {
+			p.getKey().load(p.getValue());
 		}
 	}
 }
