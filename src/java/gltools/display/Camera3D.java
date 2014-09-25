@@ -1,7 +1,6 @@
 package gltools.display;
 
 import gltools.utils.GLMatrix4f;
-import gltools.vector.Matrix3f;
 import gltools.vector.Matrix4f;
 import gltools.vector.MatrixFactory;
 import gltools.vector.Vector3f;
@@ -85,6 +84,4 @@ public class Camera3D {
 	public String toString() {
 		return m_position.toString();
 	}
-
-
 }

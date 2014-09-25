@@ -36,6 +36,7 @@ public abstract class Input {
 		case VEC2: setValue((Vector2f) v);
 		case VEC3: setValue((Vector3f) v);
 		case VEC4: setValue((Vector4f) v);
+		default: throw new IllegalArgumentException("Unrecognized dataType:  " + type);
 		}
 	}
 	public void setValue(DataType type, Object o) {
@@ -49,6 +50,7 @@ public abstract class Input {
 		case MAT2: setValue((Matrix2f) o); break;
 		case MAT3: setValue((Matrix3f) o); break;
 		case MAT4: setValue((Matrix4f) o); break;
+		default: throw new IllegalArgumentException("Unrecognized dataType:  " + type);
 		}
 	}
 }

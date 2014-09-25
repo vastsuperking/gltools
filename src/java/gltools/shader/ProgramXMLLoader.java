@@ -85,6 +85,7 @@ public class ProgramXMLLoader {
 			switch(dataType) {
 			case VEC2: return new FFPVertexAttribute(InputUsage.VERTEX_POSITION_2D);
 			case VEC3: return new FFPVertexAttribute(InputUsage.VERTEX_POSITION_3D);
+			default: throw new IllegalArgumentException("Unrecognized dataType: " + dataType);
 			}
 		} else if (a.tagName().equals("ffp-texcoord-attribute")) {
 			return new FFPTexCoordAttribute();
