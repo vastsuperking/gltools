@@ -105,7 +105,7 @@ public class Uniform extends Input {
 			if (isActive()) System.out.println("Deactivating Uniform: " + this + " due to invalid id(-1)");
 			setActive(false);
 		} else if (autoActivate) {
-			if (!isActive()) System.out.println("Reactivating Uniform " + this + " due to valid id: " + id);
+			if (!isActive()) System.out.println("Activating Uniform " + this + " due to valid id: " + id);
 			setActive(true);
 		}
 	}

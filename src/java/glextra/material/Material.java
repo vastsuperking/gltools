@@ -78,6 +78,14 @@ public class Material {
 		m_parameters.get(param).setValue(f);
 		notifyParamChanged(param, old, f);
 	}
+	public void setBoolean(String param, boolean bool) {
+		if (!m_parameters.containsKey(param)) throw new RuntimeException("Could not find param: " + param);
+		if (m_parameters.get(param).getDataType() != DataType.BOOL) throw new RuntimeException("Param is not a float!");
+		
+		Object old = m_parameters.get(param).getValue();
+		m_parameters.get(param).setValue(bool);
+		notifyParamChanged(param, old, bool);
+	}
 	public void setTexture2D(String param, Texture2D texture) {
 		if (!m_parameters.containsKey(param)) throw new RuntimeException("Could not find param: " + param);
 		if (m_parameters.get(param).getDataType() != DataType.SAMPLER2D) throw new RuntimeException("Param is not a texture!");

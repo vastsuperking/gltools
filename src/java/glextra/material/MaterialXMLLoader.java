@@ -133,10 +133,10 @@ public class MaterialXMLLoader {
 	private static DataType s_parseParamType(String type) {
 		type = type.toLowerCase();
 		if (type.equals("float")) return DataType.FLOAT;
+		else if (type.equals("boolean") || type.equals("bool")) return DataType.BOOL;
 		else if (type.equals("vec2")) return DataType.VEC2;
 		else if (type.equals("vec3")) return DataType.VEC3;
 		else if (type.equals("color") || type.equals("vec4")) return DataType.VEC4;
-		else if (type.equals("boolean") || type.equals("bool")) return DataType.BOOL;
 		else if (type.equals("tex2d")) return DataType.SAMPLER2D;
 		else if (type.equals("tex1d")) return DataType.SAMPLER1D;
 		//else if (type.equals("mat2")) return DataType.MAT3;
@@ -148,9 +148,9 @@ public class MaterialXMLLoader {
 	private static DataType s_parseGlobalParamType(String type) {
 		type = type.toLowerCase();
 		if (type.equals("float")) return DataType.FLOAT;
+		else if (type.equals("boolean") || type.equals("bool")) return DataType.BOOL;
 		else if (type.equals("vec2")) return DataType.VEC2;
 		else if (type.equals("vec3")) return DataType.VEC3;
-		else if (type.equals("boolean") || type.equals("bool")) return DataType.BOOL;
 		else if (type.equals("tex2d")) return DataType.SAMPLER2D;
 		else if (type.equals("tex1d")) return DataType.SAMPLER1D;
 		else if (type.equals("mat2")) return DataType.MAT2;

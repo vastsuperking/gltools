@@ -46,7 +46,7 @@ public class LWJGLMouse extends Mouse {
 			if (dx != 0 || dy != 0) updateDelta(dx, dy);
 			if (buttonId != -1) {
 				boolean state = getEventButtonState();
-				updateButtonState(getMouseButton(buttonId), state);
+				updateButtonState(getButton(buttonId), state);
 			} else if (dWheel != 0) { mouseWheelMoved(dWheel);
 			} else {
 				int ex = getEventX();

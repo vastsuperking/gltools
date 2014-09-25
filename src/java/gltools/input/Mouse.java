@@ -29,11 +29,14 @@ public abstract class Mouse {
 	public void removeListener(MouseListener l) {
 		m_listeners.remove(l);
 	}
-	public MouseButton getMouseButton(String name) {
+	public MouseButton getButton(String name) {
 		return m_buttonNames.get(name);
 	}
-	public MouseButton getMouseButton(int id) {
+	public MouseButton getButton(int id) {
 		return m_buttonIds.get(id);
+	}
+	public boolean isButtonDown(MouseButton button) {
+		return m_buttonStates.get(button);
 	}
 	
 	public int getX() { return m_x; }

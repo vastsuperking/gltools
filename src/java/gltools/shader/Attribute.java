@@ -99,7 +99,7 @@ public class Attribute extends Input {
 			if (isActive()) System.out.println("Deactivating Attribute: " + this + " due to invalid id(-1)");
 			setActive(false);
 		} else if (autoActivate) {
-			if (!isActive()) System.out.println("Reactivating Attribute: " + this + " due to valid id: " + id);
+			if (!isActive()) System.out.println("Activating Attribute: " + this + " due to valid id: " + id);
 			setActive(true);
 		}
 	}

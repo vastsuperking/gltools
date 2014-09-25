@@ -4,9 +4,8 @@ import gltools.shader.DataType;
 import gltools.shader.Input;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
-import gltools.utils.Loadable;
 
-public class MatParam implements Loadable {
+public class MatParam {
 	protected DataType m_type = null;
 	protected String m_name = null;
 	protected InputUsage m_usage = null;
@@ -29,14 +28,8 @@ public class MatParam implements Loadable {
 	public void setName(String name) { m_name = name; }
 	
 	public void load() {
-		load(m_usage);
-	}
-	/**
-	 * Like load(), but only sets inputs with the specified usage
-	 */
-	public void load(InputUsage usage) {
-		Input input = Program.s_getCurrent().getInputs(usage.getInputType(), usage);
-		input.setValue(m_type, m_value);		
+		Input input = Program.s_getCurrent().getInputs(m_usage.getInputType(), m_usage);
+		if (m_value != null) input.setValue(m_type, m_value);		
 	}
 	
 	@Override
