@@ -11,9 +11,13 @@ import gltools.vector.Vector4f;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.opengl.GL20;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Uniform extends Input {
+	public static final Logger logger = LoggerFactory.getLogger(Uniform.class);
+	
 	private int m_id;
 	private Program m_program;
 	
@@ -84,10 +88,6 @@ public class Uniform extends Input {
 		checkProgBound();
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
 		mat.store(buffer);
-		/*System.out.println("\n\n\n------------------Storing Matrix----------------\n\n\n");
-		System.out.println("Original: " + mat);
-		System.out.println("In buffer:");
-		System.out.println(BufferUtils.asString(buffer));*/
 		buffer.flip();
 		GL20.glUniformMatrix4(getID(), true, buffer);
 	}
@@ -102,11 +102,15 @@ public class Uniform extends Input {
 		int id = s_getUniformID(m_program, getName());
 		setID(id);
 		if (autoActivate && id == -1) {
-			if (isActive()) System.out.println("Deactivating Uniform: " + this + " due to invalid id(-1)");
-			setActive(false);
+			if (isActive()) { 
+				logger.debug("Deactivating Uniform: " + this + " due to invalid id(-1)");
+				setActive(false);
+			}
 		} else if (autoActivate) {
-			if (!isActive()) System.out.println("Activating Uniform " + this + " due to valid id: " + id);
-			setActive(true);
+			if (!isActive()) {
+				logger.debug("Activating Uniform " + this + " due to valid id: " + id);
+				setActive(true);
+			}
 		}
 	}
 	

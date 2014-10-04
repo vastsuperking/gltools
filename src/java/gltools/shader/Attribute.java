@@ -8,8 +8,12 @@ import gltools.vector.Vector3f;
 import gltools.vector.Vector4f;
 
 import org.lwjgl.opengl.GL20;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Attribute extends Input {
+	private static final Logger logger = LoggerFactory.getLogger(Attribute.class);
+	
 	private int m_id;
 	private Program m_program;
 	
@@ -96,11 +100,15 @@ public class Attribute extends Input {
 		int id = s_getAttributeID(m_program, getName());
 		setID(id);
 		if (autoActivate && id == -1) {
-			if (isActive()) System.out.println("Deactivating Attribute: " + this + " due to invalid id(-1)");
-			setActive(false);
+			if (isActive()) {
+				logger.debug("Deactivating Attribute: " + this + " due to invalid id(-1)");
+				setActive(false);
+			}
 		} else if (autoActivate) {
-			if (!isActive()) System.out.println("Activating Attribute: " + this + " due to valid id: " + id);
-			setActive(true);
+			if (!isActive()) {
+				logger.debug("Activating Attribute: " + this + " due to valid id: " + id);
+				setActive(true);
+			}
 		}
 	}
 	
