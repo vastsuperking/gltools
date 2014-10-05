@@ -4,7 +4,7 @@ import glextra.material.GlobalParamProvider;
 import glextra.material.Material;
 
 public interface Renderer2D {
-	public void init(float left, float right, float top, float bottom);
+	public void init(int displayWidth, int displayHeight, float left, float right, float top, float bottom);
 	
 	public void setMaterial(Material mat);
 	public Material getMaterial();
@@ -26,6 +26,11 @@ public interface Renderer2D {
 	public void startGeometry();
 	public void fillRect(float x, float y, float width, float height);
 	public void finishGeometry();
+	
+	public void startLighted();
+	public void finishLighted();
+	public void renderLight(Light light);
+	public void doLightingComputations();
 	
 	public void clear();
 }

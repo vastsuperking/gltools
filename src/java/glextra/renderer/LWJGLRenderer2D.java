@@ -4,15 +4,19 @@ import glextra.material.GlobalParam;
 import glextra.material.GlobalParamProvider;
 import glextra.material.GlobalParams;
 import glextra.material.Material;
+import glextra.renderer.GBuffer.GBufferMode;
 import gltools.Mode;
 import gltools.buffer.AttribArray;
 import gltools.buffer.Geometry;
 import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
+import gltools.extra.GeometryFactory;
 import gltools.shader.InputUsage;
 import gltools.utils.GLMatrix3f;
 import gltools.vector.MatrixFactory;
 import gltools.vector.Vector2f;
+
+import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
@@ -20,6 +24,11 @@ import org.lwjgl.opengl.GL11;
 public class LWJGLRenderer2D implements Renderer2D {
 	private static LWJGLRenderer2D INSTANCE = null;
 	
+	//Temporary list with all lights to be rendered
+	private ArrayList<Light> m_lights = new ArrayList<Light>();
+	private Geometry m_fullScreenQuad;
+	
+	private GBuffer m_gBuffer;
 	
 	public GLMatrix3f m_modelMat;
 	public GLMatrix3f m_viewMat;
@@ -36,7 +45,10 @@ public class LWJGLRenderer2D implements Renderer2D {
 	private LWJGLRenderer2D() {}
 	
 	@Override
-	public void init(float left, float right, float top, float bottom) {
+	public void init(int displayWidth, int displayHeight, float left, float right, float top, float bottom) {
+		m_gBuffer = new GBuffer(displayWidth, displayHeight);
+		m_fullScreenQuad = GeometryFactory.s_generateFullScreenQuad();
+		
 		m_modelMat = new GLMatrix3f();
 		m_viewMat = new GLMatrix3f();
 		m_projMat = new GLMatrix3f();
@@ -113,18 +125,14 @@ public class LWJGLRenderer2D implements Renderer2D {
 	public void popModel() {
 		m_modelMat.pop();
 	}	
-	
-	@Override
-	public void startGeometry() {
-		m_modelMat.getCurrentMatrix().setIdentity();
-		m_viewMat.getCurrentMatrix().setIdentity();	
-	}
-	
 	@Override
 	public void fillRect(float x, float y, float width, float height) {
 		if (m_material == null) throw new RuntimeException("Must call setMaterial() first!");
 		
 		m_material.bind();
+		//Sets the output buffers to point
+		//to the correct attachments
+		m_gBuffer.setDrawBuffers();
 		//For bottom left origin
 		float vertices[] = {x + width, y + height,
 							 x, y + height,
@@ -161,7 +169,51 @@ public class LWJGLRenderer2D implements Renderer2D {
 	}
 	
 	@Override
-	public void finishGeometry() {}
+	public void doLightingComputations() {
+		//Light alpha blending - additive
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+		for (Light l : m_lights) {
+			l.bind(m_gBuffer);
+			m_fullScreenQuad.render();
+			l.unbind(m_gBuffer);
+		}
+		//Disable blending after done
+		GL11.glDisable(GL11.GL_BLEND);
+		
+		//Clear lights array - already rendered these
+		m_lights.clear();
+	}
+
+	@Override
+	public void renderLight(Light light) {
+		m_lights.add(light);
+	}
+
+	@Override
+	public void startGeometry() {
+		m_modelMat.getCurrentMatrix().setIdentity();
+		m_viewMat.getCurrentMatrix().setIdentity();	
+
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA,	GL11.GL_ONE_MINUS_SRC_ALPHA);
+	}
+	
+	@Override
+	public void finishGeometry() {
+		//Disable blending
+		GL11.glDisable(GL11.GL_BLEND);
+	}
+	
+	@Override
+	public void startLighted() {
+		m_gBuffer.bind(GBufferMode.WRITE);	
+	}
+	@Override
+	public void finishLighted() {
+		m_gBuffer.unbind(GBufferMode.WRITE);
+	}
+	
 	
 	@Override
 	public void clear() {

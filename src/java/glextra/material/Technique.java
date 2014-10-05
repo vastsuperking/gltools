@@ -98,10 +98,8 @@ public class Technique {
 	}
 	
 	public void bind(HashMap<String, MatParam> params) {
-		//make sure the program is compiled correctly
-		if (m_needsRecompile) recompile(params);
 		m_program.bind();
-
+		//Will check to make sure compiled and uniforms up to date
 		load(params);
 		
 		try {
@@ -121,6 +119,14 @@ public class Technique {
 		}
 	}
 	public void load(HashMap<String, MatParam> params) {
+		//make sure the program is compiled correctly
+		if (m_needsRecompile) {
+			//Unbind before recompiling
+			m_program.unbind();
+			recompile(params);
+			m_program.bind();
+		}
+
 		//Set the params
 		for (MatParam p : params.values()) {
 			p.load();
