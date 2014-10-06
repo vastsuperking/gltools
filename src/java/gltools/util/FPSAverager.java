@@ -1,4 +1,4 @@
-package gltools.utils;
+package gltools.util;
 
 public class FPSAverager {
 	private float m_fps = -1f;

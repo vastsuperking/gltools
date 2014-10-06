@@ -24,7 +24,7 @@ public class OBJMaterialReader {
 				current = new Material();
 				mats.put(name, current);
 			} else if (line.startsWith("Ka ")) {
-				
+				s_parseColor(line.substring(3));
 			}
 		}
 		return mats;

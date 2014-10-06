@@ -1,7 +1,7 @@
 package gltools.shader;
 
 import gltools.ResourceLocator;
-import gltools.utils.FileUtils;
+import gltools.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;

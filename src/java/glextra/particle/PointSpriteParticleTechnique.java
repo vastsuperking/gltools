@@ -12,7 +12,7 @@ import gltools.shader.ProgramXMLLoader;
 import gltools.shader.Uniform;
 import gltools.texture.Texture1D;
 import gltools.texture.Texture2D;
-import gltools.utils.GLMatrix4f;
+import gltools.util.GLMatrix4f;
 import gltools.vector.Vector3f;
 
 import java.nio.FloatBuffer;

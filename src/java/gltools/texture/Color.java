@@ -52,4 +52,9 @@ public class Color {
 	}
 
 	public Color clone() { return new Color(m_red, m_green, m_blue, m_alpha); }
+	
+	
+	public java.awt.Color toJava() {
+		return new java.awt.Color((int) (m_red * 225), (int) (m_blue * 255), (int) (m_green * 255), (int) (m_alpha * 255));
+	}
 }

@@ -1,5 +1,7 @@
 package glextra.renderer;
 
+import glextra.font.Font;
+import glextra.font.Font.Glyph;
 import glextra.material.GlobalParam;
 import glextra.material.GlobalParamProvider;
 import glextra.material.GlobalParams;
@@ -12,7 +14,7 @@ import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
 import gltools.extra.GeometryFactory;
 import gltools.shader.InputUsage;
-import gltools.utils.GLMatrix3f;
+import gltools.util.GLMatrix3f;
 import gltools.vector.MatrixFactory;
 import gltools.vector.Vector2f;
 
@@ -40,6 +42,8 @@ public class LWJGLRenderer2D implements Renderer2D {
 	
 	//private GlobalParamProvider m_provider;
 	
+	//Current states
+	private Font m_font;
 	private Material m_material;
 	
 	private LWJGLRenderer2D() {}
@@ -75,6 +79,14 @@ public class LWJGLRenderer2D implements Renderer2D {
 	}
 	@Override
 	public Material getMaterial() { return m_material; }
+	
+	@Override
+	public void setFont(Font font) {
+		m_font = font;
+	}
+	@Override
+	public Font getFont() { return m_font; }
+	
 	@Override
 	public GlobalParamProvider getGlobalParams() {
 		return GlobalParams.getInstance();
@@ -166,6 +178,26 @@ public class LWJGLRenderer2D implements Renderer2D {
 		
 		geo.render();
 		m_material.unbind();
+	}
+	@Override
+	public void drawString(float x, float y, float scale, String string) {
+		//The font we will be using
+		Font font = getFont();
+		if (font == null) throw new RuntimeException("No font set!");
+		
+		//First, push the transformation matrix
+		pushModel();
+		translate(x, y);
+		
+		char[] chars = string.toCharArray();
+		for (char c : chars) {
+			if (c == '\n' || c == '\t') continue;
+			Glyph g = font.getGlyph(c);
+			g.renderAndTranslate(this, scale, getMaterial());
+		}
+		
+		//Pop it to get back to what we had before
+		popModel();
 	}
 	
 	@Override

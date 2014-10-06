@@ -12,7 +12,7 @@ import gltools.texture.Texture;
 import gltools.texture.Texture1D;
 import gltools.texture.Texture2D;
 import gltools.texture.TextureFactory;
-import gltools.utils.FileUtils;
+import gltools.util.FileUtils;
 import gltools.vector.Vector2f;
 import gltools.vector.Vector3f;
 import gltools.vector.Vector4f;
@@ -65,7 +65,11 @@ public class MaterialXMLLoader {
 			else mat.addTechnique(technique);
 		}
 		
+		//Just in case ready doesn't select the technique
 		mat.selectTechnique();
+
+		//Will do all the compiling
+		//and select the technique
 		mat.ready();
 		return mat;
 	}

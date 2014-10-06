@@ -1,7 +1,6 @@
 package glextra.material;
 
 import gltools.shader.DataType;
-import gltools.shader.InputUsage;
 import gltools.shader.Program;
 import gltools.shader.Program.ProgramLinkException;
 import gltools.shader.Program.ProgramValidateException;
@@ -12,7 +11,6 @@ import gltools.texture.Texture;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map.Entry;
 
 public class Technique {
 	private final String m_name;

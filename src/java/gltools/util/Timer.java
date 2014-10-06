@@ -1,4 +1,4 @@
-package gltools.utils;
+package gltools.util;
 
 public class Timer {
 	//The second to last mark

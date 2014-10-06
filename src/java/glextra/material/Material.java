@@ -27,6 +27,7 @@ public class Material {
 	public String getName() { return m_name; }
 	public Technique getDefaultTechnique() { return m_defaultTechnique; }
 	public HashMap<String, MatParam> getMatParams() { return m_parameters; }
+	public MatParam getParam(String param) { return m_parameters.get(param); }
 	
 	public void addTechnique(Technique technique) {
 		m_techniques.put(technique.getName(), technique);

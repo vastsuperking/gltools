@@ -1,4 +1,4 @@
-package gltools.utils;
+package gltools.util;
 
 public class ResourceUtils {
 	public static String s_getRelativeResource(String resource, String relativeResource) {

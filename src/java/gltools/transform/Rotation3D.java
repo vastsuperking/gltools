@@ -1,6 +1,6 @@
 package gltools.transform;
 
-import gltools.utils.GLMatrix3f;
+import gltools.util.GLMatrix3f;
 import gltools.vector.Matrix4f;
 import gltools.vector.MatrixFactory;
 import gltools.vector.Vector3f;

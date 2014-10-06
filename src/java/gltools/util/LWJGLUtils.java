@@ -1,4 +1,4 @@
-package gltools.utils;
+package gltools.util;
 
 import org.lwjgl.opengl.GL11;
 

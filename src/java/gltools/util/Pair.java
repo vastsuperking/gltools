@@ -1,4 +1,4 @@
-package gltools.utils;
+package gltools.util;
 
 import java.util.Objects;
 

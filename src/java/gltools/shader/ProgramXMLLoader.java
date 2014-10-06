@@ -5,8 +5,8 @@ import gltools.ffp.FFPTexCoordAttribute;
 import gltools.ffp.FFPVertexAttribute;
 import gltools.shader.Program.ProgramLinkException;
 import gltools.shader.Shader.ShaderCompileException;
-import gltools.utils.FileUtils;
-import gltools.utils.LWJGLUtils;
+import gltools.util.FileUtils;
+import gltools.util.LWJGLUtils;
 
 import java.io.IOException;
 import java.io.InputStream;

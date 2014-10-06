@@ -1,7 +1,7 @@
 package glextra.material;
 
 import gltools.shader.InputUsage;
-import gltools.utils.Loadable;
+import gltools.util.Loadable;
 
 public class GlobalParam implements Loadable {
 	private InputUsage m_usage = null;

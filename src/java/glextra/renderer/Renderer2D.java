@@ -1,5 +1,6 @@
 package glextra.renderer;
 
+import glextra.font.Font;
 import glextra.material.GlobalParamProvider;
 import glextra.material.Material;
 
@@ -8,6 +9,10 @@ public interface Renderer2D {
 	
 	public void setMaterial(Material mat);
 	public Material getMaterial();
+	
+	public void setFont(Font font);
+	public Font getFont();
+	
 	public GlobalParamProvider getGlobalParams();
 		
 	public void viewTrans(float x, float y);
@@ -23,13 +28,18 @@ public interface Renderer2D {
 	public void pushModel();
 	public void popModel();
 	
-	public void startGeometry();
+	
 	public void fillRect(float x, float y, float width, float height);
+	public void drawString(float x, float y, float scale, String string);
+	
+	public void renderLight(Light light);
+	
+	public void startGeometry();
 	public void finishGeometry();
 	
 	public void startLighted();
 	public void finishLighted();
-	public void renderLight(Light light);
+
 	public void doLightingComputations();
 	
 	public void clear();
