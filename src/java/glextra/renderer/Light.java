@@ -67,7 +67,17 @@ public interface Light {
 			m_diffuseColor = diffuse;
 			m_ambientColor = ambient;
 		}
-		
+	
+		public void setPosition(Vector3f position) { m_position = position; }
+		public void setAttenuation(Vector3f attenuation) { m_attenuation = attenuation; }
+		public void setDiffuseColor(Color diffuseColor) { m_diffuseColor = diffuseColor; }
+		public void setAmbientColor(Color ambientColor) { m_ambientColor = ambientColor; }
+
+		public Vector3f getPosition() { return m_position; }		
+		public Vector3f getAttenuation() { return m_attenuation; }
+		public Color getDiffuseColor() { return m_diffuseColor; }
+		public Color getAmbientColor() { return m_ambientColor; }
+
 		public void bind(GBuffer buffer) {
 			s_program.bind();
 			//Set uniforms to light values
