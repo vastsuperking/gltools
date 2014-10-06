@@ -249,9 +249,15 @@ public class LWJGLRenderer2D implements Renderer2D {
 	
 	@Override
 	public void clear() {
+		//Bind gbuffer and clear that too
+		m_gBuffer.bind(GBufferMode.WRITE);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | 
-					 GL11.GL_DEPTH_BUFFER_BIT |
-					 GL11.GL_STENCIL_BUFFER_BIT);
+				 GL11.GL_DEPTH_BUFFER_BIT |
+				 GL11.GL_STENCIL_BUFFER_BIT);
+		m_gBuffer.unbind(GBufferMode.WRITE);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | 
+				 GL11.GL_DEPTH_BUFFER_BIT |
+				 GL11.GL_STENCIL_BUFFER_BIT);
 	}
 	
 	public static LWJGLRenderer2D getInstance() {
