@@ -168,6 +168,11 @@ public class LWJGLRenderer2D implements Renderer2D {
 	}	
 	@Override
 	public void fillRect(float x, float y, float width, float height) {
+		fillRect(x, y, width, height, 1, 1);
+	}
+	
+	@Override
+	public void fillRect(float x, float y, float width, float height, float texCoordWidth, float texCoordHeight) {
 		if (m_material == null) throw new RuntimeException("Must call setMaterial() first!");
 		
 		m_material.bind();
@@ -180,10 +185,10 @@ public class LWJGLRenderer2D implements Renderer2D {
 							 x, y,
 							 x + width, y };
 		
-		float texCoords[] = {1.0f, 1.0f,
-							  0.0f, 1.0f,
+		float texCoords[] = {texCoordWidth, texCoordHeight,
+							  0.0f, texCoordHeight,
 							  0.0f, 0.0f,
-							  1.0f, 0.0f };
+							  texCoordWidth, 0 };
 		int indices[] = {0, 1, 2, 0, 2, 3};
 		
 		m_verticesBuf.bind();
@@ -206,8 +211,9 @@ public class LWJGLRenderer2D implements Renderer2D {
 		geo.setIndexBuffer(m_indicesBuf);
 		
 		geo.render();
-		m_material.unbind();
+		m_material.unbind();		
 	}
+	
 	@Override
 	public void drawString(float x, float y, float scale, String string) {
 		//The font we will be using

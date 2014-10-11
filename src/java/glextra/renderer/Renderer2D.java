@@ -40,6 +40,8 @@ public interface Renderer2D {
 	
 	
 	public void fillRect(float x, float y, float width, float height);
+	public void fillRect(float x, float y, float width, float height, float texCoordWidth, float texCoordHeight);
+	
 	public void drawString(float x, float y, float scale, String string);
 	
 	public void renderLight(Light light);
