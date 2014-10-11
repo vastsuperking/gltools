@@ -35,10 +35,24 @@ public class ShaderSource {
 	
 	public String getFullSource() {
 		StringBuilder builder = new StringBuilder();
+
+		//First append version statement
+		int versionIndex = m_source.indexOf("#version");
+		int endVersionIndex = m_source.indexOf('\n', versionIndex) + 1;
+		builder.append(m_source.substring(versionIndex, endVersionIndex));
+		
+		//Newline inbetween version and defines
+		builder.append('\n');
+		
+		//Then append defines
 		for (String d : m_defines) {
 			builder.append("#define " + d).append('\n');
 		}
-		builder.append(m_source);
+		
+		//Newline inbetween defines and main source code
+		builder.append('\n');
+		
+		builder.append(m_source.substring(endVersionIndex));
 		return builder.toString();
 	}
 }

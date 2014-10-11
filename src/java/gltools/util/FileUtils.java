@@ -12,7 +12,7 @@ public class FileUtils {
 		return s_readAll(new FileInputStream(in));
 	}
 	public static String s_readAll(InputStream in) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 		
 		StringBuilder text = new StringBuilder();
 		String line;
@@ -21,5 +21,6 @@ public class FileUtils {
 		}
 		reader.close();
 		return text.toString();
+
 	}
 }
