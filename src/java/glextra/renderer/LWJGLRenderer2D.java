@@ -16,6 +16,7 @@ import gltools.extra.GeometryFactory;
 import gltools.shader.InputUsage;
 import gltools.util.GLMatrix3f;
 import gltools.vector.MatrixFactory;
+import gltools.vector.MatrixUtils;
 import gltools.vector.Vector2f;
 
 import java.util.ArrayList;
@@ -118,6 +119,34 @@ public class LWJGLRenderer2D implements Renderer2D {
 	public void rotate(float radians) {
 		m_modelMat.getCurrentMatrix().mul(
 				MatrixFactory.create2DRotationMatrix(radians));
+	}
+	
+	@Override
+	public Vector2f getViewTranslation() {
+		return MatrixUtils.getTranslation(m_viewMat.getCurrentMatrix());
+	}
+	@Override
+	public Vector2f getModelTranslation() {
+		return MatrixUtils.getTranslation(m_modelMat.getCurrentMatrix());
+	}
+	
+	@Override
+	public Vector2f getViewScale() {
+		return MatrixUtils.getScale(m_viewMat.getCurrentMatrix());
+	}
+	@Override
+	public Vector2f getModelScale() {
+		return MatrixUtils.getScale(m_modelMat.getCurrentMatrix());
+	}
+	
+	@Override
+	public float getViewRotation() {
+		return MatrixUtils.getRotation(m_viewMat.getCurrentMatrix());
+	}
+	
+	@Override
+	public float getModelRotation() {
+		return MatrixUtils.getRotation(m_modelMat.getCurrentMatrix());
 	}
 	
 	@Override

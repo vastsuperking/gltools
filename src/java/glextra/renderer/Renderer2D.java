@@ -3,6 +3,7 @@ package glextra.renderer;
 import glextra.font.Font;
 import glextra.material.GlobalParamProvider;
 import glextra.material.Material;
+import gltools.vector.Vector2f;
 
 public interface Renderer2D {
 	public void init(int displayWidth, int displayHeight, float left, float right, float top, float bottom);
@@ -21,6 +22,15 @@ public interface Renderer2D {
 	public void translate(float x, float y);
 	public void scale(float x, float y);
 	public void rotate(float radians);
+	
+	public Vector2f getViewTranslation();
+	public Vector2f getModelTranslation();
+	
+	public Vector2f getViewScale();
+	public Vector2f getModelScale();
+	
+	public float getViewRotation();
+	public float getModelRotation();
 	
 	public void pushView();
 	public void popView();

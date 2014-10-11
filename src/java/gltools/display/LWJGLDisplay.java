@@ -16,7 +16,8 @@ public class LWJGLDisplay implements Display {
 	 * to fiddle around with the display, or require the display
 	 */
 	private static boolean s_created = false;
-
+	
+	private boolean m_fullscreen = false;
 	private final boolean m_vsync;
 	private final int m_width;
 	private final int m_height;
@@ -37,6 +38,15 @@ public class LWJGLDisplay implements Display {
 	public Mouse getMouse() { return LWJGLMouse.getInstance(); }
 	public Keyboard getKeyboard() { return LWJGLKeyboard.getInstance(); }
 
+	public void useFullscreen(boolean fullscreen) {
+		m_fullscreen = fullscreen;
+		try {
+			org.lwjgl.opengl.Display.setFullscreen(fullscreen);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void setTitle(String title) { 
 		org.lwjgl.opengl.Display.setTitle(title);
 	}
@@ -52,6 +62,7 @@ public class LWJGLDisplay implements Display {
 	@Override
 	public void init() {
 		try {
+			System.setProperty("org.lwjgl.opengl.Display.enableOSXFullscreenModeAPI", "true");
 			org.lwjgl.opengl.Display.setDisplayMode(new DisplayMode(m_width, m_height));
 			org.lwjgl.opengl.Display.setVSyncEnabled(m_vsync);
 			org.lwjgl.opengl.Display.create();
