@@ -47,7 +47,7 @@ public class Shader {
 		GL20.glShaderSource(getID(), m_source.getFullSource());
 		GL20.glCompileShader(getID());
 		if (!isCompiled()) {
-			throw new ShaderCompileException(getInfoLog());
+			throw new ShaderCompileException("Could not compile " + getShaderType() + " : " + getInfoLog());
 		}
 	}
 	public boolean isCompiled() {
