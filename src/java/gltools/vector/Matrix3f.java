@@ -190,7 +190,17 @@ public class Matrix3f extends Matrix {
 		dest.m20 = m20; dest.m21 = m21; dest.m22 = m22;
 		return dest;
 	}
-	
+	public static Vector3f mul(Matrix3f mat, Vector3f vec, Vector3f dest) {
+		if (dest == null) dest = new Vector3f();
+		float x = mat.m00 * vec.x + mat.m01 * vec.y + mat.m02 * vec.z;
+		float y = mat.m10 * vec.x + mat.m11 * vec.y + mat.m12 * vec.z;
+		float z = mat.m20 * vec.x + mat.m21 * vec.y + mat.m22 * vec.z;
+		dest.x = x;
+		dest.y = y;
+		dest.z = z;
+		
+		return dest;
+	}
 	public static Matrix3f add(Matrix3f left, Matrix3f right, Matrix3f dest) {
 		if (dest == null) dest = new Matrix3f();
 		dest.m00 = left.m00 + right.m00;
