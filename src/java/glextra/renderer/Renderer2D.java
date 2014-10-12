@@ -3,6 +3,7 @@ package glextra.renderer;
 import glextra.font.Font;
 import glextra.material.GlobalParamProvider;
 import glextra.material.Material;
+import gltools.vector.Matrix3f;
 import gltools.vector.Vector2f;
 
 public interface Renderer2D {
@@ -31,6 +32,9 @@ public interface Renderer2D {
 	
 	public float getViewRotation();
 	public float getModelRotation();
+	
+	public Matrix3f getModelMatrix();
+	public Matrix3f getViewMatrix();
 	
 	public void pushView();
 	public void popView();

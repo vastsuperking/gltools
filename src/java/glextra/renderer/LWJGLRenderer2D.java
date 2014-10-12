@@ -15,6 +15,7 @@ import gltools.buffer.VertexBuffer;
 import gltools.extra.GeometryFactory;
 import gltools.shader.InputUsage;
 import gltools.util.GLMatrix3f;
+import gltools.vector.Matrix3f;
 import gltools.vector.MatrixFactory;
 import gltools.vector.MatrixUtils;
 import gltools.vector.Vector2f;
@@ -147,6 +148,15 @@ public class LWJGLRenderer2D implements Renderer2D {
 	@Override
 	public float getModelRotation() {
 		return MatrixUtils.getRotation(m_modelMat.getCurrentMatrix());
+	}
+	
+	@Override
+	public Matrix3f getModelMatrix() {
+		return m_modelMat.getCurrentMatrix();
+	}
+	@Override
+	public Matrix3f getViewMatrix() {
+		return m_viewMat.getCurrentMatrix();
 	}
 	
 	@Override
