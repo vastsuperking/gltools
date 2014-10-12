@@ -17,6 +17,14 @@ public interface Renderer2D {
 	
 	public GlobalParamProvider getGlobalParams();
 		
+	public float getCSTop();
+	public float getCSBottom();
+	public float getCSRight();
+	public float getCSLeft();
+	
+	public float getDisplayWidth();
+	public float getDisplayHeight();
+	
 	public void viewTrans(float x, float y);
 	public void viewScale(float x, float y);
 	

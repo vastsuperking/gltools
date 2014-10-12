@@ -42,6 +42,15 @@ public class LWJGLRenderer2D implements Renderer2D {
 	private VertexBuffer m_texCoordsBuf;
 	private IndexBuffer m_indicesBuf;
 	
+	//CS
+	private float m_csTop;
+	private float m_csBottom;
+	private float m_csRight;
+	private float m_csLeft;
+	
+	private float m_displayWidth;
+	private float m_displayHeight;
+	
 	//private GlobalParamProvider m_provider;
 	
 	//Current states
@@ -72,6 +81,13 @@ public class LWJGLRenderer2D implements Renderer2D {
 		m_verticesBuf = new VertexBuffer();
 		m_texCoordsBuf = new VertexBuffer();
 		m_indicesBuf = new IndexBuffer();
+		
+		m_csLeft = left;
+		m_csRight = right;
+		m_csTop = top;
+		m_csBottom = bottom;
+		m_displayWidth = displayWidth;
+		m_displayHeight = displayHeight;
 	}
 
 	
@@ -93,6 +109,19 @@ public class LWJGLRenderer2D implements Renderer2D {
 	public GlobalParamProvider getGlobalParams() {
 		return GlobalParams.getInstance();
 	}
+	@Override
+	public float getCSTop() { return m_csTop; }
+	@Override
+	public float getCSBottom() { return m_csBottom; }
+	@Override
+	public float getCSRight() { return m_csRight; }
+	@Override
+	public float getCSLeft() { return m_csLeft; }
+	@Override
+	public float getDisplayWidth() { return m_displayWidth; }
+	@Override
+	public float getDisplayHeight() { return m_displayHeight; }
+	
 	@Override
 	public void viewTrans(float x, float y) {
 		m_viewMat.getCurrentMatrix().mul(
