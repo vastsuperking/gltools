@@ -1,5 +1,6 @@
 package glextra.particle;
 
+import glcommon.vector.Vector3f;
 import gltools.Mode;
 import gltools.ResourceLocator.ClasspathResourceLocator;
 import gltools.buffer.AttribArray;
@@ -13,7 +14,6 @@ import gltools.shader.Uniform;
 import gltools.texture.Texture1D;
 import gltools.texture.Texture2D;
 import gltools.util.GLMatrix4f;
-import gltools.vector.Vector3f;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;

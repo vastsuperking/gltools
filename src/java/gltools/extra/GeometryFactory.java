@@ -1,6 +1,6 @@
 package gltools.extra;
 
-import gltools.BufferUtils;
+import glcommon.BufferUtils;
 import gltools.Mode;
 import gltools.Primitive;
 import gltools.Vertex;

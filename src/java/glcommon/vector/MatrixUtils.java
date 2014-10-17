@@ -1,4 +1,4 @@
-package gltools.vector;
+package glcommon.vector;
 
 public class MatrixUtils {
 	public static Vector2f getTranslation(Matrix3f mat) {

@@ -1,11 +1,11 @@
 package gltools;
 
+import glcommon.Color;
+import glcommon.vector.Vector2f;
+import glcommon.vector.Vector3f;
 import gltools.shader.Attribute;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
-import gltools.texture.Color;
-import gltools.vector.Vector2f;
-import gltools.vector.Vector3f;
 
 import java.nio.ByteBuffer;
 import java.util.Collection;

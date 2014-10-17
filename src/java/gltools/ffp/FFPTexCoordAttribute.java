@@ -1,11 +1,11 @@
 package gltools.ffp;
 
+import glcommon.vector.Matrix4f;
+import glcommon.vector.Vector2f;
+import glcommon.vector.Vector3f;
+import glcommon.vector.Vector4f;
 import gltools.shader.Attribute;
 import gltools.shader.InputUsage;
-import gltools.vector.Matrix4f;
-import gltools.vector.Vector2f;
-import gltools.vector.Vector3f;
-import gltools.vector.Vector4f;
 
 import org.lwjgl.opengl.GL11;
 

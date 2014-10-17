@@ -1,5 +1,9 @@
 package glextra.renderer;
 
+import glcommon.vector.Matrix3f;
+import glcommon.vector.MatrixFactory;
+import glcommon.vector.MatrixUtils;
+import glcommon.vector.Vector2f;
 import glextra.font.Font;
 import glextra.font.Font.Glyph;
 import glextra.material.GlobalParam;
@@ -15,10 +19,6 @@ import gltools.buffer.VertexBuffer;
 import gltools.extra.GeometryFactory;
 import gltools.shader.InputUsage;
 import gltools.util.GLMatrix3f;
-import gltools.vector.Matrix3f;
-import gltools.vector.MatrixFactory;
-import gltools.vector.MatrixUtils;
-import gltools.vector.Vector2f;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,6 @@
-package gltools.texture;
+package glcommon;
 
-import gltools.vector.Vector4f;
+import glcommon.vector.Vector4f;
 
 public class Color {
 	public static Color BLACK = new Color(0f, 0f, 0f, 1f);

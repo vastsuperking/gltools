@@ -1,7 +1,7 @@
 package gltools.extra;
 
+import glcommon.vector.Vector3f;
 import gltools.display.Camera3D;
-import gltools.vector.Vector3f;
 
 public class Billboard {
 	public enum BillboardMode{ MATCH_ALL, MATCH_YAW }

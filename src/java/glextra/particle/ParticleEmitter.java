@@ -1,6 +1,6 @@
 package glextra.particle;
 
-import gltools.vector.Vector3f;
+import glcommon.vector.Vector3f;
 
 import java.util.Random;
 

@@ -1,7 +1,7 @@
 package gltools.transform;
 
+import glcommon.vector.Matrix4f;
 import gltools.util.GLMatrix4f;
-import gltools.vector.Matrix4f;
 
 //Matrix Operation
 public abstract class MatOp4f {

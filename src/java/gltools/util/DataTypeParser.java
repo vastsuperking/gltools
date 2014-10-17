@@ -1,11 +1,11 @@
 package gltools.util;
 
+import glcommon.vector.Matrix2f;
+import glcommon.vector.Matrix4f;
+import glcommon.vector.Vector2f;
+import glcommon.vector.Vector3f;
+import glcommon.vector.Vector4f;
 import gltools.shader.DataType;
-import gltools.vector.Matrix2f;
-import gltools.vector.Matrix4f;
-import gltools.vector.Vector2f;
-import gltools.vector.Vector3f;
-import gltools.vector.Vector4f;
 
 import java.nio.FloatBuffer;
 

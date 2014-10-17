@@ -1,6 +1,6 @@
 package gltools;
 
-import gltools.vector.Vector3f;
+import glcommon.vector.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;

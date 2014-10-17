@@ -1,12 +1,12 @@
 package glextra.material;
 
+import glcommon.Color;
+import glcommon.vector.Vector2f;
+import glcommon.vector.Vector3f;
+import glcommon.vector.Vector4f;
 import gltools.shader.DataType;
-import gltools.texture.Color;
 import gltools.texture.Texture1D;
 import gltools.texture.Texture2D;
-import gltools.vector.Vector2f;
-import gltools.vector.Vector3f;
-import gltools.vector.Vector4f;
 
 import java.util.HashMap;
 

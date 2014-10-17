@@ -1,5 +1,7 @@
 package glextra.renderer;
 
+import glcommon.Color;
+import glcommon.vector.Vector3f;
 import glextra.renderer.GBuffer.GBufferMode;
 import gltools.ResourceLocator.ClasspathResourceLocator;
 import gltools.shader.DataType;
@@ -9,8 +11,6 @@ import gltools.shader.Program.ProgramLinkException;
 import gltools.shader.ProgramXMLLoader;
 import gltools.shader.Shader.ShaderCompileException;
 import gltools.shader.Uniform;
-import gltools.texture.Color;
-import gltools.vector.Vector3f;
 
 import java.io.IOException;
 

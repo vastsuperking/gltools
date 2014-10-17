@@ -1,8 +1,8 @@
 package glextra;
 
+import glcommon.Color;
 import glextra.material.Material;
 import gltools.ResourceLocator;
-import gltools.texture.Color;
 
 import java.io.BufferedReader;
 import java.io.IOException;

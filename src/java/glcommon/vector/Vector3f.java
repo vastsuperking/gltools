@@ -1,4 +1,4 @@
-package gltools.vector;
+package glcommon.vector;
 
 
 import java.nio.FloatBuffer;

@@ -1,10 +1,10 @@
 package gltools.util;
 
+import glcommon.vector.Matrix3f;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
 import gltools.shader.Uniform;
-import gltools.vector.Matrix3f;
 
 import java.util.Stack;
 

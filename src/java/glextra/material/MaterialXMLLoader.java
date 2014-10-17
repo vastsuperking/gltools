@@ -1,5 +1,8 @@
 package glextra.material;
 
+import glcommon.vector.Vector2f;
+import glcommon.vector.Vector3f;
+import glcommon.vector.Vector4f;
 import gltools.ResourceLocator;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
@@ -13,9 +16,6 @@ import gltools.texture.Texture1D;
 import gltools.texture.Texture2D;
 import gltools.texture.TextureFactory;
 import gltools.util.FileUtils;
-import gltools.vector.Vector2f;
-import gltools.vector.Vector3f;
-import gltools.vector.Vector4f;
 
 import java.io.IOException;
 import java.io.InputStream;

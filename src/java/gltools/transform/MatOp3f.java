@@ -1,7 +1,7 @@
 package gltools.transform;
 
+import glcommon.vector.Matrix3f;
 import gltools.util.GLMatrix3f;
-import gltools.vector.Matrix3f;
 
 public abstract class MatOp3f {
 	public abstract Matrix3f getTransform();

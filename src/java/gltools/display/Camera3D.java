@@ -1,10 +1,10 @@
 package gltools.display;
 
+import glcommon.vector.Matrix4f;
+import glcommon.vector.MatrixFactory;
+import glcommon.vector.Vector3f;
+import glcommon.vector.Vector4f;
 import gltools.util.GLMatrix4f;
-import gltools.vector.Matrix4f;
-import gltools.vector.MatrixFactory;
-import gltools.vector.Vector3f;
-import gltools.vector.Vector4f;
 
 public class Camera3D {
 	Vector3f m_position = new Vector3f(0f, 0f, 0f);

@@ -1,6 +1,6 @@
 package gltools.input;
 
-import gltools.vector.Vector2f;
+import glcommon.vector.Vector2f;
 
 import java.util.ArrayList;
 import java.util.HashMap;

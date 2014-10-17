@@ -1,8 +1,8 @@
 package gltools.transform;
 
-import gltools.vector.Matrix4f;
-import gltools.vector.MatrixFactory;
-import gltools.vector.Vector3f;
+import glcommon.vector.Matrix4f;
+import glcommon.vector.MatrixFactory;
+import glcommon.vector.Vector3f;
 
 public class Translation3D extends MatOp4f {
 	private Vector3f m_translate = new Vector3f();

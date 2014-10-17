@@ -1,5 +1,7 @@
 package glextra;
 
+import glcommon.vector.Vector2f;
+import glcommon.vector.Vector3f;
 import glextra.material.Material;
 import gltools.ResourceLocator;
 import gltools.Triangle;
@@ -9,8 +11,6 @@ import gltools.Vertex.TexCoord;
 import gltools.Vertex.VertexNormal;
 import gltools.buffer.Geometry;
 import gltools.extra.GeometryFactory;
-import gltools.vector.Vector2f;
-import gltools.vector.Vector3f;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package gltools.vector;
+package glcommon.vector;
 
 public class MatrixFactory {//useful for creating projection matricies
 	/**

@@ -1,10 +1,10 @@
 package glextra.renderer;
 
+import glcommon.vector.Matrix3f;
+import glcommon.vector.Vector2f;
 import glextra.font.Font;
 import glextra.material.GlobalParamProvider;
 import glextra.material.Material;
-import gltools.vector.Matrix3f;
-import gltools.vector.Vector2f;
 
 public interface Renderer2D {
 	public void init(int displayWidth, int displayHeight, float left, float right, float top, float bottom);

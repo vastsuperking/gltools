@@ -1,6 +1,6 @@
 package glextra.renderer;
 
-import gltools.BufferUtils;
+import glcommon.BufferUtils;
 import gltools.buffer.FrameBuffer;
 import gltools.buffer.FrameBuffer.AttachmentPoint;
 import gltools.buffer.RenderBuffer;

@@ -1,7 +1,7 @@
 package gltools.transform;
 
-import gltools.vector.Matrix3f;
-import gltools.vector.MatrixFactory;
+import glcommon.vector.Matrix3f;
+import glcommon.vector.MatrixFactory;
 
 public class Rotation2D extends MatOp3f {
 	private float m_degrees;

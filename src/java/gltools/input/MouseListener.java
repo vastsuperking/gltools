@@ -1,7 +1,7 @@
 package gltools.input;
 
+import glcommon.vector.Vector2f;
 import gltools.input.Mouse.MouseButton;
-import gltools.vector.Vector2f;
 
 public interface MouseListener {
 	public void mouseMoved(Mouse m, int x, int y, Vector2f delta);

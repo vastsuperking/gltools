@@ -1,7 +1,7 @@
 package glextra.font;
 
+import glcommon.Color;
 import glextra.font.BMFont.BMGlyph;
-import gltools.texture.Color;
 import gltools.texture.Texture2D;
 import gltools.texture.TextureFactory;
 
