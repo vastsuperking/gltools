@@ -1,10 +1,11 @@
 package gltools.codegen;
 
+import gltools.util.Pair;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,19 +13,28 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import tools.codegen.GArgument;
+import tools.codegen.GCompilationUnit;
 import tools.codegen.GConstruct;
 import tools.codegen.GField;
 import tools.codegen.GInterface;
+import tools.codegen.GMethod;
+import tools.codegen.GVisibility;
+import tools.codegen.out.XMLGenerator;
 
 
 public class GenerateGLTemplates {
 	private static final String OUTPUT_DIR = "/Templates/GL/";
-	private static final String PACKAGE_SUMMARY_URL = "http://www.lwjgl.org/javadoc/org/lwjgl/opengl/package-summary.html";
+	//private static final String PACKAGE_SUMMARY_URL = "http://www.lwjgl.org/javadoc/org/lwjgl/opengl/package-summary.html";
 	private static final String CONSTANT_VALUES_URL = "http://www.lwjgl.org/javadoc/constant-values.html";
 	
 	private static final String LWJGL_CLASS_URL_PREFIX = "http://lwjgl.org/javadoc/org/lwjgl/opengl/";
@@ -33,28 +43,103 @@ public class GenerateGLTemplates {
 													 "GL20", "GL21",
 													 "GL30", "GL31", "GL32", "GL33",
 													 "GL40", "GL41", "GL42", "GL43", "GL44"};
-	
+	private static final HashMap<String, String> s_classReplaceMap = new HashMap<String, String>();
 	private HashMap<String, GField> m_constantFields = new HashMap<String, GField>();
+
+	static {
+		s_classReplaceMap.put("PointerWrapper", "Pointer");
+		s_classReplaceMap.put("KHRDebugCallback", "DebugCallback");
+	}
 	
-	public void run() throws IOException {
+	public void run() throws Exception {
 		parseConstants(CONSTANT_VALUES_URL);
 		HashMap<String, String> classURLs = parseClassListURLs();
-		parseClasses(classURLs);
+		List<GConstruct> constructs = parseClasses(classURLs);
+
+		File outputDir = new File("src/resources/" + OUTPUT_DIR);
+		for (GConstruct construct : constructs) {
+			File output = new File(outputDir, construct.getName() + ".template");
+			System.out.println("Writing: " + output.getAbsolutePath());
+			XMLGenerator generator = new XMLGenerator();
+			generator.setSourceUnit(new GCompilationUnit("gltools.gl", construct));
+			String xml = generator.generate();
+			s_write(xml, output);
+		}
 	}
-	private List<GConstruct> parseClasses(HashMap<String, String> classURLs) {
+	private List<GConstruct> parseClasses(HashMap<String, String> classURLs) throws IOException {
 		List<GConstruct> constructs = new ArrayList<GConstruct>();
 		
 		for (int i = 1; i <= 4; i++) {
 			GInterface interfaze = new GInterface("GL" + i);
 			Set<OnlineClass> validClasses = s_getClassesNameStarts(classURLs, "GL" + i);
+			
+			ArrayList<GMethod> methods = new ArrayList<GMethod>();
+			HashMap<String, GField> fields = new HashMap<String, GField>();
+			
 			for (OnlineClass onlineClass : validClasses) {
-				parseClass(onlineClass.getName(), onlineClass.getURL(), interfaze);
+				parseClass(onlineClass.getName(), onlineClass.getURL(), fields, methods);
 			}
+			
+			interfaze.addAll(fields.values());
+			interfaze.addAll(methods);
+			
+			constructs.add(interfaze);
 		}
 		return constructs;
 	}
-	private void parseClass(String name, String url, GInterface glInterface) {
-		System.out.println("Parsing: " + name + " for " + glInterface.getName());
+	private void parseClass(String name, String url, HashMap<String, GField> fields, ArrayList<GMethod> methods) throws IOException {
+		Document doc = s_get(url);
+		Element summaryContainer = doc.getElementsByClass("summary").first().child(0).child(0);
+		Element fieldSummary = summaryContainer.child(0);
+		Element fieldTBody = fieldSummary.getElementsByTag("tbody").first();
+		Elements fieldRows = fieldTBody.getElementsByTag("tr");
+		for (Element e : fieldRows) {
+			String fieldName = s_clean(e.child(1).text());
+			if (fieldName.equals("Field and Description")) continue;
+			else fieldName = fieldName.split(" ")[0];
+			if (m_constantFields.containsKey(fieldName)) {
+				fields.put(fieldName, m_constantFields.get(fieldName));
+			}
+		}
+		
+		Element methodSummary = summaryContainer.child(1);
+		Element methodTBody = methodSummary.getElementsByTag("tbody").first();
+		Elements methodRows = methodTBody.getElementsByTag("tr");
+		for (Element e : methodRows) {
+			String sig = s_clean(e.child(1).text());
+			String methodName = sig.split("\\(")[0];
+			if (methodName.equals("Method and Description")) continue;
+			ArrayList<GArgument> args = s_parseArguments(sig);
+			
+			String[] prts = e.child(0).text().split(" ");
+			String returnType = s_getClass(s_clean(prts[prts.length - 1]));
+			
+			GMethod method = new GMethod(GVisibility.PUBLIC, false, false, returnType, methodName);
+			method.addArguments(args);
+			methods.add(method);
+		}
+		System.out.println("Parsed: " + name + " for " + name.substring(0, name.length() - 1));
+	}
+	public static ArrayList<GArgument> s_parseArguments(String functionDeclaration) {
+		String[] splitStartingParenth = functionDeclaration.split("\\(");
+		if (splitStartingParenth.length < 2) return new ArrayList<GArgument>(); 
+		String[] splitEndingParenth = splitStartingParenth[1].split("\\)");
+		if (splitEndingParenth.length == 0) return new ArrayList<GArgument>();
+		String argumentsSeparated = splitEndingParenth[0];
+
+		String[] arguments = argumentsSeparated.split(",");
+		
+		ArrayList<GArgument> argumentList = new ArrayList<GArgument>(arguments.length);
+		for (int i = 0; i < arguments.length; i++) {
+			String arg = arguments[i].trim();
+			if (arg.equals("") || arg == null) continue;
+			String[] parts = arg.split("\\s+");
+			String type = s_getClass(parts[0]);
+			
+			String name = parts[1];
+			argumentList.add(new GArgument(type, name));
+		}
+		return argumentList;
 	}
 	private HashMap<String, String> parseClassListURLs() {
 		HashMap<String, String> classURLs = new HashMap<String, String>();
@@ -67,27 +152,35 @@ public class GenerateGLTemplates {
 	private void parseConstants(String constantsURL) throws IOException {
 		Document doc = s_get(constantsURL);
 		Element constantsContainer = doc.getElementsByClass("constantValuesContainer").first();
-		Elements tables = constantsContainer.getElementsByTag("table");
-		for (Element t : tables) {
-			//Get main table body(3rd element, 2nd index)
-			Element tBody = t.child(2);
-			//Get all table rows from table body
-			Elements rows = tBody.getElementsByTag("tr");
-			for (Element row : rows) processConstant(row);
+		Elements blockLists = constantsContainer.children();
+		for (Element bl : blockLists) {
+			if (!bl.attr("class").equals("blockList")) continue;
+			Elements innerBlockLists = bl.children();
+			for (Element ibl : innerBlockLists) {
+				if (!ibl.attr("class").equals("blockList")) continue;
+				
+				Element table = ibl.child(0);
+				System.out.println("Parsing: " + table.child(0).text());
+				//Get main table body(3rd element, 2nd index)
+				Element tBody = table.child(2);
+				//Get all table rows from table body
+				Elements rows = tBody.getElementsByTag("tr");
+				for (Element row : rows) processConstant(row);
+			}
 		}
 	}
 	private void processConstant(Element row) {
 		String modsAndType = s_clean(row.getAllElements().get(0).text());
-		String name = s_clean(row.child(1).text());
-		String value = s_clean(row.child(2).text());
 		String[] modsParts = modsAndType.split(" ");
-		String visibility = modsParts[0];
-		String type = modsParts[modsParts.length - 1];
+		String value = modsParts[modsParts.length - 1];
+		String name = modsParts[modsParts.length - 2];
+		String type = modsParts[modsParts.length - 3];
+		
 		boolean isStatic = modsAndType.contains("static");
 		boolean isFinal = modsAndType.contains("final");		if (s_isInt(value)) {
 			int intVal = Integer.parseInt(value);
 			String formattedValue = "0x" + String.format("%05X", intVal & 0xFFFFFF);
-			GField field = new GField(isStatic, isFinal, type, name, formattedValue);
+			GField field = new GField(GVisibility.PUBLIC, isStatic, isFinal, type, name, formattedValue);
 			m_constantFields.put(name, field);
 		}
 	}
@@ -99,8 +192,17 @@ public class GenerateGLTemplates {
 		return set;
 	}
 	public static Document s_get(String url) throws IOException {
-		return Jsoup.connect(url).get();
+		HttpGet get = new HttpGet(url);
+		HttpResponse response = HttpClients.createDefault().execute(get);
+		String html = EntityUtils.toString(response.getEntity());
+		return Jsoup.parse(html);
     }
+	
+	public static String s_getClass(String clazz) {
+		if (s_classReplaceMap.containsKey(clazz)) return s_classReplaceMap.get(clazz);
+		else return clazz;
+	}
+	
 	public static String s_clean(String input) {
 		return input.replace('\u00A0', ' ');
 	}
@@ -118,7 +220,7 @@ public class GenerateGLTemplates {
 		writer.print(output);
 		writer.close();
 	}
-	public static void main(String[] args) throws IOException, URISyntaxException {
+	public static void main(String[] args) throws Exception {
 		GenerateGLTemplates gen = new GenerateGLTemplates();
 		gen.run();
 	}
