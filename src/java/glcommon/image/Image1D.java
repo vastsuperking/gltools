@@ -1,5 +1,6 @@
 package glcommon.image;
 
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -19,6 +20,10 @@ public class Image1D {
 		m_length = length;
 		m_format = format;
 		m_data = buffer;
+	}
+	public Image1D(BufferedImage image) {
+		//TODO: Implement
+		throw new RuntimeException("Not implemented!");
 	}
 	public int getLength() { return m_length; }
 	public ByteBuffer getData() { return m_data; }

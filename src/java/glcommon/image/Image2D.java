@@ -1,5 +1,8 @@
 package glcommon.image;
 
+import glcommon.common.Pair;
+
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -22,6 +25,13 @@ public class Image2D {
 		m_height = height;
 		m_format = format;
 		m_data = buffer;
+	}
+	public Image2D(BufferedImage image) {
+		Pair<ImageFormat, ByteBuffer> pair = ImageUtils.s_imageToByteBuffer(image);
+		m_format = pair.getKey();
+		m_data = pair.getValue();
+		m_width = image.getWidth();
+		m_height = image.getHeight();
 	}
 	public int getWidth() { return m_width; }
 	public int getHeight() { return m_height; }
