@@ -1,4 +1,4 @@
-package gltools.display;
+package gltools.transform;
 
 import glcommon.vector.Vector2f;
 import gltools.input.Keyboard;

@@ -1,11 +1,13 @@
 package gltools.codegen;
 
-import gltools.util.Pair;
-
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,13 +39,15 @@ public class GenerateGLTemplates {
 	//private static final String PACKAGE_SUMMARY_URL = "http://www.lwjgl.org/javadoc/org/lwjgl/opengl/package-summary.html";
 	private static final String CONSTANT_VALUES_URL = "http://www.lwjgl.org/javadoc/constant-values.html";
 	
-	private static final String LWJGL_CLASS_URL_PREFIX = "http://lwjgl.org/javadoc/org/lwjgl/opengl/";
+	//private static final String LWJGL_CLASS_URL_PREFIX = "http://lwjgl.org/javadoc/org/lwjgl/opengl/";
+	private static final String LWJGL_CLASS_URL_PREFIX = "file:///home/daniel/programs/java/graphics/lwjgl/doc/javadoc/org/lwjgl/opengl/";
+
 	private static final String LWJGL_CLASS_URL_SUFFIX = ".html";
 	private static final String[] LWJGL_CLASSES = {"GL11", "GL12", "GL13", "GL14", "GL15",
 													 "GL20", "GL21",
 													 "GL30", "GL31", "GL32", "GL33",
 													 "GL40", "GL41", "GL42", "GL43", "GL44"};
-	private static final HashMap<String, String> s_classReplaceMap = new HashMap<String, String>();
+	public static final HashMap<String, String> s_classReplaceMap = new HashMap<String, String>();
 	private HashMap<String, GField> m_constantFields = new HashMap<String, GField>();
 
 	static {
@@ -192,10 +196,19 @@ public class GenerateGLTemplates {
 		return set;
 	}
 	public static Document s_get(String url) throws IOException {
-		HttpGet get = new HttpGet(url);
-		HttpResponse response = HttpClients.createDefault().execute(get);
-		String html = EntityUtils.toString(response.getEntity());
-		return Jsoup.parse(html);
+		if (url.startsWith("file")) {
+			try {
+				return Jsoup.parse(s_read(new File(new URL(url).toURI())));
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+			return null;
+		} else {
+			HttpGet get = new HttpGet(url);
+			HttpResponse response = HttpClients.createDefault().execute(get);
+			String html = EntityUtils.toString(response.getEntity());
+			return Jsoup.parse(html);
+		}
     }
 	
 	public static String s_getClass(String clazz) {
@@ -214,6 +227,18 @@ public class GenerateGLTemplates {
 	    }
 	    // only got here if we didn't return false
 	    return true;
+	}
+	private static String s_read(File f) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(f));
+		StringBuilder builder = new StringBuilder();
+		
+		String line;
+		while((line = reader.readLine()) != null) {
+			builder.append(line).append('\n');
+		}
+		reader.close();
+		
+		return builder.toString();
 	}
 	public static void s_write(String output, File file) throws IOException {
 		PrintWriter writer = new PrintWriter(new FileWriter(file));

@@ -118,7 +118,6 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_UNIFORM_TYPE" value="0x08A37"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT" value="0x00001"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_UNSIGNED_INT_SAMPLER_3D" value="0x08DD3"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_SRC1_ALPHA" value="0x08589"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_COMPARE_REF_TO_TEXTURE" value="0x0884E"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_LINE_STRIP_ADJACENCY" value="0x0000B"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE" value="0x0910A"/>

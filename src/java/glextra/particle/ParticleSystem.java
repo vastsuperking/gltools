@@ -1,7 +1,7 @@
 package glextra.particle;
 
 import glcommon.vector.Vector3f;
-import gltools.display.Camera3D;
+import gltools.transform.Camera3D;
 
 import java.util.ArrayList;
 import java.util.Collections;

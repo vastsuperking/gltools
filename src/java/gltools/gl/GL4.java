@@ -1,4 +1,6 @@
 package gltools.gl;
+
+
 public interface GL4 {
 	public static final int GL_REFERENCED_BY_TESS_EVALUATION_SHADER = 0x09308;
 	public static final int GL_IMAGE_1D = 0x0904C;
@@ -14,18 +16,16 @@ public interface GL4 {
 	public static final int GL_PROXY_TEXTURE_CUBE_MAP_ARRAY = 0x0900B;
 	public static final int GL_DOUBLE_MAT3x4 = 0x08F4C;
 	public static final int GL_UNSIGNED_INT_ATOMIC_COUNTER = 0x092DB;
-	public static final int GL_DOUBLE_MAT4x2 = 0x08F4D;
 	public static final int GL_MIN_MAP_BUFFER_ALIGNMENT = 0x090BC;
+	public static final int GL_DOUBLE_MAT4x2 = 0x08F4D;
 	public static final int GL_UNPACK_COMPRESSED_BLOCK_WIDTH = 0x09127;
 	public static final int GL_DOUBLE_MAT4x3 = 0x08F4E;
-	public static final int GL_UNIFORM_SIZE = 0x08A38;
 	public static final int GL_DEBUG_TYPE_POP_GROUP = 0x0826A;
 	public static final int GL_TEXTURE_SHADOW = 0x082A1;
 	public static final int GL_MAX_TESS_GEN_LEVEL = 0x08E7E;
 	public static final int GL_QUERY = 0x082E3;
 	public static final int GL_IMAGE_2D = 0x0904D;
 	public static final int GL_ARRAY_STRIDE = 0x092FE;
-	public static final int GL_TEXTURE_3D = 0x0806F;
 	public static final int GL_MAX_IMAGE_UNITS = 0x08F38;
 	public static final int GL_TESS_CONTROL_SUBROUTINE_UNIFORM = 0x092EF;
 	public static final int GL_VERTEX_BINDING_OFFSET = 0x082D7;
@@ -45,7 +45,6 @@ public interface GL4 {
 	public static final int GL_MAX_FRAGMENT_UNIFORM_VECTORS = 0x08DFD;
 	public static final int GL_FRAMEBUFFER_BLEND = 0x0828B;
 	public static final int GL_TEXTURE_IMMUTABLE_LEVELS = 0x082DF;
-	public static final int GL_TEXTURE_RECTANGLE = 0x084F5;
 	public static final int GL_PROGRAM_BINARY_RETRIEVABLE_HINT = 0x08257;
 	public static final int GL_VERTEX_TEXTURE = 0x0829B;
 	public static final int GL_DEBUG_TYPE_OTHER = 0x08251;
@@ -54,7 +53,6 @@ public interface GL4 {
 	public static final int GL_MAX_TESS_PATCH_COMPONENTS = 0x08E84;
 	public static final int GL_UNSIGNED_INT_SAMPLER_CUBE_MAP_ARRAY = 0x0900F;
 	public static final int GL_MAX_COMPUTE_UNIFORM_COMPONENTS = 0x08263;
-	public static final int GL_TEXTURE_2D = 0x00DE1;
 	public static final int GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM = 0x08E8D;
 	public static final int GL_MAX_TESS_CONTROL_TOTAL_OUTPUT_COMPONENTS = 0x08E85;
 	public static final int GL_VIEW_CLASS_24_BITS = 0x082C9;
@@ -69,7 +67,6 @@ public interface GL4 {
 	public static final int GL_MAX_UNIFORM_LOCATIONS = 0x0826E;
 	public static final int GL_ACTIVE_SUBROUTINES = 0x08DE5;
 	public static final int GL_IS_PER_PATCH = 0x092E7;
-	public static final int GL_TEXTURE_1D = 0x00DE0;
 	public static final int GL_ACTIVE_ATOMIC_COUNTER_BUFFERS = 0x092D9;
 	public static final int GL_SIMULTANEOUS_TEXTURE_AND_STENCIL_TEST = 0x082AD;
 	public static final int GL_PIXEL_BUFFER_BARRIER_BIT = 0x00080;
@@ -85,7 +82,6 @@ public interface GL4 {
 	public static final int GL_IMAGE_CLASS_2_X_8 = 0x082C0;
 	public static final int GL_IMAGE_2D_MULTISAMPLE = 0x09055;
 	public static final int GL_MAX_COMPUTE_WORK_GROUP_COUNT = 0x091BE;
-	public static final int GL_TEXTURE_1D_ARRAY = 0x08C18;
 	public static final int GL_DEBUG_SOURCE_THIRD_PARTY = 0x08249;
 	public static final int GL_MAX_NUM_ACTIVE_VARIABLES = 0x092F7;
 	public static final int GL_FRAGMENT_INTERPOLATION_OFFSET_BITS = 0x08E5D;
@@ -171,14 +167,13 @@ public interface GL4 {
 	public static final int GL_PACK_COMPRESSED_BLOCK_HEIGHT = 0x0912C;
 	public static final int GL_VIEW_CLASS_S3TC_DXT1_RGBA = 0x082CD;
 	public static final int GL_MAX_COMPUTE_ATOMIC_COUNTERS = 0x08265;
-	public static final int GL_MAX_FRAGMENT_ATOMIC_COUNTERS = 0x092D6;
 	public static final int GL_MAX_TESS_EVALUATION_ATOMIC_COUNTER_BUFFERS = 0x092CE;
+	public static final int GL_MAX_FRAGMENT_ATOMIC_COUNTERS = 0x092D6;
 	public static final int GL_MAX_HEIGHT = 0x0827F;
 	public static final int GL_ARRAY_SIZE = 0x092FB;
-	public static final int GL_STACK_UNDERFLOW = 0x00504;
 	public static final int GL_IMAGE_CLASS_4_X_32 = 0x082B9;
-	public static final int GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS = 0x090DD;
 	public static final int GL_BUFFER = 0x082E0;
+	public static final int GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS = 0x090DD;
 	public static final int GL_LOCATION_COMPONENT = 0x0934A;
 	public static final int GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS = 0x09314;
 	public static final int GL_TEXTURE_COMPRESSED_BLOCK_SIZE = 0x082B3;
@@ -196,8 +191,8 @@ public interface GL4 {
 	public static final int GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS = 0x090DC;
 	public static final int GL_VERTEX_ATTRIB_RELATIVE_OFFSET = 0x082D5;
 	public static final int GL_VERTEX_BINDING_DIVISOR = 0x082D6;
-	public static final int GL_MAX_WIDTH = 0x0827E;
 	public static final int GL_MAX_TESS_CONTROL_OUTPUT_COMPONENTS = 0x08E83;
+	public static final int GL_MAX_WIDTH = 0x0827E;
 	public static final int GL_REFERENCED_BY_VERTEX_SHADER = 0x09306;
 	public static final int GL_LOW_INT = 0x08DF3;
 	public static final int GL_IMAGE_CLASS_4_X_16 = 0x082BC;
@@ -252,7 +247,6 @@ public interface GL4 {
 	public static final int GL_MAX_GEOMETRY_ATOMIC_COUNTER_BUFFERS = 0x092CF;
 	public static final int GL_IMAGE_FORMAT_COMPATIBILITY_TYPE = 0x090C7;
 	public static final int GL_MAX_VARYING_VECTORS = 0x08DFC;
-	public static final int GL_TEXTURE_2D_MULTISAMPLE_ARRAY = 0x09102;
 	public static final int GL_SHADER_IMAGE_STORE = 0x082A5;
 	public static final int GL_IMAGE_2D_MULTISAMPLE_ARRAY = 0x09056;
 	public static final int GL_INTERNALFORMAT_SUPPORTED = 0x0826F;
@@ -263,9 +257,7 @@ public interface GL4 {
 	public static final int GL_TESS_CONTROL_SHADER_BIT = 0x00008;
 	public static final int GL_FRAGMENT_SUBROUTINE = 0x092EC;
 	public static final int GL_TESS_GEN_VERTEX_ORDER = 0x08E78;
-	public static final int GL_TEXTURE_COMPRESSED = 0x086A1;
 	public static final int GL_PATCH_DEFAULT_OUTER_LEVEL = 0x08E74;
-	public static final int GL_FIRST_VERTEX_CONVENTION = 0x08E4D;
 	public static final int GL_INTERNALFORMAT_SHARED_SIZE = 0x08277;
 	public static final int GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS = 0x091BC;
 	public static final int GL_SHADER_STORAGE_BLOCK = 0x092E6;
@@ -294,13 +286,10 @@ public interface GL4 {
 	public static final int GL_PACK_COMPRESSED_BLOCK_DEPTH = 0x0912D;
 	public static final int GL_VIEW_CLASS_64_BITS = 0x082C6;
 	public static final int GL_ALL_SHADER_BITS = 0xFFFFFF;
-	public static final int GL_VIEWPORT = 0x00BA2;
 	public static final int GL_IMAGE_CLASS_2_X_32 = 0x082BA;
-	public static final int GL_TEXTURE_2D_MULTISAMPLE = 0x09100;
 	public static final int GL_MEDIUM_INT = 0x08DF4;
 	public static final int GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC = 0x09279;
 	public static final int GL_IMAGE_BINDING_ACCESS = 0x08F3E;
-	public static final int GL_SCISSOR_TEST = 0x00C11;
 	public static final int GL_IMAGE_CLASS_1_X_32 = 0x082BB;
 	public static final int GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS = 0x08266;
 	public static final int GL_MATRIX_STRIDE = 0x092FF;
@@ -309,10 +298,8 @@ public interface GL4 {
 	public static final int GL_LAYER_PROVOKING_VERTEX = 0x0825E;
 	public static final int GL_TEXTURE_BUFFER_SIZE = 0x0919E;
 	public static final int GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_TESS_CONTROL_SHADER = 0x092C8;
-	public static final int GL_SAMPLES = 0x080A9;
 	public static final int GL_IMAGE_CLASS_1_X_8 = 0x082C1;
 	public static final int GL_SAMPLER = 0x082E6;
-	public static final int GL_RENDERBUFFER = 0x08D41;
 	public static final int GL_INT_IMAGE_BUFFER = 0x0905C;
 	public static final int GL_VERTEX_SHADER_BIT = 0x00001;
 	public static final int GL_VIEWPORT_SUBPIXEL_BITS = 0x0825C;
@@ -327,7 +314,6 @@ public interface GL4 {
 	public static final int GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2 = 0x09277;
 	public static final int GL_TRANSFORM_FEEDBACK_BUFFER_STRIDE = 0x0934C;
 	public static final int GL_TRANSFORM_FEEDBACK_BINDING = 0x08E25;
-	public static final int GL_LAST_VERTEX_CONVENTION = 0x08E4E;
 	public static final int GL_MAX_COMBINED_IMAGE_UNITS_AND_FRAGMENT_OUTPUTS = 0x08F39;
 	public static final int GL_MAX_VERTEX_STREAMS = 0x08E71;
 	public static final int GL_STENCIL_COMPONENTS = 0x08285;
@@ -339,16 +325,13 @@ public interface GL4 {
 	public static final int GL_MIN_SAMPLE_SHADING_VALUE = 0x08C37;
 	public static final int GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT = 0x00001;
 	public static final int GL_DEBUG_SOURCE_APPLICATION = 0x0824A;
-	public static final int GL_SCISSOR_BOX = 0x00C10;
 	public static final int GL_PATCH_DEFAULT_INNER_LEVEL = 0x08E73;
 	public static final int GL_UNSIGNED_INT_IMAGE_1D = 0x09062;
 	public static final int GL_DEBUG_OUTPUT = 0x092E0;
 	public static final int GL_COMPATIBLE_SUBROUTINES = 0x08E4B;
 	public static final int GL_MAX_COMPUTE_WORK_GROUP_SIZE = 0x091BF;
-	public static final int GL_PROVOKING_VERTEX = 0x08E4F;
 	public static final int GL_TEXTURE_FETCH_BARRIER_BIT = 0x00008;
 	public static final int GL_PATCHES = 0x0000E;
-	public static final int GL_UNIFORM_NAME_LENGTH = 0x08A39;
 	public static final int GL_DEBUG_TYPE_ERROR = 0x0824C;
 	public static final int GL_MAX_COMPUTE_SHARED_MEMORY_SIZE = 0x08262;
 	public static final int GL_GEOMETRY_SUBROUTINE_UNIFORM = 0x092F1;
@@ -368,13 +351,11 @@ public interface GL4 {
 	public static final int GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS = 0x090EB;
 	public static final int GL_VERTEX_ATTRIB_ARRAY_LONG = 0x0874E;
 	public static final int GL_TEXTURE_VIEW_NUM_LEVELS = 0x082DC;
-	public static final int GL_DEPTH_RANGE = 0x00B70;
 	public static final int GL_LOCATION_INDEX = 0x0930F;
 	public static final int GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS = 0x08E47;
 	public static final int GL_MAX_ELEMENT_INDEX = 0x08D6B;
 	public static final int GL_INT_IMAGE_2D_MULTISAMPLE_ARRAY = 0x09061;
 	public static final int GL_UNPACK_COMPRESSED_BLOCK_DEPTH = 0x09129;
-	public static final int GL_TEXTURE_CUBE_MAP = 0x08513;
 	public static final int GL_TEXTURE_BINDING_CUBE_MAP_ARRAY = 0x0900A;
 	public static final int GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE_ARRAY = 0x0906C;
 	public static final int GL_ACTIVE_RESOURCES = 0x092F5;
@@ -442,10 +423,8 @@ public interface GL4 {
 	public static final int GL_INTERNALFORMAT_ALPHA_TYPE = 0x0827B;
 	public static final int GL_MAX_DEPTH = 0x08280;
 	public static final int GL_PATCH_VERTICES = 0x08E72;
-	public static final int GL_TEXTURE_2D_ARRAY = 0x08C1A;
 	public static final int GL_IMAGE_BINDING_FORMAT = 0x0906E;
 	public static final int GL_INT_IMAGE_3D = 0x09059;
-	public static final int GL_STACK_OVERFLOW = 0x00503;
 	public static final int GL_TESS_EVALUATION_SHADER_BIT = 0x00010;
 	public static final int GL_PROGRAM_SEPARABLE = 0x08258;
 	public static final int GL_MAX_DEBUG_MESSAGE_LENGTH = 0x09143;
@@ -469,7 +448,6 @@ public interface GL4 {
 	public static final int GL_COMPUTE_SHADER = 0x091B9;
 	public static final int GL_IMAGE_CLASS_10_10_10_2 = 0x082C3;
 	public static final int GL_MAX_VERTEX_IMAGE_UNIFORMS = 0x090CA;
-	public static final int GL_TEXTURE_BUFFER = 0x08C2A;
 	public static final int GL_NUM_ACTIVE_VARIABLES = 0x09304;
 	public static final int GL_SAMPLE_SHADING = 0x08C36;
 	public static final int GL_VERTEX_SUBROUTINE = 0x092E8;
@@ -707,7 +685,7 @@ public interface GL4 {
 	public void glTexStorage3D(int target, int levels, int internalformat, int width, int height, int depth);
 	public void glBindVertexBuffer(int bindingindex, int buffer, long offset, int stride);
 	public void glClearBufferData(int target, int internalformat, int format, int type, java.nio.ByteBuffer data);
-	public void glClearBufferSubData(int target, int internalformat, long offset, int format, int type, java.nio.ByteBuffer data);
+	public void glClearBufferSubData(int target, int internalformat, long offset, long size, int format, int type, java.nio.ByteBuffer data);
 	public void glCopyImageSubData(int srcName, int srcTarget, int srcLevel, int srcX, int srcY, int srcZ, int dstName, int dstTarget, int dstLevel, int dstX, int dstY, int dstZ, int srcWidth, int srcHeight, int srcDepth);
 	public void glDebugMessageCallback(DebugCallback callback);
 	public void glDebugMessageControl(int source, int type, int severity, java.nio.IntBuffer ids, boolean enabled);

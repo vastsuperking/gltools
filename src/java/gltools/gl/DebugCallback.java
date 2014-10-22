@@ -31,6 +31,17 @@ public class DebugCallback {
 		GL_DEBUG_TYPE_OTHER               = 0x8251,
 		GL_DEBUG_TYPE_MARKER              = 0x8268;
 	
+	
+	private final Handler m_handler;
+	
+	public DebugCallback(Handler handler) {
+		m_handler = handler;
+	}
+	
+	
+	public Handler getHandler() { return m_handler; } 
+	
+	
 	public interface Handler {
 		public void handleMessage(int source, int type, int id, int severity, String message);
 	}

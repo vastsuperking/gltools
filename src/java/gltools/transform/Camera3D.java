@@ -1,4 +1,4 @@
-package gltools.display;
+package gltools.transform;
 
 import glcommon.vector.Matrix4f;
 import glcommon.vector.MatrixFactory;

@@ -14,18 +14,16 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_PROXY_TEXTURE_CUBE_MAP_ARRAY" value="0x0900B"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_DOUBLE_MAT3x4" value="0x08F4C"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_UNSIGNED_INT_ATOMIC_COUNTER" value="0x092DB"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_DOUBLE_MAT4x2" value="0x08F4D"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MIN_MAP_BUFFER_ALIGNMENT" value="0x090BC"/>
+	<field visibility="public" static="true" final="true" type="int" name="GL_DOUBLE_MAT4x2" value="0x08F4D"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_UNPACK_COMPRESSED_BLOCK_WIDTH" value="0x09127"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_DOUBLE_MAT4x3" value="0x08F4E"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_UNIFORM_SIZE" value="0x08A38"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_DEBUG_TYPE_POP_GROUP" value="0x0826A"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_SHADOW" value="0x082A1"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_TESS_GEN_LEVEL" value="0x08E7E"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_QUERY" value="0x082E3"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_2D" value="0x0904D"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_ARRAY_STRIDE" value="0x092FE"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_3D" value="0x0806F"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_IMAGE_UNITS" value="0x08F38"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TESS_CONTROL_SUBROUTINE_UNIFORM" value="0x092EF"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VERTEX_BINDING_OFFSET" value="0x082D7"/>
@@ -45,7 +43,6 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_FRAGMENT_UNIFORM_VECTORS" value="0x08DFD"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_FRAMEBUFFER_BLEND" value="0x0828B"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_IMMUTABLE_LEVELS" value="0x082DF"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_RECTANGLE" value="0x084F5"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_PROGRAM_BINARY_RETRIEVABLE_HINT" value="0x08257"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VERTEX_TEXTURE" value="0x0829B"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_DEBUG_TYPE_OTHER" value="0x08251"/>
@@ -54,7 +51,6 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_TESS_PATCH_COMPONENTS" value="0x08E84"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_UNSIGNED_INT_SAMPLER_CUBE_MAP_ARRAY" value="0x0900F"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_COMPUTE_UNIFORM_COMPONENTS" value="0x08263"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_2D" value="0x00DE1"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM" value="0x08E8D"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_TESS_CONTROL_TOTAL_OUTPUT_COMPONENTS" value="0x08E85"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VIEW_CLASS_24_BITS" value="0x082C9"/>
@@ -69,7 +65,6 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_UNIFORM_LOCATIONS" value="0x0826E"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_ACTIVE_SUBROUTINES" value="0x08DE5"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IS_PER_PATCH" value="0x092E7"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_1D" value="0x00DE0"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_ACTIVE_ATOMIC_COUNTER_BUFFERS" value="0x092D9"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_SIMULTANEOUS_TEXTURE_AND_STENCIL_TEST" value="0x082AD"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_PIXEL_BUFFER_BARRIER_BIT" value="0x00080"/>
@@ -85,7 +80,6 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_CLASS_2_X_8" value="0x082C0"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_2D_MULTISAMPLE" value="0x09055"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_COMPUTE_WORK_GROUP_COUNT" value="0x091BE"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_1D_ARRAY" value="0x08C18"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_DEBUG_SOURCE_THIRD_PARTY" value="0x08249"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_NUM_ACTIVE_VARIABLES" value="0x092F7"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_FRAGMENT_INTERPOLATION_OFFSET_BITS" value="0x08E5D"/>
@@ -171,14 +165,13 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_PACK_COMPRESSED_BLOCK_HEIGHT" value="0x0912C"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VIEW_CLASS_S3TC_DXT1_RGBA" value="0x082CD"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_COMPUTE_ATOMIC_COUNTERS" value="0x08265"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_FRAGMENT_ATOMIC_COUNTERS" value="0x092D6"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_TESS_EVALUATION_ATOMIC_COUNTER_BUFFERS" value="0x092CE"/>
+	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_FRAGMENT_ATOMIC_COUNTERS" value="0x092D6"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_HEIGHT" value="0x0827F"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_ARRAY_SIZE" value="0x092FB"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_STACK_UNDERFLOW" value="0x00504"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_CLASS_4_X_32" value="0x082B9"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS" value="0x090DD"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_BUFFER" value="0x082E0"/>
+	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS" value="0x090DD"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_LOCATION_COMPONENT" value="0x0934A"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS" value="0x09314"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_COMPRESSED_BLOCK_SIZE" value="0x082B3"/>
@@ -196,8 +189,8 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS" value="0x090DC"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VERTEX_ATTRIB_RELATIVE_OFFSET" value="0x082D5"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VERTEX_BINDING_DIVISOR" value="0x082D6"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_WIDTH" value="0x0827E"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_TESS_CONTROL_OUTPUT_COMPONENTS" value="0x08E83"/>
+	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_WIDTH" value="0x0827E"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_REFERENCED_BY_VERTEX_SHADER" value="0x09306"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_LOW_INT" value="0x08DF3"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_CLASS_4_X_16" value="0x082BC"/>
@@ -252,7 +245,6 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_GEOMETRY_ATOMIC_COUNTER_BUFFERS" value="0x092CF"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_FORMAT_COMPATIBILITY_TYPE" value="0x090C7"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_VARYING_VECTORS" value="0x08DFC"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_2D_MULTISAMPLE_ARRAY" value="0x09102"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_SHADER_IMAGE_STORE" value="0x082A5"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_2D_MULTISAMPLE_ARRAY" value="0x09056"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_INTERNALFORMAT_SUPPORTED" value="0x0826F"/>
@@ -263,9 +255,7 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_TESS_CONTROL_SHADER_BIT" value="0x00008"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_FRAGMENT_SUBROUTINE" value="0x092EC"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TESS_GEN_VERTEX_ORDER" value="0x08E78"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_COMPRESSED" value="0x086A1"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_PATCH_DEFAULT_OUTER_LEVEL" value="0x08E74"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_FIRST_VERTEX_CONVENTION" value="0x08E4D"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_INTERNALFORMAT_SHARED_SIZE" value="0x08277"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS" value="0x091BC"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_SHADER_STORAGE_BLOCK" value="0x092E6"/>
@@ -294,13 +284,10 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_PACK_COMPRESSED_BLOCK_DEPTH" value="0x0912D"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VIEW_CLASS_64_BITS" value="0x082C6"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_ALL_SHADER_BITS" value="0xFFFFFF"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_VIEWPORT" value="0x00BA2"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_CLASS_2_X_32" value="0x082BA"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_2D_MULTISAMPLE" value="0x09100"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MEDIUM_INT" value="0x08DF4"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC" value="0x09279"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_BINDING_ACCESS" value="0x08F3E"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_SCISSOR_TEST" value="0x00C11"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_CLASS_1_X_32" value="0x082BB"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS" value="0x08266"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MATRIX_STRIDE" value="0x092FF"/>
@@ -309,10 +296,8 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_LAYER_PROVOKING_VERTEX" value="0x0825E"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_BUFFER_SIZE" value="0x0919E"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_TESS_CONTROL_SHADER" value="0x092C8"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_SAMPLES" value="0x080A9"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_CLASS_1_X_8" value="0x082C1"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_SAMPLER" value="0x082E6"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_RENDERBUFFER" value="0x08D41"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_INT_IMAGE_BUFFER" value="0x0905C"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VERTEX_SHADER_BIT" value="0x00001"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VIEWPORT_SUBPIXEL_BITS" value="0x0825C"/>
@@ -327,7 +312,6 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2" value="0x09277"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TRANSFORM_FEEDBACK_BUFFER_STRIDE" value="0x0934C"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TRANSFORM_FEEDBACK_BINDING" value="0x08E25"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_LAST_VERTEX_CONVENTION" value="0x08E4E"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_COMBINED_IMAGE_UNITS_AND_FRAGMENT_OUTPUTS" value="0x08F39"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_VERTEX_STREAMS" value="0x08E71"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_STENCIL_COMPONENTS" value="0x08285"/>
@@ -339,16 +323,13 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_MIN_SAMPLE_SHADING_VALUE" value="0x08C37"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT" value="0x00001"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_DEBUG_SOURCE_APPLICATION" value="0x0824A"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_SCISSOR_BOX" value="0x00C10"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_PATCH_DEFAULT_INNER_LEVEL" value="0x08E73"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_UNSIGNED_INT_IMAGE_1D" value="0x09062"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_DEBUG_OUTPUT" value="0x092E0"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_COMPATIBLE_SUBROUTINES" value="0x08E4B"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_COMPUTE_WORK_GROUP_SIZE" value="0x091BF"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_PROVOKING_VERTEX" value="0x08E4F"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_FETCH_BARRIER_BIT" value="0x00008"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_PATCHES" value="0x0000E"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_UNIFORM_NAME_LENGTH" value="0x08A39"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_DEBUG_TYPE_ERROR" value="0x0824C"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_COMPUTE_SHARED_MEMORY_SIZE" value="0x08262"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_GEOMETRY_SUBROUTINE_UNIFORM" value="0x092F1"/>
@@ -368,13 +349,11 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS" value="0x090EB"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VERTEX_ATTRIB_ARRAY_LONG" value="0x0874E"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_VIEW_NUM_LEVELS" value="0x082DC"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_DEPTH_RANGE" value="0x00B70"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_LOCATION_INDEX" value="0x0930F"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS" value="0x08E47"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_ELEMENT_INDEX" value="0x08D6B"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_INT_IMAGE_2D_MULTISAMPLE_ARRAY" value="0x09061"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_UNPACK_COMPRESSED_BLOCK_DEPTH" value="0x09129"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_CUBE_MAP" value="0x08513"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_BINDING_CUBE_MAP_ARRAY" value="0x0900A"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE_ARRAY" value="0x0906C"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_ACTIVE_RESOURCES" value="0x092F5"/>
@@ -442,10 +421,8 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_INTERNALFORMAT_ALPHA_TYPE" value="0x0827B"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_DEPTH" value="0x08280"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_PATCH_VERTICES" value="0x08E72"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_2D_ARRAY" value="0x08C1A"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_BINDING_FORMAT" value="0x0906E"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_INT_IMAGE_3D" value="0x09059"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_STACK_OVERFLOW" value="0x00503"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_TESS_EVALUATION_SHADER_BIT" value="0x00010"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_PROGRAM_SEPARABLE" value="0x08258"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_DEBUG_MESSAGE_LENGTH" value="0x09143"/>
@@ -469,7 +446,6 @@
 	<field visibility="public" static="true" final="true" type="int" name="GL_COMPUTE_SHADER" value="0x091B9"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_IMAGE_CLASS_10_10_10_2" value="0x082C3"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_MAX_VERTEX_IMAGE_UNIFORMS" value="0x090CA"/>
-	<field visibility="public" static="true" final="true" type="int" name="GL_TEXTURE_BUFFER" value="0x08C2A"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_NUM_ACTIVE_VARIABLES" value="0x09304"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_SAMPLE_SHADING" value="0x08C36"/>
 	<field visibility="public" static="true" final="true" type="int" name="GL_VERTEX_SUBROUTINE" value="0x092E8"/>
@@ -1477,6 +1453,7 @@
 		<argument type="int" name="target"/>
 		<argument type="int" name="internalformat"/>
 		<argument type="long" name="offset"/>
+		<argument type="long" name="size"/>
 		<argument type="int" name="format"/>
 		<argument type="int" name="type"/>
 		<argument type="java.nio.ByteBuffer" name="data"/>

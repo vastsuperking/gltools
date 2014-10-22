@@ -1,4 +1,6 @@
 package gltools.gl;
+
+
 public interface GL3 {
 	public static final int GL_MAX_GEOMETRY_OUTPUT_VERTICES = 0x08DE0;
 	public static final int GL_CLIP_DISTANCE0 = 0x03000;
@@ -118,7 +120,6 @@ public interface GL3 {
 	public static final int GL_UNIFORM_TYPE = 0x08A37;
 	public static final int GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT = 0x00001;
 	public static final int GL_UNSIGNED_INT_SAMPLER_3D = 0x08DD3;
-	public static final int GL_SRC1_ALPHA = 0x08589;
 	public static final int GL_COMPARE_REF_TO_TEXTURE = 0x0884E;
 	public static final int GL_LINE_STRIP_ADJACENCY = 0x0000B;
 	public static final int GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE = 0x0910A;

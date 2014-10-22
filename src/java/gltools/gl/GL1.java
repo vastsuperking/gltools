@@ -1,4 +1,6 @@
 package gltools.gl;
+
+
 public interface GL1 {
 	public static final int GL_RETURN = 0x00102;
 	public static final int GL_SOURCE1_RGB = 0x08581;

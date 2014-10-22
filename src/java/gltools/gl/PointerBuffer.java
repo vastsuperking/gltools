@@ -12,7 +12,7 @@ import java.nio.LongBuffer;
 import java.nio.ReadOnlyBufferException;
 
 public class PointerBuffer implements Comparable<PointerBuffer> {
-	private static final boolean s_is64Bit;;
+	private static final boolean s_is64Bit;
 	
 	static {
 		s_is64Bit = System.getProperty("os.arch").endsWith("64");
@@ -37,6 +37,11 @@ public class PointerBuffer implements Comparable<PointerBuffer> {
 			m_64View = null;
 		}
 	}
+	public ByteBuffer getPointerBuffer() { return m_pointers; }
+	public Buffer getView() { return m_view; }
+	public IntBuffer get32View() { return m_32View; }
+	public LongBuffer get64View() { return m_64View; }
+	
 	public final int capacity() {
 		return m_view.capacity();
 	}
@@ -270,7 +275,7 @@ public class PointerBuffer implements Comparable<PointerBuffer> {
 		public PointerBufferR(final ByteBuffer source) {
 			super(source);
 		}
-
+		@Override
 		public boolean isReadOnly() {
 			return true;
 		}
@@ -278,27 +283,27 @@ public class PointerBuffer implements Comparable<PointerBuffer> {
 		protected PointerBuffer newInstance(final ByteBuffer source) {
 			return new PointerBufferR(source);
 		}
-
+		@Override
 		public PointerBuffer asReadOnlyBuffer() {
 			return duplicate();
 		}
-
+		@Override
 		public PointerBuffer put(final long l) {
 			throw new ReadOnlyBufferException();
 		}
-
+		@Override
 		public PointerBuffer put(final int index, final long l) {
 			throw new ReadOnlyBufferException();
 		}
-
+		@Override
 		public PointerBuffer put(final PointerBuffer src) {
 			throw new ReadOnlyBufferException();
 		}
-
+		@Override
 		public PointerBuffer put(final long[] src, final int offset, final int length) {
 			throw new ReadOnlyBufferException();
 		}
-
+		@Override
 		public PointerBuffer compact() {
 			throw new ReadOnlyBufferException();
 		}

@@ -1,4 +1,6 @@
 package gltools.gl;
+
+
 public interface GL2 {
 	public static final int GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS = 0x08B4D;
 	public static final int GL_POINT_SPRITE_COORD_ORIGIN = 0x08CA0;
