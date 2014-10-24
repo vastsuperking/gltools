@@ -1,6 +1,6 @@
 package glcommon.image;
 
-import glcommon.common.Pair;
+import glcommon.util.Pair;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -20,12 +20,12 @@ public class ImageUtils {
 		int fmtInt = img.getType();
 		switch(fmtInt) {
 		case BufferedImage.TYPE_BYTE_GRAY: return new Pair<ImageFormat, ByteBuffer>(ImageFormat.R, s_imageGreyscaleToByteBuffer(img));
-		case BufferedImage.TYPE_INT_ARGB: return new Pair<ImageFormat, ByteBuffer>(ImageFormat.RGBA, s_imageARGBToByteBufferRGBA(img));	
-		case BufferedImage.TYPE_INT_RGB: return new Pair<ImageFormat, ByteBuffer>(ImageFormat.RGB, s_imageRGBToByteBuffer(img));
+		case BufferedImage.TYPE_4BYTE_ABGR: return new Pair<ImageFormat, ByteBuffer>(ImageFormat.RGBA, s_imageABGRToByteBufferRGBA(img));	
+		case BufferedImage.TYPE_3BYTE_BGR: return new Pair<ImageFormat, ByteBuffer>(ImageFormat.RGB, s_imageBGRToByteBufferRGB(img));
 		default: throw new RuntimeException(s_intFormatToString(fmtInt) + " is not supported!");
 		}
 	}
-	public static ByteBuffer s_imageRGBToByteBuffer(BufferedImage img) {
+	public static ByteBuffer s_imageBGRToByteBufferRGB(BufferedImage img) {
 		AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
 		tx.translate(0, -img.getHeight());
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
@@ -48,7 +48,7 @@ public class ImageUtils {
 		buffer.flip(); //DO NOT FORGET THIS
 		return buffer;
 	}
-	public static ByteBuffer s_imageARGBToByteBufferRGBA(BufferedImage img) {
+	public static ByteBuffer s_imageABGRToByteBufferRGBA(BufferedImage img) {
 		AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
 		tx.translate(0, -img.getHeight());
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
@@ -95,10 +95,15 @@ public class ImageUtils {
 	}
 	public static String s_intFormatToString(int fmt) {
 		switch(fmt) {
+		case BufferedImage.TYPE_4BYTE_ABGR: return "4BYTE_ABGR";
+		case BufferedImage.TYPE_4BYTE_ABGR_PRE: return "4BYTE_ABGR_PRE";
 		case BufferedImage.TYPE_3BYTE_BGR: return "3BYTE_BGR";	
 		case BufferedImage.TYPE_BYTE_GRAY: return "BYTE_GRAY";
-		case BufferedImage.TYPE_INT_ARGB: return "INT_ARGB";	
+		case BufferedImage.TYPE_INT_ARGB: return "INT_ARGB";
 		case BufferedImage.TYPE_INT_RGB: return "INT_RGB";
+		case BufferedImage.TYPE_CUSTOM: return "CUSTOM";
+		case BufferedImage.TYPE_BYTE_INDEXED: return "BYTE_INDEXED";
+		case BufferedImage.TYPE_BYTE_BINARY: return "BYTE_BINARY";
 		default: return "UNKNOWN_TYPE";
 		}
 	}

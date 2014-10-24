@@ -9,6 +9,7 @@ import gltools.shader.Shader.ShaderCompileException;
 import gltools.shader.ShaderSource;
 import gltools.texture.Texture;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -19,6 +20,9 @@ public class Technique {
 	private HashMap<String, String> m_defines = new HashMap<String, String>();
 	
 	private HashSet<GlobalParam> m_globalParams = new HashSet<GlobalParam>();
+	//A set of strings representing render modes for which this technique is
+	//suited
+	private HashSet<String> m_renderModes = new HashSet<String>();
 	
 	private boolean m_needsRecompile = false;
 	
@@ -29,6 +33,16 @@ public class Technique {
 	public boolean needsRecompile() { return m_needsRecompile; }
 	public Program getProgram() { return m_program; }
 	public String getName() { return m_name; }
+	public HashSet<String> getRenderModes() { return m_renderModes; }
+	
+	public void addRenderMode(String mode) {
+		m_renderModes.add(mode);
+	}
+	public void addAllRenderModes(Collection<String> modes) {
+		m_renderModes.addAll(modes);
+	}
+	
+	public void clearRenderModes() { m_renderModes.clear(); }
 	
 	/**
 	 * When a parameter with inputusage usage is set,

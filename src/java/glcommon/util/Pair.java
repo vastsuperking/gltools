@@ -1,4 +1,4 @@
-package glcommon.common;
+package glcommon.util;
 
 import java.util.Objects;
 

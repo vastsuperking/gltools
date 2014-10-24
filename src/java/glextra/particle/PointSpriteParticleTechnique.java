@@ -1,8 +1,8 @@
 package glextra.particle;
 
+import glcommon.util.ResourceLocator.ClasspathResourceLocator;
 import glcommon.vector.Vector3f;
 import gltools.Mode;
-import gltools.ResourceLocator.ClasspathResourceLocator;
 import gltools.buffer.AttribArray;
 import gltools.buffer.BufferUsage;
 import gltools.buffer.Geometry;

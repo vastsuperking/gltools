@@ -5,9 +5,10 @@ import glcommon.vector.Vector2f;
 import glextra.font.Font;
 import glextra.material.GlobalParamProvider;
 import glextra.material.Material;
+import gltools.display.Display;
 
 public interface Renderer2D {
-	public void init(int displayWidth, int displayHeight, float left, float right, float top, float bottom);
+	public void init(float left, float right, float top, float bottom, Display display);
 	
 	public void setMaterial(Material mat);
 	public Material getMaterial();
@@ -22,8 +23,9 @@ public interface Renderer2D {
 	public float getCSRight();
 	public float getCSLeft();
 	
-	public float getDisplayWidth();
-	public float getDisplayHeight();
+	public Display getDisplay();
+	
+	public void updateProjection(float left, float right, float top, float bottom);
 	
 	public void viewTrans(float x, float y);
 	public void viewScale(float x, float y);

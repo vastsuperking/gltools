@@ -1,5 +1,7 @@
 package glcommon.image;
 
+import glcommon.util.Pair;
+
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
@@ -22,8 +24,12 @@ public class Image1D {
 		m_data = buffer;
 	}
 	public Image1D(BufferedImage image) {
-		//TODO: Implement
-		throw new RuntimeException("Not implemented!");
+		int length = image.getWidth() > image.getHeight() ? image.getWidth() : image.getHeight();
+		if (!(image.getWidth() == 1 || image.getHeight() == 1)) throw new RuntimeException("Width or height must be 1!");
+		m_length = length;
+		Pair<ImageFormat, ByteBuffer> pair = ImageUtils.s_imageToByteBuffer(image);
+		m_format = pair.getKey();
+		m_data = pair.getValue();
 	}
 	public int getLength() { return m_length; }
 	public ByteBuffer getData() { return m_data; }

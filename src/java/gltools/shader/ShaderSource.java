@@ -1,6 +1,6 @@
 package gltools.shader;
 
-import gltools.ResourceLocator;
+import glcommon.util.ResourceLocator;
 import gltools.util.FileUtils;
 
 import java.io.File;

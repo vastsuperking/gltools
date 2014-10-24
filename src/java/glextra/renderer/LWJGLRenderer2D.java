@@ -16,15 +16,21 @@ import gltools.buffer.AttribArray;
 import gltools.buffer.Geometry;
 import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
+import gltools.display.Display;
+import gltools.display.ResizeListener;
 import gltools.extra.GeometryFactory;
 import gltools.shader.InputUsage;
 import gltools.util.GLMatrix3f;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.lwjgl.opengl.GL11;
 
-
+/*
+ * Notes on non-lighted rendering in deferred (startLighting()) mode
+ * If input normals(normalMap) is 
+ */
 public class LWJGLRenderer2D implements Renderer2D {
 	private static LWJGLRenderer2D INSTANCE = null;
 	
@@ -48,8 +54,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	private float m_csRight;
 	private float m_csLeft;
 	
-	private float m_displayWidth;
-	private float m_displayHeight;
+	private Display m_display;
 	
 	//private GlobalParamProvider m_provider;
 	
@@ -57,11 +62,13 @@ public class LWJGLRenderer2D implements Renderer2D {
 	private Font m_font;
 	private Material m_material;
 	
+	private boolean m_usingDeferred = false;
+	
 	private LWJGLRenderer2D() {}
 	
 	@Override
-	public void init(int displayWidth, int displayHeight, float left, float right, float top, float bottom) {
-		m_gBuffer = new GBuffer(displayWidth, displayHeight);
+	public void init(float left, float right, float top, float bottom, Display display) {
+		m_gBuffer = new GBuffer(display.getWidth(), display.getHeight());
 		m_fullScreenQuad = GeometryFactory.s_generateFullScreenQuad();
 		
 		m_modelMat = new GLMatrix3f();
@@ -78,6 +85,14 @@ public class LWJGLRenderer2D implements Renderer2D {
 		m_projMat.setCurrentMatrix(
 				MatrixFactory.create2DProjectionMatrix(left, right, top, bottom));
 		
+		display.addResizedListener(new ResizeListener() {
+			public void onResize(int width, int height) {
+				System.out.println(width + " " + height);
+				GL11.glViewport(0, 0, width, height);
+				m_gBuffer.resize(width, height);
+			}
+		});
+		
 		m_verticesBuf = new VertexBuffer();
 		m_texCoordsBuf = new VertexBuffer();
 		m_indicesBuf = new IndexBuffer();
@@ -86,10 +101,9 @@ public class LWJGLRenderer2D implements Renderer2D {
 		m_csRight = right;
 		m_csTop = top;
 		m_csBottom = bottom;
-		m_displayWidth = displayWidth;
-		m_displayHeight = displayHeight;
+		
+		m_display = display;
 	}
-
 	
 	@Override
 	public void setMaterial(Material mat) {
@@ -118,9 +132,13 @@ public class LWJGLRenderer2D implements Renderer2D {
 	@Override
 	public float getCSLeft() { return m_csLeft; }
 	@Override
-	public float getDisplayWidth() { return m_displayWidth; }
+	public Display getDisplay() { return m_display; }
+	
 	@Override
-	public float getDisplayHeight() { return m_displayHeight; }
+	public void updateProjection(float left, float right, float top, float bottom) {
+		m_projMat.setCurrentMatrix(
+				MatrixFactory.create2DProjectionMatrix(left, right, top, bottom));		
+	}
 	
 	@Override
 	public void viewTrans(float x, float y) {
@@ -214,6 +232,9 @@ public class LWJGLRenderer2D implements Renderer2D {
 	public void fillRect(float x, float y, float width, float height, float texCoordWidth, float texCoordHeight) {
 		if (m_material == null) throw new RuntimeException("Must call setMaterial() first!");
 		
+		HashSet<String> modes = new HashSet<String>();
+		if (m_usingDeferred) modes.add("DEFERRED");
+		m_material.selectTechnique(modes);
 		m_material.bind();
 		//Sets the output buffers to point
 		//to the correct attachments
@@ -314,10 +335,12 @@ public class LWJGLRenderer2D implements Renderer2D {
 	@Override
 	public void startLighted() {
 		m_gBuffer.bind(GBufferMode.WRITE);	
+		m_usingDeferred = true;
 	}
 	@Override
 	public void finishLighted() {
 		m_gBuffer.unbind(GBufferMode.WRITE);
+		m_usingDeferred = false;
 	}
 	
 	

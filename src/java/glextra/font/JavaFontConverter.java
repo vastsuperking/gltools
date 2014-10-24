@@ -1,6 +1,7 @@
 package glextra.font;
 
 import glcommon.Color;
+import glcommon.image.Image2D;
 import glextra.font.BMFont.BMGlyph;
 import gltools.texture.Texture2D;
 import gltools.texture.TextureFactory;
@@ -53,7 +54,7 @@ public class JavaFontConverter {
 			g2d.drawString(Character.toString(c), 0, height - metrics.getDescent());
 			g2d.dispose();
 			
-			Texture2D texture = TextureFactory.s_loadTexture(image);
+			Texture2D texture = TextureFactory.s_loadTexture(new Image2D(image));
 			
 			//Add a one pixel extra offset to the xadvance
 			BMGlyph glyph = new BMGlyph(bmfont, c, texture, 0, 0, width + 1);

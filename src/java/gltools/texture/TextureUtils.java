@@ -12,7 +12,7 @@ public class TextureUtils {
 	public static final int BYTES_PER_PIXEL_RGBA = 4; //4 for RGBA, 3 for RGB
 	public static final int BYTES_PER_PIXEL_GREYSCALE = 1; //1 channel
 	
-
+	@Deprecated
 	public static ByteBuffer s_imageToByteBuffer(BufferedImage img) {
 		AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
 		tx.translate(0, -img.getHeight());
@@ -37,6 +37,7 @@ public class TextureUtils {
 		buffer.flip(); //DO NOT FORGET THIS
 		return buffer;
 	}
+	@Deprecated
 	public static ByteBuffer s_imageGreyscaleToByteBuffer(BufferedImage img) {
 		AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
 		tx.translate(0, -img.getHeight());

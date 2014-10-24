@@ -1,6 +1,6 @@
 package glcommon.image;
 
-import glcommon.common.Pair;
+import glcommon.util.Pair;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;

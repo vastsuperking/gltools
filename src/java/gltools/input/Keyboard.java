@@ -1,6 +1,6 @@
 package gltools.input;
 
-import gltools.ResourceLocator;
+import glcommon.util.ResourceLocator;
 
 import java.io.InputStream;
 import java.util.ArrayList;

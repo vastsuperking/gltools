@@ -1,9 +1,9 @@
 package glextra.renderer;
 
 import glcommon.Color;
+import glcommon.util.ResourceLocator.ClasspathResourceLocator;
 import glcommon.vector.Vector3f;
 import glextra.renderer.GBuffer.GBufferMode;
-import gltools.ResourceLocator.ClasspathResourceLocator;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;

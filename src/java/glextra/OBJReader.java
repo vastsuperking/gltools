@@ -1,9 +1,9 @@
 package glextra;
 
+import glcommon.util.ResourceLocator;
 import glcommon.vector.Vector2f;
 import glcommon.vector.Vector3f;
 import glextra.material.Material;
-import gltools.ResourceLocator;
 import gltools.Triangle;
 import gltools.TriangleFactory;
 import gltools.Vertex;

@@ -1,9 +1,9 @@
 package glextra.material;
 
+import glcommon.util.ResourceLocator;
 import glcommon.vector.Vector2f;
 import glcommon.vector.Vector3f;
 import glcommon.vector.Vector4f;
-import gltools.ResourceLocator;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
@@ -20,6 +20,7 @@ import gltools.util.FileUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -89,6 +90,7 @@ public class MaterialXMLLoader {
 	}
 	private static Technique s_parseTechnique(Element t, ResourceLocator locator, GlobalParamProvider provider) throws IOException, ShaderCompileException, ProgramLinkException {
 		String name = t.attr("name");
+		String[] modes = t.attr("modes").split(",");
 		
 		Elements programs = t.getElementsByTag("program");
 		if (programs.size() < 1) throw new RuntimeException("Unable to find program tag");
@@ -100,6 +102,9 @@ public class MaterialXMLLoader {
 		if (definesElements.size() > 0) s_parseDefines(definesElements.first(), technique);
 		Elements globalParamsElements = t.getElementsByTag("globalParams");
 		if (globalParamsElements.size() > 0) s_parseGlobalParams(globalParamsElements.first().children(), technique, provider);
+		
+		technique.addAllRenderModes(Arrays.asList(modes));
+		
 		return technique;
 	}
 	

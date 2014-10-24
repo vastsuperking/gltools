@@ -9,8 +9,14 @@ import gltools.texture.Texture1D;
 import gltools.texture.Texture2D;
 
 import java.util.HashMap;
+import java.util.HashSet;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Material {
+	private static final Logger logger = LoggerFactory.getLogger(Material.class);
+	
 	private String m_name = "";
 	private HashMap<String, MatParam> m_parameters = new HashMap<String, MatParam>();
 	private Technique m_currentTechnique = null;
@@ -115,6 +121,22 @@ public class Material {
 	
 	public void selectTechnique() {
 		m_currentTechnique = m_defaultTechnique;
+	}
+	public void selectTechnique(HashSet<String> renderModes) {
+		for (Technique t : m_techniques.values()) {
+			if (renderModes.containsAll(t.getRenderModes())) {
+				if (m_currentTechnique != t) {
+					System.out.println("Selecting technique: " + t.getName() + " for " + getName());
+					m_currentTechnique = t;
+				}
+				return;
+			}
+		}
+
+		if (m_currentTechnique != m_defaultTechnique) {
+			logger.debug("Selecting default technique: " + m_currentTechnique.getName() + " for " + getName());
+			m_currentTechnique = m_defaultTechnique;
+		}
 	}
 
 	/**

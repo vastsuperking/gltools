@@ -23,7 +23,7 @@ public class Texture2D extends Texture {
 		checkBound();
 		loadParams();
         //Send texel data to OpenGL
-        GL11.glTexImage2D(getTarget().getID(), 0, getFormat().getSized(), m_width, m_height, 0, getFormat().getBase(), GL11.GL_UNSIGNED_BYTE, getData());
+        GL11.glTexImage2D(getTarget().getID(), 0, getFormat().getInternal(), m_width, m_height, 0, getFormat().getBase(), GL11.GL_UNSIGNED_BYTE, getData());
 	}
 	@Override
 	public void loadParams() {

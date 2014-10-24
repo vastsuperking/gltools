@@ -16,11 +16,11 @@ public class LWJGLDisplay implements Display {
 	 * to fiddle around with the display, or require the display
 	 */
 	private static boolean s_created = false;
+	private final boolean m_vsync;
 	
 	private boolean m_fullscreen = false;
-	private final boolean m_vsync;
-	private final int m_width;
-	private final int m_height;
+	private int m_width;
+	private int m_height;
 	
 	private ArrayList<ResizeListener> m_listeners = new ArrayList<ResizeListener>();
 	
@@ -46,6 +46,9 @@ public class LWJGLDisplay implements Display {
 			e.printStackTrace();
 		}
 	}
+	public void setResizable(boolean resizable) {
+		org.lwjgl.opengl.Display.setResizable(resizable);
+	}
 	
 	public void setTitle(String title) { 
 		org.lwjgl.opengl.Display.setTitle(title);
@@ -57,7 +60,7 @@ public class LWJGLDisplay implements Display {
 	@Override
 	public void addResizedListener(ResizeListener l) {
 		m_listeners.add(l);
-		l.resized(m_width, m_height);
+		l.onResize(m_width, m_height);
 	}
 	@Override
 	public void init() {
@@ -88,6 +91,15 @@ public class LWJGLDisplay implements Display {
 		if (s_created) {
 			org.lwjgl.opengl.Display.update();
 			org.lwjgl.opengl.Display.sync(fps);
+			if (org.lwjgl.opengl.Display.wasResized()) {
+				m_width = org.lwjgl.opengl.Display.getWidth();
+				m_height = org.lwjgl.opengl.Display.getHeight();
+				synchronized(m_listeners) {
+					for (ResizeListener l : m_listeners) {
+						l.onResize(m_width, m_height);
+					}
+				}
+			}
 		}
 	}
 	

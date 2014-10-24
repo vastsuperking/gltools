@@ -27,12 +27,12 @@ public enum TextureFormat {
 	RED8(GL30.GL_R8, GL11.GL_RED),
 	RED16(GL30.GL_R16, GL11.GL_RED);
 	
-	private int m_sized;
+	private int m_internal;
 	private int m_base;
-	TextureFormat(int sized, int base) {
-		m_sized = sized;
+	TextureFormat(int internal, int base) {
+		m_internal = internal;
 		m_base = base;
 	}
-	public int getSized() { return m_sized; }
+	public int getInternal() { return m_internal; }
 	public int getBase() { return m_base; } 
 }

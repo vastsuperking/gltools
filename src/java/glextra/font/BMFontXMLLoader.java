@@ -1,6 +1,7 @@
 package glextra.font;
 
-import glcommon.common.Pair;
+import glcommon.image.Image2D;
+import glcommon.util.Pair;
 import glextra.font.BMFont.BMGlyph;
 import gltools.texture.Texture2D;
 import gltools.texture.TextureFactory;
@@ -115,7 +116,7 @@ public class BMFontXMLLoader {
 
 		BufferedImage image = page.getImage().getSubimage(x, y, width, height);
 
-		Texture2D texture = TextureFactory.s_loadTexture(image);
+		Texture2D texture = TextureFactory.s_loadTexture(new Image2D(image));
 		
 		char character = (char) id;
 

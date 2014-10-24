@@ -1,4 +1,4 @@
-package gltools;
+package glcommon.util;
 
 import java.io.InputStream;
 

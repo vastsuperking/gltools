@@ -1,6 +1,7 @@
 package gltools.texture;
 
-import java.awt.image.BufferedImage;
+import glcommon.image.Image2D;
+
 import java.nio.ByteBuffer;
 
 public class Texture2DBuilder {
@@ -29,14 +30,18 @@ public class Texture2DBuilder {
 	
 	//--------Special Function Setters---------
 	
-	public Texture2DBuilder setImage(BufferedImage image) {
-		setData(TextureUtils.s_imageToByteBuffer(image));
+	public Texture2DBuilder setImage(Image2D image) {
+		//TODO: Set format
+		setData(image.getData());
 		setWidth(image.getWidth());
 		setHeight(image.getHeight());
 		return this;
 	}
 	
 	//--------Build function-----------
+	/**
+	 * After build is called, the texture still needs to be loaded into gpu via <code>load()</code>
+	 */
 	public Texture2D build() {
 		Texture2D tex = new Texture2D();
 		

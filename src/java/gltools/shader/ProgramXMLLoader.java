@@ -1,6 +1,6 @@
 package gltools.shader;
 
-import gltools.ResourceLocator;
+import glcommon.util.ResourceLocator;
 import gltools.ffp.FFPTexCoordAttribute;
 import gltools.ffp.FFPVertexAttribute;
 import gltools.shader.Program.ProgramLinkException;

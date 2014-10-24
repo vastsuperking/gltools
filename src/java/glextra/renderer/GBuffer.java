@@ -14,6 +14,7 @@ import gltools.texture.TextureFormat;
 
 import java.nio.IntBuffer;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.slf4j.Logger;
@@ -34,8 +35,8 @@ public class GBuffer {
 		WRITE
 	}
 	
-	private final int m_width;
-	private final int m_height;
+	private int m_width;
+	private int m_height;
 	private final FrameBuffer m_fbo;
 	private final RenderBuffer m_rbo;
 	
@@ -76,6 +77,38 @@ public class GBuffer {
 		setDrawBuffers();
 		
 		m_fbo.unbind();
+	}
+	
+	public void resize(int width, int height) {
+		m_rbo.bind();
+		m_rbo.setStorage(RBOFormat.DEPTH_COMPONENT24, width, height);
+		m_rbo.unbind();
+		
+		m_vertexBuffer.bind();
+		m_vertexBuffer.setWidth(width);
+		m_vertexBuffer.setHeight(height);
+		m_vertexBuffer.load();
+		m_vertexBuffer.unbind();
+
+		m_normalBuffer.bind();
+		m_normalBuffer.setWidth(width);
+		m_normalBuffer.setHeight(height);
+		m_normalBuffer.load();		
+		m_normalBuffer.unbind();
+		
+		m_diffuseBuffer.bind();
+		m_diffuseBuffer.setWidth(width);
+		m_diffuseBuffer.setHeight(height);
+		m_diffuseBuffer.load();	
+		m_diffuseBuffer.unbind();
+		
+		m_fbo.bind();
+		//Resize the fbo viewport
+		GL11.glViewport(0, 0, width, height);
+		m_fbo.unbind();
+		
+		m_width = width;
+		m_height = height;
 	}
 	
 	public int getWidth() { return m_width; }
