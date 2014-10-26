@@ -6,9 +6,7 @@ import glcommon.vector.MatrixUtils;
 import glcommon.vector.Vector2f;
 import glextra.font.Font;
 import glextra.font.Font.Glyph;
-import glextra.material.GlobalParam;
-import glextra.material.GlobalParamProvider;
-import glextra.material.GlobalParams;
+import glextra.material.GlobalParamBindingSet;
 import glextra.material.Material;
 import glextra.renderer.GBuffer.GBufferMode;
 import gltools.Mode;
@@ -64,7 +62,10 @@ public class LWJGLRenderer2D implements Renderer2D {
 	
 	private boolean m_usingDeferred = false;
 	
-	private LWJGLRenderer2D() {}
+	private GlobalParamBindingSet m_globals = new GlobalParamBindingSet();
+	
+	private LWJGLRenderer2D() {
+	}
 	
 	@Override
 	public void init(float left, float right, float top, float bottom, Display display) {
@@ -78,16 +79,14 @@ public class LWJGLRenderer2D implements Renderer2D {
 		//m_provider = new ListParamProvider(new GlobalParam(InputUsage.MODEL_MATRIX_2D, m_modelMat),
 											//new GlobalParam(InputUsage.VIEW_MATRIX_2D, m_viewMat),
 											//new GlobalParam(InputUsage.PROJECTION_MATRIX_2D, m_projMat));
-		GlobalParams.getInstance().addParam(new GlobalParam(InputUsage.MODEL_MATRIX_2D, m_modelMat));
-		GlobalParams.getInstance().addParam(new GlobalParam(InputUsage.VIEW_MATRIX_2D, m_viewMat));
-		GlobalParams.getInstance().addParam(new GlobalParam(InputUsage.PROJECTION_MATRIX_2D, m_projMat));
+		m_globals.addParam(InputUsage.MODEL_MATRIX_2D, m_modelMat);
+		m_globals.addParam(InputUsage.VIEW_MATRIX_2D, m_viewMat);
+		m_globals.addParam(InputUsage.PROJECTION_MATRIX_2D, m_projMat);
 		
-		m_projMat.setCurrentMatrix(
-				MatrixFactory.create2DProjectionMatrix(left, right, top, bottom));
+		updateProjection(left, right, top, bottom);
 		
 		display.addResizedListener(new ResizeListener() {
 			public void onResize(int width, int height) {
-				System.out.println(width + " " + height);
 				GL11.glViewport(0, 0, width, height);
 				m_gBuffer.resize(width, height);
 			}
@@ -97,10 +96,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 		m_texCoordsBuf = new VertexBuffer();
 		m_indicesBuf = new IndexBuffer();
 		
-		m_csLeft = left;
-		m_csRight = right;
-		m_csTop = top;
-		m_csBottom = bottom;
+
 		
 		m_display = display;
 	}
@@ -118,11 +114,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	}
 	@Override
 	public Font getFont() { return m_font; }
-	
-	@Override
-	public GlobalParamProvider getGlobalParams() {
-		return GlobalParams.getInstance();
-	}
+
 	@Override
 	public float getCSTop() { return m_csTop; }
 	@Override
@@ -131,13 +123,24 @@ public class LWJGLRenderer2D implements Renderer2D {
 	public float getCSRight() { return m_csRight; }
 	@Override
 	public float getCSLeft() { return m_csLeft; }
+	
+	@Override
+	public float getCSWidth() { return m_csLeft + m_csRight; }
+	@Override
+	public float getCSHeight() { return m_csTop + m_csBottom; }
+	
 	@Override
 	public Display getDisplay() { return m_display; }
 	
 	@Override
 	public void updateProjection(float left, float right, float top, float bottom) {
+		//TODO: Fix to get rid of negatives on left and bottom
 		m_projMat.setCurrentMatrix(
-				MatrixFactory.create2DProjectionMatrix(left, right, top, bottom));		
+				MatrixFactory.create2DProjectionMatrix(-left, right, top, -bottom));		
+		m_csLeft = left;
+		m_csRight = right;
+		m_csTop = top;
+		m_csBottom = bottom;
 	}
 	
 	@Override
@@ -235,7 +238,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 		HashSet<String> modes = new HashSet<String>();
 		if (m_usingDeferred) modes.add("DEFERRED");
 		m_material.selectTechnique(modes);
-		m_material.bind();
+		m_material.bind(m_globals);
 		//Sets the output buffers to point
 		//to the correct attachments
 		m_gBuffer.setDrawBuffers();

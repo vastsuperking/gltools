@@ -31,21 +31,21 @@ import org.jsoup.select.Elements;
 
 public class MaterialXMLLoader {
 	private static final boolean DEBUG = false;
-	public static List<Material> s_load(String resource, ResourceLocator locator, GlobalParamProvider paramProvider) throws IOException, ShaderCompileException, ProgramLinkException {
-		return s_load(locator.getResource(resource), locator, paramProvider);
+	public static List<Material> s_load(String resource, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
+		return s_load(locator.getResource(resource), locator);
 	}
-	public static List<Material> s_load(InputStream in, ResourceLocator locator, GlobalParamProvider paramProvider) throws IOException, ShaderCompileException, ProgramLinkException {
+	public static List<Material> s_load(InputStream in, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
 		String content = FileUtils.s_readAll(in);
 		Document doc = Jsoup.parse(content, "", Parser.xmlParser());
 		Elements mats = doc.getElementsByTag("material");
 		
 		List<Material> materials = new ArrayList<Material>();
 		for (Element m : mats) {
-			materials.add(s_parseMaterial(m, locator, paramProvider));
+			materials.add(s_parseMaterial(m, locator));
 		}
 		return materials;
 	}
-	private static Material s_parseMaterial(Element m, ResourceLocator locator, GlobalParamProvider paramProvider) throws IOException, ShaderCompileException, ProgramLinkException {
+	private static Material s_parseMaterial(Element m, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
 		Material mat = new Material(m.attr("name"));
 		
 		Elements paramsElements = m.getElementsByTag("parameters");
@@ -61,7 +61,7 @@ public class MaterialXMLLoader {
 		Elements techniques = m.getElementsByTag("technique");
 		for (Element t : techniques) {
 			boolean def = Boolean.parseBoolean(t.attr("default"));
-			Technique technique = s_parseTechnique(t, locator, paramProvider);
+			Technique technique = s_parseTechnique(t, locator);
 			if (def) mat.setDefaultTechnique(technique);
 			else mat.addTechnique(technique);
 		}
@@ -88,7 +88,7 @@ public class MaterialXMLLoader {
 			return new MatTexParam(type, name, usage, (Texture) value, unit);
 		} else return new MatParam(type, name, usage, value);
 	}
-	private static Technique s_parseTechnique(Element t, ResourceLocator locator, GlobalParamProvider provider) throws IOException, ShaderCompileException, ProgramLinkException {
+	private static Technique s_parseTechnique(Element t, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
 		String name = t.attr("name");
 		String[] modes = t.attr("modes").split(",");
 		
@@ -101,7 +101,7 @@ public class MaterialXMLLoader {
 		Elements definesElements = t.getElementsByTag("defines");
 		if (definesElements.size() > 0) s_parseDefines(definesElements.first(), technique);
 		Elements globalParamsElements = t.getElementsByTag("globalParams");
-		if (globalParamsElements.size() > 0) s_parseGlobalParams(globalParamsElements.first().children(), technique, provider);
+		if (globalParamsElements.size() > 0) s_parseGlobalParams(globalParamsElements.first().children(), technique);
 		
 		technique.addAllRenderModes(Arrays.asList(modes));
 		
@@ -119,19 +119,12 @@ public class MaterialXMLLoader {
 		}
 	}
 	
-	private static void s_parseGlobalParams(Elements params, Technique technique, GlobalParamProvider provider) {
-		if (provider == null && params.size() != 0) throw new IllegalArgumentException("No global param provider specified, and mat has global params!");
-		else if (provider == null) return;
+	private static void s_parseGlobalParams(Elements params, Technique technique) {
 		for (Element e : params) {
 			DataType type = s_parseGlobalParamType(e.tagName());
 			
 			InputUsage usage = new InputUsage(e.attr("usage"), type, Uniform.class);
-			if (provider.hasParam(usage)){
-				GlobalParam param = provider.getParam(usage);
-				technique.addGlobalParam(param);
-			} else {
-				throw new RuntimeException("Could not find global param for: " + usage + " in provider " + provider);
-			}
+			technique.addGlobalParam(usage);
 		}
 	}
 	

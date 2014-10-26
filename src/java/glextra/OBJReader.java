@@ -1,6 +1,7 @@
 package glextra;
 
 import glcommon.util.ResourceLocator;
+import glcommon.util.ResourceUtils;
 import glcommon.vector.Vector2f;
 import glcommon.vector.Vector3f;
 import glextra.material.Material;
@@ -21,14 +22,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class OBJReader {
-	public Mesh read(String resource, ResourceLocator locator) throws IOException {
-		return read(locator.getResource(resource));
-	}
 	/**
 	 * Will read and parse a .obj file from an InputStream
 	 * @param input the stream to read text from
 	 */
-	public Mesh read(InputStream input) throws IOException {
+	public static Mesh s_read(String resource, ResourceLocator locator) throws IOException {
+		InputStream input = locator.getResource(resource);
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		
 		Mesh mesh = new Mesh();
@@ -59,6 +59,11 @@ public class OBJReader {
 				String matName = line.substring(7);
 				currentMaterial = materials.get(matName);
 				if (currentMaterial == null) throw new RuntimeException("Could not find material: " + matName);
+			} else if (line.startsWith("mtllib ")) {
+				String libloc = line.substring(7);
+				String parent = ResourceUtils.s_getParentDirectory(resource);
+				String libResource = parent + libloc;
+				materials.putAll(OBJMaterialReader.s_readMaterials(libResource, locator));
 			}
 		}
 		//Finish last geometry
@@ -68,6 +73,36 @@ public class OBJReader {
 		}
 		
 		return mesh;
+	}
+	public static Geometry s_readGeometry(String resource,
+			ResourceLocator locator) throws IOException {
+		return s_readGeometry(locator.getResource(resource));
+	}
+	/**
+	 * Will read and parse a .obj file from an InputStream - only reads the actual geometry, not the materials as well
+	 * @param input the stream to read text from
+	 */
+	public static Geometry s_readGeometry(InputStream input) throws IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		
+		ArrayList<Vertex> vertices = new ArrayList<Vertex>();
+		ArrayList<Triangle> primitives = new ArrayList<Triangle>();
+		ArrayList<VertexNormal> normals = new ArrayList<VertexNormal>();
+		ArrayList<TexCoord> texcoords = new ArrayList<TexCoord>();
+		
+		
+		String line;
+		while((line = reader.readLine()) != null) {
+			if (line.startsWith("v ")) vertices.add(s_parseVertex(line.substring(2)));
+			else if (line.startsWith("vt ")) texcoords.add(s_parseTexCoord(line.substring(3)));
+			else if (line.startsWith("vn ")) normals.add(s_parseNormal(line.substring(3)));	
+			else if (line.startsWith("vp "));
+			else if (line.startsWith("f ")) primitives.addAll(s_parseFace(line.substring(2), vertices, normals, texcoords));
+		}
+		
+		Geometry geo = GeometryFactory.s_generateGeometry(primitives.toArray(new Triangle[0]));
+		
+		return geo;
 	}
 	
 	private static Vertex s_parseVertex(String vertex) {

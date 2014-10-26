@@ -1,6 +1,7 @@
 package glextra.material;
 
 import gltools.shader.DataType;
+import gltools.shader.InputUsage;
 import gltools.shader.Program;
 import gltools.shader.Program.ProgramLinkException;
 import gltools.shader.Program.ProgramValidateException;
@@ -8,18 +9,25 @@ import gltools.shader.Shader;
 import gltools.shader.Shader.ShaderCompileException;
 import gltools.shader.ShaderSource;
 import gltools.texture.Texture;
+import gltools.util.Loadable;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Technique {
+	private static final Logger logger = LoggerFactory.getLogger(Technique.class);
+	
 	private final String m_name;
 	private Program m_program;
 
 	private HashMap<String, String> m_defines = new HashMap<String, String>();
 	
-	private HashSet<GlobalParam> m_globalParams = new HashSet<GlobalParam>();
+	//A set of input usages representing the global params
+	private HashSet<InputUsage> m_globalParams = new HashSet<InputUsage>();
 	//A set of strings representing render modes for which this technique is
 	//suited
 	private HashSet<String> m_renderModes = new HashSet<String>();
@@ -55,9 +63,9 @@ public class Technique {
 	}
 	
 	/**
-	 * Adds a world parameter to this technique
+	 * Adds a global param(input usage) to this technique
 	 */
-	public void addGlobalParam(GlobalParam param) {
+	public void addGlobalParam(InputUsage param) {
 		m_globalParams.add(param);
 	}
 	
@@ -109,10 +117,10 @@ public class Technique {
 		m_needsRecompile = false;
 	}
 	
-	public void bind(HashMap<String, MatParam> params) {
+	public void bind(HashMap<String, MatParam> params, HashMap<InputUsage, Loadable> globalParamMap) {
 		m_program.bind();
 		//Will check to make sure compiled and uniforms up to date
-		load(params);
+		load(params, globalParamMap);
 		
 		try {
 			m_program.validate();
@@ -130,7 +138,7 @@ public class Technique {
 			}
 		}
 	}
-	public void load(HashMap<String, MatParam> params) {
+	public void load(HashMap<String, MatParam> params, HashMap<InputUsage, Loadable> globalParamMap) {
 		//make sure the program is compiled correctly
 		if (m_needsRecompile) {
 			//Unbind before recompiling
@@ -144,8 +152,12 @@ public class Technique {
 			p.load();
 		}
 		//Now globals
-		for (GlobalParam p : m_globalParams) {
-			p.load();
+		for (InputUsage p : m_globalParams) {
+			if (globalParamMap.containsKey(p)) {
+				globalParamMap.get(p).load(p);
+			} else {
+				logger.warn("No global param vailable for: {}", p);
+			}
 		}
 	}
 }

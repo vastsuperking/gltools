@@ -12,6 +12,7 @@ import org.lwjgl.BufferUtils;
 
 public class ImageUtils {
 	public static final int BYTES_PER_PIXEL_RGBA = 4; //4 for RGBA, 3 for RGB
+	//DO NOT USE, texture buffer must be power of 2
 	public static final int BYTES_PER_PIXEL_RGB = 3; //4 for RGBA, 3 for RGB
 	public static final int BYTES_PER_PIXEL_GREYSCALE = 1; //1 channel
 
@@ -20,11 +21,13 @@ public class ImageUtils {
 		int fmtInt = img.getType();
 		switch(fmtInt) {
 		case BufferedImage.TYPE_BYTE_GRAY: return new Pair<ImageFormat, ByteBuffer>(ImageFormat.R, s_imageGreyscaleToByteBuffer(img));
-		case BufferedImage.TYPE_4BYTE_ABGR: return new Pair<ImageFormat, ByteBuffer>(ImageFormat.RGBA, s_imageABGRToByteBufferRGBA(img));	
-		case BufferedImage.TYPE_3BYTE_BGR: return new Pair<ImageFormat, ByteBuffer>(ImageFormat.RGB, s_imageBGRToByteBufferRGB(img));
+		case BufferedImage.TYPE_4BYTE_ABGR: return new Pair<ImageFormat, ByteBuffer>(ImageFormat.RGBA, s_imageABGRToByteBufferRGBA(img));
+		case BufferedImage.TYPE_3BYTE_BGR: return new Pair<ImageFormat, ByteBuffer>(ImageFormat.RGBA, s_imageABGRToByteBufferRGBA(img));
 		default: throw new RuntimeException(s_intFormatToString(fmtInt) + " is not supported!");
 		}
 	}
+	/*
+	 * Cannot use b/c buffer must be power of two *3 is not power of two
 	public static ByteBuffer s_imageBGRToByteBufferRGB(BufferedImage img) {
 		AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
 		tx.translate(0, -img.getHeight());
@@ -48,6 +51,7 @@ public class ImageUtils {
 		buffer.flip(); //DO NOT FORGET THIS
 		return buffer;
 	}
+	*/
 	public static ByteBuffer s_imageABGRToByteBufferRGBA(BufferedImage img) {
 		AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
 		tx.translate(0, -img.getHeight());

@@ -5,8 +5,10 @@ import glcommon.vector.Vector2f;
 import glcommon.vector.Vector3f;
 import glcommon.vector.Vector4f;
 import gltools.shader.DataType;
+import gltools.shader.InputUsage;
 import gltools.texture.Texture1D;
 import gltools.texture.Texture2D;
+import gltools.util.Loadable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -126,7 +128,7 @@ public class Material {
 		for (Technique t : m_techniques.values()) {
 			if (renderModes.containsAll(t.getRenderModes())) {
 				if (m_currentTechnique != t) {
-					System.out.println("Selecting technique: " + t.getName() + " for " + getName());
+					logger.debug("Selecting technique: " + t.getName() + " for " + getName());
 					m_currentTechnique = t;
 				}
 				return;
@@ -149,17 +151,32 @@ public class Material {
 	}
 
 	/**
+	 * Will load the mat params again and load the globals using the GlobalParamSet
+	 */
+	public void load(GlobalParamBindingSet globals) {
+		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters, globals.getParamMap());
+		else logger.warn("CurrentTechnique null!, params not updated");
+	}
+	
+	public void bind(GlobalParamBindingSet globals) {
+		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
+		m_currentTechnique.bind(m_parameters, globals.getParamMap());
+	}
+
+	/**
 	 * Will load the mat params again
 	 */
-	public void load() {
-		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters);
+	public void load(HashMap<InputUsage, Loadable> globals) {
+		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters, globals);
 		else System.err.println("Warning, currentTechnique null!, params not updated");
 	}
 	
-	public void bind() {
+	public void bind(HashMap<InputUsage, Loadable> globals) {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
-		m_currentTechnique.bind(m_parameters);
+		m_currentTechnique.bind(m_parameters, globals);
 	}
+
+	
 	public void unbind() {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
 		m_currentTechnique.unbind(m_parameters);

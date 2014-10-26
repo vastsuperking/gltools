@@ -3,7 +3,6 @@ package glextra.renderer;
 import glcommon.vector.Matrix3f;
 import glcommon.vector.Vector2f;
 import glextra.font.Font;
-import glextra.material.GlobalParamProvider;
 import glextra.material.Material;
 import gltools.display.Display;
 
@@ -16,12 +15,13 @@ public interface Renderer2D {
 	public void setFont(Font font);
 	public Font getFont();
 	
-	public GlobalParamProvider getGlobalParams();
-		
 	public float getCSTop();
 	public float getCSBottom();
 	public float getCSRight();
 	public float getCSLeft();
+	
+	public float getCSWidth();
+	public float getCSHeight();
 	
 	public Display getDisplay();
 	

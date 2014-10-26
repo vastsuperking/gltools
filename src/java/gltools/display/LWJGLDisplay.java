@@ -1,10 +1,12 @@
 package gltools.display;
 
+import gltools.gl.lwjgl.LWJGLNativesLoader;
 import gltools.input.Keyboard;
 import gltools.input.LWJGLKeyboard;
 import gltools.input.LWJGLMouse;
 import gltools.input.Mouse;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.lwjgl.LWJGLException;
@@ -18,7 +20,6 @@ public class LWJGLDisplay implements Display {
 	private static boolean s_created = false;
 	private final boolean m_vsync;
 	
-	private boolean m_fullscreen = false;
 	private int m_width;
 	private int m_height;
 	
@@ -28,6 +29,8 @@ public class LWJGLDisplay implements Display {
 		m_width = width;
 		m_height = height;
 		m_vsync = vsync;
+		//Load natives
+		if (!LWJGLNativesLoader.isLoaded()) LWJGLNativesLoader.load(new File(System.getProperty("user.home") + "/.gltools/libs"));
 	}
 
 	@Override
@@ -39,7 +42,6 @@ public class LWJGLDisplay implements Display {
 	public Keyboard getKeyboard() { return LWJGLKeyboard.getInstance(); }
 
 	public void useFullscreen(boolean fullscreen) {
-		m_fullscreen = fullscreen;
 		try {
 			org.lwjgl.opengl.Display.setFullscreen(fullscreen);
 		} catch (LWJGLException e) {

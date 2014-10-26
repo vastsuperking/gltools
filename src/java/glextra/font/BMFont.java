@@ -119,7 +119,7 @@ public class BMFont implements Font {
 				mat.getParam(GLYPH_TEX_PARAM).getDataType() != DataType.SAMPLER2D)
 					throw new RuntimeException("Material does not contain " + GLYPH_TEX_PARAM + " as a parameter");
 			mat.setTexture2D(GLYPH_TEX_PARAM, m_glyph);
-			mat.bind();
+			//Material is already set...
 			r.fillRect(m_xoffset * scale, scale * (getFont().getAscent() - m_yoffset), scale * m_glyph.getWidth(), scale * m_glyph.getHeight());
 		}
 		public void renderAndTranslate(Renderer2D r, float scale, Material mat) {
