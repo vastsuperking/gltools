@@ -35,7 +35,6 @@ public class OBJMaterialReader {
 			}
 		}
 		if (current != null) current.ready();
-		System.out.println("Parsed: " + mats);
 		return mats;
 	}
 	private static Color s_parseColor(String string) {
