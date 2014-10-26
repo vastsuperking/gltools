@@ -44,6 +44,10 @@ public class GLMatrix3f implements Loadable {
 	public void pop() {
 		m_matrix = m_stack.pop();
 	}
+	
+	public void setIdentity() {
+		m_matrix = new Matrix3f();
+	}
 	 
 	/**
 	 * Will update the matrix so the openGL and local matrices are in sync,

@@ -23,6 +23,10 @@ public class GLMatrix4f implements Loadable {
 		m_usage = usage;
 	}
 
+	public GLMatrix4f() {
+		m_usage = null;
+	}
+
 	public Matrix4f getCurrentMatrix() { return m_matrix; }
 	public InputUsage getUsage() { return m_usage; }
 	public void setCurrentMatrix(Matrix4f mat) { m_matrix = mat; }
@@ -35,12 +39,16 @@ public class GLMatrix4f implements Loadable {
 		m_matrix = m_stack.pop();
 	}
 	 
+	public void setIdentity() {
+		m_matrix = new Matrix4f();
+	}
+	
 	/**
 	 * Will update the matrix so the openGL and local matrices are in sync,
 	 * using the default usage
 	 */
 	public void load() {
-		if (m_usage == null) throw new RuntimeException("Default usage is null!");
+		if (m_usage == null) throw new RuntimeException("Default usage is null, cannot use load()!");
 		load(m_usage);
 	}
 	public void load(InputUsage usage) {

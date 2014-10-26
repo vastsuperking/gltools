@@ -4,13 +4,16 @@ import glcommon.vector.Matrix3f;
 import glcommon.vector.MatrixFactory;
 import glcommon.vector.MatrixUtils;
 import glcommon.vector.Vector2f;
+import glextra.GBuffer;
+import glextra.GBuffer.GBufferAttachment;
+import glextra.GBuffer.GBufferMode;
 import glextra.font.Font;
 import glextra.font.Font.Glyph;
 import glextra.material.GlobalParamBindingSet;
 import glextra.material.Material;
-import glextra.renderer.GBuffer.GBufferMode;
 import gltools.Mode;
 import gltools.buffer.AttribArray;
+import gltools.buffer.FrameBuffer.AttachmentPoint;
 import gltools.buffer.Geometry;
 import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
@@ -18,6 +21,7 @@ import gltools.display.Display;
 import gltools.display.ResizeListener;
 import gltools.extra.GeometryFactory;
 import gltools.shader.InputUsage;
+import gltools.texture.TextureFormat;
 import gltools.util.GLMatrix3f;
 
 import java.util.ArrayList;
@@ -70,6 +74,11 @@ public class LWJGLRenderer2D implements Renderer2D {
 	@Override
 	public void init(float left, float right, float top, float bottom, Display display) {
 		m_gBuffer = new GBuffer(display.getWidth(), display.getHeight());
+		m_gBuffer.addAttachment(new GBufferAttachment(0, AttachmentPoint.COLOR_ATTACHMENT0, InputUsage.GBUFFER_VERTEX_SAMPLER, TextureFormat.RGBA16F));
+		m_gBuffer.addAttachment(new GBufferAttachment(1, AttachmentPoint.COLOR_ATTACHMENT1, InputUsage.GBUFFER_NORMAL_SAMPLER, TextureFormat.RGBA16F));
+		m_gBuffer.addAttachment(new GBufferAttachment(2, AttachmentPoint.COLOR_ATTACHMENT2, InputUsage.GBUFFER_DIFFUSE_SAMPLER, TextureFormat.RGBA8));
+		m_gBuffer.init();
+		
 		m_fullScreenQuad = GeometryFactory.s_generateFullScreenQuad();
 		
 		m_modelMat = new GLMatrix3f();
@@ -134,9 +143,8 @@ public class LWJGLRenderer2D implements Renderer2D {
 	
 	@Override
 	public void updateProjection(float left, float right, float top, float bottom) {
-		//TODO: Fix to get rid of negatives on left and bottom
 		m_projMat.setCurrentMatrix(
-				MatrixFactory.create2DProjectionMatrix(-left, right, top, -bottom));		
+				MatrixFactory.create2DProjectionMatrix(left, right, top, bottom));		
 		m_csLeft = left;
 		m_csRight = right;
 		m_csTop = top;

@@ -1,6 +1,7 @@
 package gltools.texture;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class Texture1D extends Texture {
 	private int m_length;
@@ -34,6 +35,9 @@ public class Texture1D extends Texture {
 		//Setup texture filtering
 		GL11.glTexParameteri(getTarget().getID(), GL11.GL_TEXTURE_MIN_FILTER, getMinFilterMode().getID());
 		GL11.glTexParameteri(getTarget().getID(), GL11.GL_TEXTURE_MAG_FILTER, getMaxFilterMode().getID());
+	
+	    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
+	    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
 	}
 
 }

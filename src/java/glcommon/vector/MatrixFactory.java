@@ -5,10 +5,10 @@ public class MatrixFactory {//useful for creating projection matricies
 	 * Creates a finite frustum projection with the given values
 	 */
 	public static Matrix4f s_createFrustumProjection(float left, float right, float bottom, float top, float near, float far) {
-		float x = (2 * near) / (right - left);
-		float y = (2 * near) / (top - bottom);
-		float a = (right + left) / (right - left);
-		float b = (top + bottom) / (top - bottom);
+		float x = (2 * near) / (right + left);
+		float y = (2 * near) / (top + bottom);
+		float a = (right - left) / (right + left);
+		float b = (top - bottom) / (top + bottom);
 		float c = (-(far + near)) / (far - near);
 		float d = (-2 * far * near) / (far - near);
 		float[][] m = {{x, 0f,  a,  0f},
@@ -27,10 +27,10 @@ public class MatrixFactory {//useful for creating projection matricies
 															float bottom,
 															float top, float near) {
 //far = oo
-		float x = (float) ((2.0 * near) / (right - left));
-		float y = (float) ((2.0 * near) / (top - bottom));
-		float a = (float) ((right + left) / (right - left));
-		float b = (float) ((top + bottom) / (top - bottom));
+		float x = (float) ((2.0 * near) / (right + left));
+		float y = (float) ((2.0 * near) / (top + bottom));
+		float a = (float) ((right - left) / (right + left));
+		float b = (float) ((top - bottom) / (top + bottom));
 		float d = (float) (-2.0 * near);
 		float[][] m = {{ x,	0f,   a,  0f},
 				   {0f,		y,    b,  0f},
@@ -46,11 +46,11 @@ public class MatrixFactory {//useful for creating projection matricies
 	public static Matrix4f createOrthographicProjection(float left, float right,
 														float top, float bottom, 
 														float near, float far) {
-		float x = (2)/(right - left);
-		float y = (2)/(top - bottom);
+		float x = (2)/(right + left);
+		float y = (2)/(top + bottom);
 		float z = (-2)/(far - near);
-		float a = -((right + left)/(right - left));
-		float b = -((top + bottom)/(top - bottom));
+		float a = -((right - left)/(right + left));
+		float b = -((top - bottom)/(top + bottom));
 		float c = -((far + near)/(far - near));
 		float[][] m = {{x, 0f,  0f, a},
 					   {0f, y,  0f, b},
@@ -64,10 +64,10 @@ public class MatrixFactory {//useful for creating projection matricies
 	 * left and top are negative
 	 */
 	public static Matrix3f create2DProjectionMatrix(float left, float right, float top, float bottom) {
-		float x = (2)/(right - left);
-		float y = (2)/(top - bottom);
-		float a = -((right + left)/(right - left));
-		float b = -((top + bottom)/(top - bottom));
+		float x = (2)/(right + left);
+		float y = (2)/(top + bottom);
+		float a = -((right - left)/(right + left));
+		float b = -((top - bottom)/(top + bottom));
 		float[][] m = {{x, 0f, a},
 					   {0f, y,  b},
 					   {0f, 0f, 1f}};

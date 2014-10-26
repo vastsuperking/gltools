@@ -5,11 +5,14 @@ import static org.lwjgl.input.Keyboard.getEventKey;
 import static org.lwjgl.input.Keyboard.getEventKeyState;
 import static org.lwjgl.input.Keyboard.isCreated;
 import static org.lwjgl.input.Keyboard.next;
+import glcommon.util.ResourceLocator.ClasspathResourceLocator;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 public class LWJGLKeyboard extends Keyboard {
+	private static String CONFIG_LOCATION = "Config/Keyboard/lwjgl.xml";
+	
 	private static LWJGLKeyboard s_instance;
 	
 	private LWJGLKeyboard() {}
@@ -32,7 +35,14 @@ public class LWJGLKeyboard extends Keyboard {
 	}
 	
 	public static LWJGLKeyboard getInstance() {
-		if (s_instance == null) s_instance = new LWJGLKeyboard();
+		if (s_instance == null) {
+			s_instance = new LWJGLKeyboard();
+			try {
+				s_instance.readXMLKeyConfig(CONFIG_LOCATION, new ClasspathResourceLocator());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return s_instance;
 	}
 	

@@ -3,7 +3,8 @@ package glextra.renderer;
 import glcommon.Color;
 import glcommon.util.ResourceLocator.ClasspathResourceLocator;
 import glcommon.vector.Vector3f;
-import glextra.renderer.GBuffer.GBufferMode;
+import glextra.GBuffer;
+import glextra.GBuffer.GBufferMode;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
@@ -19,19 +20,17 @@ public interface Light {
 	 * When bind is called, a GBuffer is supplied.
 	 * The light must bind its own program,
 	 * call buffer.bind(GBufferMode.READ),
-	 * and call buffer.setReadSamplers();
 	 */
 	public void bind(GBuffer buffer);
 	public void unbind(GBuffer buffer); 
 	
 	public static class NoLight implements Light {
-		private static final String PROG_LOCATION = "Programs/Lights/no_light.prog";
+		private static final String PROG_LOCATION = "Programs/Lights2D/no_light.prog";
 		private static Program s_program = null;
 		
 		public void bind(GBuffer buffer) {
 			s_program.bind();
 			buffer.bind(GBufferMode.READ);
-			buffer.setReadSamplers();
 		}
 		public void unbind(GBuffer buffer) {
 			buffer.unbind(GBufferMode.READ);
@@ -53,7 +52,7 @@ public interface Light {
 		}
 	}
 	public static class PointLight implements Light {
-		private static final String PROG_LOCATION = "Programs/Lights/point_light.prog";
+		private static final String PROG_LOCATION = "Programs/Lights2D/point_light.prog";
 		private static Program s_program = null;
 		
 		private Vector3f m_position;
@@ -91,9 +90,8 @@ public interface Light {
 					new InputUsage("LIGHT_ATTENUATION", DataType.VEC3, Uniform.class)).setValue(m_attenuation);
 			
 			//Will bind the buffers to their correct texture units
+			//setReadSamplers() is called in the buffer
 			buffer.bind(GBufferMode.READ);
-			//Will set GLSL samplers to point to correct texture units
-			buffer.setReadSamplers();
 		}
 		public void unbind(GBuffer buffer) {
 			buffer.unbind(GBufferMode.READ);
