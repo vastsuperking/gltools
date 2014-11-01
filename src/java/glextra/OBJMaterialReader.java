@@ -3,10 +3,14 @@ package glextra;
 import glcommon.Color;
 import glcommon.util.ResourceLocator;
 import glcommon.util.ResourceLocator.ClasspathResourceLocator;
+import glcommon.util.ResourceUtils;
 import glextra.material.Material;
 import glextra.material.MaterialXMLLoader;
 import gltools.shader.Program.ProgramLinkException;
 import gltools.shader.Shader.ShaderCompileException;
+import gltools.texture.Texture2D;
+import gltools.texture.TextureFactory;
+import gltools.texture.TextureWrapMode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,14 +31,28 @@ public class OBJMaterialReader {
 				if (current != null) current.ready();
 				String name = line.substring(7);
 				current = s_newMTL();
+				current.setName(name);
 				mats.put(name, current);
 			} else if (line.startsWith("Ka ")) {
 				current.setColor("ambientColor", s_parseColor(line.substring(3)));
 			} else if (line.startsWith("Kd ")) {
 				current.setColor("diffuseColor", s_parseColor(line.substring(3)));
+				System.out.println("Set diffuseColor to " + s_parseColor(line.substring(3)) + " for material " + current.getName());
+			} else if (line.startsWith("map_Kd ")) {
+				String texLoc = line.substring(7);
+				String parent = ResourceUtils.s_getParentDirectory(resource);
+				String texResource = parent + texLoc;
+				Texture2D tex = TextureFactory.s_loadTexture(texResource, locator);
+				tex.setSWrapMode(TextureWrapMode.REPEAT);
+				tex.setTWrapMode(TextureWrapMode.REPEAT);
+				tex.bind();
+				tex.loadParams();
+				tex.unbind();
+				current.setTexture2D("diffuseMap", tex);
 			}
 		}
 		if (current != null) current.ready();
+		System.out.println(mats.values());
 		return mats;
 	}
 	private static Color s_parseColor(String string) {

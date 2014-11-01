@@ -109,7 +109,7 @@ public class GeometryFactory {
 				for (InputUsage u : activeUsages) {
 					VertexAttribute a = v.getAttribute(u);
 					if (a == null)
-						throw new RuntimeException("Could not find attribute for required usage: " + u + " in " + v + ":" + primitive); 
+						throw new RuntimeException("Could not find vertex attribute for required usage: " + u + " in " + v + ":" + primitive); 
 					//Since the position changes might not happen in a bytebuffer
 					//but in a floatbuffer, which uses different positions,
 					//we need to update the position manually by adding the offset

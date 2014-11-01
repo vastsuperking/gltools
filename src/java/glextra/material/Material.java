@@ -168,7 +168,7 @@ public class Material {
 	 */
 	public void load(HashMap<InputUsage, Loadable> globals) {
 		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters, globals);
-		else System.err.println("Warning, currentTechnique null!, params not updated");
+		else logger.warn("Warning, currentTechnique null!, params not updated");
 	}
 	
 	public void bind(HashMap<InputUsage, Loadable> globals) {
@@ -180,5 +180,19 @@ public class Material {
 	public void unbind() {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
 		m_currentTechnique.unbind(m_parameters);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append(getName()).append('(');
+		int i = 0;
+		for (MatParam p : m_parameters.values()) {
+			b.append(p.getName()).append(" = ").append(p.getValue());
+			if (i != m_parameters.size() - 1) b.append(", ");
+			i++;
+		}
+		b.append(')');
+		return b.toString();
 	}
 }

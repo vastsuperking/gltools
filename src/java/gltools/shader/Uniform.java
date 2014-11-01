@@ -64,6 +64,8 @@ public class Uniform extends Input {
 	}
 	public void setValue(Vector4f vec) {
 		if (!isActive()) return;
+		//System.out.println("Setting " + getName() + " to " + vec);
+		//Thread.dumpStack();
 		checkProgBound();
 		GL20.glUniform4f(getID(), vec.getX(), vec.getY(), vec.getZ(), vec.getW());
 	}

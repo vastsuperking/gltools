@@ -27,7 +27,6 @@ public class Mesh {
 		for (Map.Entry<Geometry, Material> entry : m_geoMap.entrySet()) {
 			Geometry geo = entry.getKey();
 			Material mat = entry.getValue();
-			
 			mat.bind(globals);
 			geo.render();
 			mat.unbind();

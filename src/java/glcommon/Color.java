@@ -43,6 +43,11 @@ public class Color {
 	public void setBlue(float blue) { m_blue = blue; }
 	public void setAlpha(float alpha) { m_alpha = alpha; }
 
+	@Override
+	public String toString() {
+		return "Color(" + m_red + ", " + m_green + ", " + m_blue + ", " + m_alpha + ")";
+	}
+	
 	public float[] toFloats() {
 		return new float[] { m_red, m_green, m_blue, m_alpha};
 	}
@@ -53,7 +58,7 @@ public class Color {
 
 	public Color clone() { return new Color(m_red, m_green, m_blue, m_alpha); }
 	
-	
+
 	public java.awt.Color toJava() {
 		return new java.awt.Color((int) (m_red * 225), (int) (m_blue * 255), (int) (m_green * 255), (int) (m_alpha * 255));
 	}
