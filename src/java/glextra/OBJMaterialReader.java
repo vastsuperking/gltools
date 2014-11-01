@@ -37,7 +37,6 @@ public class OBJMaterialReader {
 				current.setColor("ambientColor", s_parseColor(line.substring(3)));
 			} else if (line.startsWith("Kd ")) {
 				current.setColor("diffuseColor", s_parseColor(line.substring(3)));
-				System.out.println("Set diffuseColor to " + s_parseColor(line.substring(3)) + " for material " + current.getName());
 			} else if (line.startsWith("map_Kd ")) {
 				String texLoc = line.substring(7);
 				String parent = ResourceUtils.s_getParentDirectory(resource);
@@ -52,7 +51,6 @@ public class OBJMaterialReader {
 			}
 		}
 		if (current != null) current.ready();
-		System.out.println(mats.values());
 		return mats;
 	}
 	private static Color s_parseColor(String string) {
