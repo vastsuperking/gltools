@@ -76,6 +76,7 @@ public class OBJReader {
 		if (primitives.size() > 0) {
 			Geometry geo = GeometryFactory.s_generateGeometry(primitives.toArray(new Triangle[0]));
 			mesh.addGeometry(geo, currentMaterial);
+			primitives.clear();
 		}
 		
 		return mesh;
@@ -108,6 +109,8 @@ public class OBJReader {
 				//Finish the old geometry
 				if (primitives.size() > 0) {
 					Geometry geo = GeometryFactory.s_generateGeometry(primitives.toArray(new Triangle[0]));
+					primitives.clear();
+					
 					mesh.addGeometry(geo, currentMaterial);
 				}
 				//Set next material
@@ -120,6 +123,7 @@ public class OBJReader {
 		if (primitives.size() > 0) {
 			Geometry geo = GeometryFactory.s_generateGeometry(primitives.toArray(new Triangle[0]));
 			mesh.addGeometry(geo, currentMaterial);
+			primitives.clear();
 		}
 		
 		return mesh;
