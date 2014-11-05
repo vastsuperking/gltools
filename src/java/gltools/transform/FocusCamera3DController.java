@@ -58,7 +58,6 @@ public class FocusCamera3DController implements Camera3DController, MouseListene
 			Vector3f viewRot3 = new Vector3f(viewRot.getX(), viewRot.getY(), -viewRot.getZ());
 			//viewRot3.normalise().scale(m_distance);
 			//Add the view to pos // pos <-- pos + view
-			System.out.println("ViewRot: " + viewRot3);
 			pos.add(viewRot3);
 			camera.setPosition(pos);
 			//Set update pos to false
@@ -77,7 +76,6 @@ public class FocusCamera3DController implements Camera3DController, MouseListene
 	@Override
 	public void mouseDelta(Mouse m, int dx, int dy) {
 		if (m_dragging) {
-			System.out.println("Dragged: " + dx + " " + dy);
 			m_pitchDelta -= dy * m_mouseSensitivity;
 			m_yawDelta += dx * m_mouseSensitivity;
 			m_updatePos = true;
