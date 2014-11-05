@@ -29,6 +29,7 @@ public class Camera3D {
 	public void setX(float x) {m_position.setX(x);}
 	public void setY(float y) {m_position.setY(y);}
 	public void setZ(float z) {m_position.setZ(z);}
+	public void setPosition(Vector3f pos) { m_position.set(pos); } 
 	public void setPitch(float a) {m_pitch = a;}
 	public void setYaw(float a) {m_yaw = a;}
 	public void setRoll(float a) {m_roll = a;}
@@ -46,8 +47,8 @@ public class Camera3D {
 	public void apply(Matrix4f matrix) {
 
 
-		Matrix4f pitchRot = MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f));
 		Matrix4f yawRot = MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_yaw), new Vector3f(0f, 1f, 0f));
+		Matrix4f pitchRot = MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f));
 
 		matrix.mul(pitchRot);
 		matrix.mul(yawRot);
@@ -60,8 +61,8 @@ public class Camera3D {
 	}
 	public Matrix4f getRotateMatrix() {
 		Matrix4f mat = new Matrix4f().setIdentity();
-		mat.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f)));
 		mat.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_yaw), new Vector3f(0f, 1f, 0f)));
+		mat.mul(MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_pitch), new Vector3f(1f, 0f, 0f)));
 		return mat;
 	}
 	public Vector3f getViewDirection() {

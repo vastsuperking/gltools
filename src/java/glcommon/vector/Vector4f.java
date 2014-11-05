@@ -22,7 +22,7 @@ public class Vector4f extends Vector {
 	public Vector4f(float xyz) {
 		set(xyz, xyz, xyz, 1.0f);
 	}
-	
+
 	public float getX() {return x;}
 	public float getY() {return y;}
 	public float getZ() {return z;}

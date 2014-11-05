@@ -38,6 +38,11 @@ public class Vector3f extends Vector {
 		setY(y);
 		setZ(z);
 	}
+	public void set(Vector3f vector) {
+		setX(vector.getX());
+		setY(vector.getY());
+		setZ(vector.getZ());
+	}
 
 	public float lengthSquared() {
 		return x * x + y * y + z * z;

@@ -37,6 +37,8 @@ public class OBJMaterialReader {
 				current.setColor("ambientColor", s_parseColor(line.substring(3)));
 			} else if (line.startsWith("Kd ")) {
 				current.setColor("diffuseColor", s_parseColor(line.substring(3)));
+			} else if (line.startsWith("Ks ")) {
+				current.setColor("specularColor", s_parseColor(line.substring(3)));
 			} else if (line.startsWith("map_Kd ")) {
 				String texLoc = line.substring(7);
 				String parent = ResourceUtils.s_getParentDirectory(resource);
