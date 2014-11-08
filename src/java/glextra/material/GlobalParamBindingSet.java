@@ -4,6 +4,7 @@ import gltools.shader.InputUsage;
 import gltools.util.Loadable;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class GlobalParamBindingSet {
 	public HashMap<InputUsage, Loadable> m_map = new HashMap<InputUsage, Loadable>();
@@ -17,5 +18,11 @@ public class GlobalParamBindingSet {
 	}
 	public void removeParam(InputUsage usage) {
 		m_map.remove(usage);
+	}
+	
+	public void loadAll() {
+		for (Entry<InputUsage,Loadable> p : m_map.entrySet()) {
+			p.getValue().load(p.getKey());
+		}
 	}
 }

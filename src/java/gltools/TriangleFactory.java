@@ -3,10 +3,14 @@ package gltools;
 import glcommon.vector.Vector3f;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TriangleFactory {
-	public static List<Triangle> s_create(ArrayList<Vertex> vertices) {
+	public static List<Triangle> s_create(Vertex... vertices) {
+		return s_create(Arrays.asList(vertices));
+	}
+	public static List<Triangle> s_create(List<Vertex> vertices) {
 		if (vertices.size() < 3) throw new IllegalArgumentException("Need at least 3 vertices to create a triangle");
 		
 		List<Triangle> triangles = new ArrayList<Triangle>();

@@ -11,8 +11,11 @@ public class FocusCamera3DController implements Camera3DController, MouseListene
 	private Vector3f m_focalPoint = new Vector3f();
 	private float m_distance = 1f;
 	private Mouse m_mouse = null;
+	private boolean m_zoomEnabled = true;
+	private float m_minZoom;
 	
 	private float m_mouseSensitivity;
+	private float m_scrollSensitivity;
 	
 	private float m_pitchDelta = 0f;
 	private float m_yawDelta = 0f;
@@ -20,10 +23,14 @@ public class FocusCamera3DController implements Camera3DController, MouseListene
 	private boolean m_updatePos = false;
 	private boolean m_dragging = false;
 	
-	public FocusCamera3DController(Vector3f point, float distance, Mouse mouse, float mouseSensitivity) {
+	public FocusCamera3DController(Vector3f point, float distance, Mouse mouse, boolean zoom, float minZoom, float mouseSensitivity, float scrollSensitivity) {
 		m_focalPoint = point;
 		m_distance = distance;
 		m_mouse = mouse;
+		m_minZoom = minZoom;
+		m_zoomEnabled = zoom;
+		
+		m_scrollSensitivity = scrollSensitivity;
 		m_mouseSensitivity = mouseSensitivity;
 		
 		m_updatePos = true;
@@ -70,8 +77,12 @@ public class FocusCamera3DController implements Camera3DController, MouseListene
 	}
 	@Override
 	public void mouseWheelMoved(Mouse m, int dm) {
-		// TODO Auto-generated method stub
-		
+		if (m_zoomEnabled) {
+			float nd = m_distance - dm * m_scrollSensitivity;
+			if (nd < m_minZoom) nd = m_minZoom;
+			m_distance = nd;
+			m_updatePos = true;
+		}
 	}
 	@Override
 	public void mouseDelta(Mouse m, int dx, int dy) {
