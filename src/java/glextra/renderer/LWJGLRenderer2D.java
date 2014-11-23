@@ -17,7 +17,7 @@ import gltools.buffer.FrameBuffer.AttachmentPoint;
 import gltools.buffer.Geometry;
 import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
-import gltools.display.Display;
+import gltools.display.Window;
 import gltools.display.ResizeListener;
 import gltools.extra.GeometryFactory;
 import gltools.shader.InputUsage;
@@ -56,7 +56,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	private float m_csRight;
 	private float m_csLeft;
 	
-	private Display m_display;
+	private Window m_display;
 	
 	//private GlobalParamProvider m_provider;
 	
@@ -72,7 +72,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	}
 	
 	@Override
-	public void init(float left, float right, float top, float bottom, Display display) {
+	public void init(float left, float right, float top, float bottom, Window display) {
 		m_gBuffer = new GBuffer(display.getWidth(), display.getHeight());
 		m_gBuffer.addAttachment(new GBufferAttachment(0, AttachmentPoint.COLOR_ATTACHMENT0, InputUsage.GBUFFER_VERTEX_SAMPLER, TextureFormat.RGBA16F));
 		m_gBuffer.addAttachment(new GBufferAttachment(1, AttachmentPoint.COLOR_ATTACHMENT1, InputUsage.GBUFFER_NORMAL_SAMPLER, TextureFormat.RGBA16F));
@@ -139,7 +139,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	public float getCSHeight() { return m_csTop + m_csBottom; }
 	
 	@Override
-	public Display getDisplay() { return m_display; }
+	public Window getDisplay() { return m_display; }
 	
 	@Override
 	public void updateProjection(float left, float right, float top, float bottom) {

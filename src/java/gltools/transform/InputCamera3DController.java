@@ -30,7 +30,7 @@ public class InputCamera3DController implements Camera3DController {
 			@Override
 			public void mouseMoved(Mouse m, int x, int y, Vector2f delta) {}
 			@Override
-			public void mouseWheelMoved(Mouse m, int dm) {}
+			public void mouseScroll(Mouse m, float dx, float dy) {}
 
 			@Override
 			public void mouseDelta(Mouse m, int x, int y) {
@@ -42,6 +42,16 @@ public class InputCamera3DController implements Camera3DController {
 			public void mouseButtonPressed(Mouse m, MouseButton button) {}
 			@Override
 			public void mouseButtonReleased(Mouse m, MouseButton button) {}
+			@Override
+			public void mouseEntered(Mouse m) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void mouseExited(Mouse m) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 	}
 
@@ -110,7 +120,7 @@ public class InputCamera3DController implements Camera3DController {
 		if (m_keyboard.isKeyPressed(m_keyboard.getKey("D"))) {
 			strafeRight(camera, (float) (deltaMillis * 0.001) * m_moveSpeed);
 		}
-		if (m_keyboard.isKeyPressed(m_keyboard.getKey("LSHIFT")))  {
+		if (m_keyboard.isKeyPressed(m_keyboard.getKey("LEFT_SHIFT")))  {
 			down(camera, (float) (deltaMillis * 0.001) * m_moveSpeed);
 		}
 		if (m_keyboard.isKeyPressed(m_keyboard.getKey("SPACE")))  {

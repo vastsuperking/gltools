@@ -4,10 +4,10 @@ import glcommon.vector.Matrix3f;
 import glcommon.vector.Vector2f;
 import glextra.font.Font;
 import glextra.material.Material;
-import gltools.display.Display;
+import gltools.display.Window;
 
 public interface Renderer2D {
-	public void init(float left, float right, float top, float bottom, Display display);
+	public void init(float left, float right, float top, float bottom, Window display);
 	
 	public void setMaterial(Material mat);
 	public Material getMaterial();
@@ -23,7 +23,7 @@ public interface Renderer2D {
 	public float getCSWidth();
 	public float getCSHeight();
 	
-	public Display getDisplay();
+	public Window getDisplay();
 	
 	public void updateProjection(float left, float right, float top, float bottom);
 	

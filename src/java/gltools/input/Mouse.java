@@ -67,9 +67,19 @@ public abstract class Mouse {
 			}
 		}
 	}
-	protected void mouseWheelMoved(int dm) {
+	protected void mouseScrolled(float dx, float dy) {
 		for (MouseListener l : m_listeners) {
-			l.mouseWheelMoved(this, dm);
+			l.mouseScroll(this, dx, dy);
+		}
+	}
+	protected void mouseEntered() {
+		for (MouseListener l : m_listeners) {
+			l.mouseEntered(this);
+		}
+	}
+	protected void mouseExited() {
+		for (MouseListener l : m_listeners) {
+			l.mouseExited(this);
 		}
 	}
 	
@@ -112,7 +122,7 @@ public abstract class Mouse {
 		@Override
 		public void mouseMoved(Mouse m, int x, int y, Vector2f delta) {}
 		@Override
-		public void mouseWheelMoved(Mouse m, int dm) {}
+		public void mouseScroll(Mouse m, float dx , float dy) {}
 		@Override
 		public void mouseDelta(Mouse m, int x, int y) {}
 		@Override
@@ -123,6 +133,10 @@ public abstract class Mouse {
 		public void mouseButtonReleased(Mouse m, MouseButton button) {
 			if (button.equals(m_button)) trigger(0f);
 		}
+		@Override
+		public void mouseEntered(Mouse m) {}
+		@Override
+		public void mouseExited(Mouse m) {}
 	}
 	
 	public static class MouseXTrigger extends InputTrigger implements MouseListener {		
@@ -134,13 +148,17 @@ public abstract class Mouse {
 			trigger(x);
 		}
 		@Override
-		public void mouseWheelMoved(Mouse m, int dm) {}
+		public void mouseScroll(Mouse m, float dx, float dy) {}
 		@Override
 		public void mouseDelta(Mouse m, int x, int y) {}
 		@Override
 		public void mouseButtonPressed(Mouse m, MouseButton button) {}
 		@Override
 		public void mouseButtonReleased(Mouse m, MouseButton button) {}
+		@Override
+		public void mouseEntered(Mouse m) {}
+		@Override
+		public void mouseExited(Mouse m) {}
 	}
 	public static class MouseYTrigger extends InputTrigger implements MouseListener {
 		public MouseYTrigger(Mouse mouse) {
@@ -151,12 +169,16 @@ public abstract class Mouse {
 			trigger(y);
 		}
 		@Override
-		public void mouseWheelMoved(Mouse m, int dm) {}
+		public void mouseScroll(Mouse m, float dx, float dy) {}
 		@Override
 		public void mouseDelta(Mouse m, int x, int y) {}
 		@Override
 		public void mouseButtonPressed(Mouse m, MouseButton button) {}
 		@Override
 		public void mouseButtonReleased(Mouse m, MouseButton button) {}
+		@Override
+		public void mouseEntered(Mouse m) {}
+		@Override
+		public void mouseExited(Mouse m) {}
 	}
 }
