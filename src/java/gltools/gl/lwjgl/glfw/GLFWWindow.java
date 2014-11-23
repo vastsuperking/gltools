@@ -59,14 +59,16 @@ public class GLFWWindow implements Window {
 		m_vsync = vsync;
 
 		m_keyboard = new GLFWKeyboard();
-		m_mouse = new GLFWMouse();
+		m_mouse = new GLFWMouse(this);
 	}
 
 	@Override
 	public int getWidth() { return m_width; }
 	@Override
 	public int getHeight() { return m_height; }
-
+	
+	public long getID() { return m_id; }
+	
 	public GLFWMouse getMouse() { return m_mouse; }
 	public GLFWKeyboard getKeyboard() { return m_keyboard; }
 

@@ -1,6 +1,7 @@
 package gltools.gl.lwjgl.glfw;
 
-public interface GLFWMonitor {
-	public int getHeight();
-	public int getWidth();
+import gltools.display.Monitor;
+
+public class GLFWMonitor implements Monitor {
+	
 }

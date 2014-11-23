@@ -2,10 +2,15 @@ package gltools.gl.lwjgl.glfw;
 
 import gltools.input.Mouse;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.glfw.GLFW;
 
 public class GLFWMouse extends Mouse {
-	protected GLFWMouse() {
+	private final GLFWWindow m_window;
+	
+	protected GLFWMouse(GLFWWindow window) {
+		m_window = window;
+		
 		add(new MouseButton(0, MouseButton.LEFT_BUTTON_NAME));
 		add(new MouseButton(1, MouseButton.RIGHT_BUTTON_NAME));
 		add(new MouseButton(2, MouseButton.MIDDLE_BUTTON_NAME));
@@ -16,6 +21,18 @@ public class GLFWMouse extends Mouse {
 		//Polling is done in the display
 	}
 
+	public void setGrabbed(boolean grabbed) {
+		if (!m_window.initialized()) throw new RuntimeException("Window not initialized");
+		if (grabbed) GLFW.glfwSetInputMode(m_window.getID(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+		else GLFW.glfwSetInputMode(m_window.getID(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+	}
+	public void setHidden(boolean hidden) {
+		if (!m_window.initialized()) throw new RuntimeException("Window not initialized");
+		if (hidden) GLFW.glfwSetInputMode(m_window.getID(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+		else GLFW.glfwSetInputMode(m_window.getID(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+	}
+	
+	
 	//Functions to be called from window
 	
 	protected void mouseButton(GLFWWindow window, int button, int action, int mods) {
