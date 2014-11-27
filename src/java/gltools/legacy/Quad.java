@@ -3,12 +3,12 @@ package gltools.legacy;
 import gltools.Mode;
 import gltools.Primitive;
 import gltools.Vertex;
+import gltools.gl.GL;
+import gltools.gl.GL1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-
-import org.lwjgl.opengl.GL11;
 
 /**
  * This is a legacy Quad class, and should not be used
@@ -51,13 +51,14 @@ public class Quad implements Primitive {
 	}
 	
 	@Deprecated
-	public void render() {
-		GL11.glBegin(GL11.GL_QUADS);
+	public void render(GL gl) {
+		GL1 gl1 = gl.getGL1();
+		gl1.glBegin(GL1.GL_QUADS);
 		for (Vertex v : m_vertices) {
 			if (v != null) {
-				v.render();
+				v.render(gl);
 			}
 		}
-		GL11.glEnd();
+		gl1.glEnd();
 	}
 }

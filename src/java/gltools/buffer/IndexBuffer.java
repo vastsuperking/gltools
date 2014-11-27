@@ -1,8 +1,9 @@
 package gltools.buffer;
 
-import java.nio.IntBuffer;
+import glcommon.BufferUtils;
+import gltools.gl.GL1;
 
-import org.lwjgl.BufferUtils;
+import java.nio.IntBuffer;
 
 public class IndexBuffer extends Buffer {
 	private int m_offset = 0;
@@ -13,11 +14,11 @@ public class IndexBuffer extends Buffer {
 		setUsage(BufferUsage.STATIC_DRAW);
 	}
 	
-	public void setValues(int[] values) {
+	public void setValues(int[] values, GL1 gl) {
 		IntBuffer buffer = BufferUtils.createIntBuffer(values.length);
 		buffer.put(values);
 		buffer.flip();
-		bufferData(buffer);
+		bufferData(buffer, gl);
 	}
 	
 	public int getOffset() { return m_offset; }

@@ -3,6 +3,7 @@ package gltools;
 import glcommon.Color;
 import glcommon.vector.Vector2f;
 import glcommon.vector.Vector3f;
+import gltools.gl.GL;
 import gltools.shader.Attribute;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
@@ -64,14 +65,14 @@ public class Vertex {
 	 * and might be removed in the future
 	 */
 	@Deprecated
-	public void render() {
+	public void render(GL gl) {
 		VertexAttribute pos = null;
 		for (VertexAttribute c : m_attributes.values()) {
-			if (!(c instanceof Position3D || c instanceof Position2D)) c.apply();
+			if (!(c instanceof Position3D || c instanceof Position2D)) c.apply(gl);
 			else pos = c;
 		}
 		//Make sure the vertex is called last
-		pos.apply();
+		pos.apply(gl);
 	}
 	
 	
@@ -92,7 +93,7 @@ public class Vertex {
 		 * Might be removed in the future
 		 */
 		@Deprecated
-		public void apply();
+		public void apply(GL gl);
 		
 		public VertexAttribute clone();
 	}
@@ -114,8 +115,8 @@ public class Vertex {
 			buffer.asFloatBuffer().put(m_pos.x).put(m_pos.y).put(m_pos.z);
 		}
 		@Override
-		public void apply() {
-			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_pos);
+		public void apply(GL gl) {
+			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_pos, gl.getGL2());
 		}
 		
 		public VertexAttribute clone() {
@@ -140,8 +141,8 @@ public class Vertex {
 			buffer.asFloatBuffer().put(m_pos.x).put(m_pos.y);
 		}
 		@Override
-		public void apply() {
-			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_pos);
+		public void apply(GL gl) {
+			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_pos, gl.getGL2());
 		}
 		
 		public VertexAttribute clone() {
@@ -163,8 +164,8 @@ public class Vertex {
 		
 		@Override
 		@Deprecated
-		public void apply() {
-			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_normal);
+		public void apply(GL gl) {
+			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_normal, gl.getGL2());
 		}
 		@Override
 		public VertexAttribute clone() {
@@ -186,8 +187,8 @@ public class Vertex {
 		
 		@Override
 		@Deprecated
-		public void apply() {
-			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_tangent);
+		public void apply(GL gl) {
+			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_tangent, gl.getGL2());
 		}
 		@Override
 		public VertexAttribute clone() {
@@ -209,8 +210,8 @@ public class Vertex {
 		
 		@Override
 		@Deprecated
-		public void apply() {
-			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_bitangent);
+		public void apply(GL gl) {
+			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_bitangent, gl.getGL2());
 		}
 		@Override
 		public VertexAttribute clone() {
@@ -233,8 +234,8 @@ public class Vertex {
 		
 		@Override
 		@Deprecated
-		public void apply() {
-			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_color.toVector4f());
+		public void apply(GL gl) {
+			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_color.toVector4f(), gl.getGL2());
 		}
 		
 		public VertexAttribute clone() {
@@ -258,8 +259,8 @@ public class Vertex {
 		
 		@Override
 		@Deprecated
-		public void apply() {
-			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_coord);
+		public void apply(GL gl) {
+			Program.s_getCurrent().getInputs().getInputs(Attribute.class, getUsage()).setValue(m_coord, gl.getGL2());
 		}
 		@Override
 		public String toString() {

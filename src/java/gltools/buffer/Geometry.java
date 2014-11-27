@@ -1,11 +1,11 @@
 package gltools.buffer;
 
 import gltools.Mode;
+import gltools.gl.GL1;
+import gltools.gl.GL2;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
-import org.lwjgl.opengl.GL11;
 
 /**
  * This class holds geometry data, a series of attribute arrays and an optional IndexBuffer
@@ -45,30 +45,30 @@ public class Geometry {
 		m_arrays.addAll(arrays);
 	}
 
-	public void render() {
-		bind();
+	public void render(GL2 gl) {
+		bind(gl);
 		//For IBOs
 		if (m_ibo != null) {
-			GL11.glDrawElements(m_mode.getMode(), m_vertexCount, GL11.GL_UNSIGNED_INT, m_ibo.getOffset());
-		} else GL11.glDrawArrays(m_mode.getMode(), 0, m_vertexCount);
+			gl.glDrawElements(m_mode.getMode(), m_vertexCount, GL1.GL_UNSIGNED_INT, m_ibo.getOffset());
+		} else gl.glDrawArrays(m_mode.getMode(), 0, m_vertexCount);
 		
-		unbind();
+		unbind(gl);
 	}
 
-	public void bind() {
+	public void bind(GL2 gl) {
 		for (AttribArray a : m_arrays) {
-			a.enable();
-			a.point();
+			a.enable(gl);
+			a.point(gl);
 		}
 		
-		if (m_ibo != null) m_ibo.bind();
+		if (m_ibo != null) m_ibo.bind(gl);
 	}
 	
-	public void unbind() {
-		if (m_ibo != null) m_ibo.unbind();
+	public void unbind(GL2 gl) {
+		if (m_ibo != null) m_ibo.unbind(gl);
 		
 		for (AttribArray a : m_arrays) {
-			a.disable();
+			a.disable(gl);
 		}
 	}
 }

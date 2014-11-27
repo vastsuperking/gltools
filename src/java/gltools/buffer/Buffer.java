@@ -1,11 +1,11 @@
 package gltools.buffer;
 
+import gltools.gl.GL1;
+
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
-
-import org.lwjgl.opengl.GL15;
 
 public class Buffer {
 	private static HashMap<BufferTarget, Buffer> s_currentBuffers = new HashMap<BufferTarget, Buffer>();
@@ -13,11 +13,9 @@ public class Buffer {
 	private BufferUsage m_usage = BufferUsage.STATIC_DRAW;
 	private BufferTarget m_target = BufferTarget.ARRAY_BUFFER;
 	
-	private int m_handle;
+	private int m_handle = -1;
 
-	public Buffer() {
-		this(GL15.glGenBuffers());
-	}
+	public Buffer() {}
 	
 	public Buffer(int handle) {
 		m_handle = handle;
@@ -30,44 +28,47 @@ public class Buffer {
 	public void setTarget(BufferTarget target) { m_target = target; }
 	public void setUsage(BufferUsage usage) { m_usage = usage; }
 	
-	public void getData(long offset, FloatBuffer dest) {
+	public void getData(long offset, FloatBuffer dest, GL1 gl) {
 		checkBound();
-		GL15.glGetBufferSubData(m_target.getID(), offset, dest);
+		gl.glGetBufferSubData(m_target.getID(), offset, dest);
 	}
-	public void getData(long offset, IntBuffer dest) {
+	public void getData(long offset, IntBuffer dest, GL1 gl) {
 		checkBound();
-		GL15.glGetBufferSubData(m_target.getID(), offset, dest);
+		gl.glGetBufferSubData(m_target.getID(), offset, dest);
 	}
 	
+	public void init(GL1 gl) {
+		if (m_handle == -1) m_handle = gl.glGenBuffers();
+	}
 	
 	/**
 	 * This function will buffer an array of bytes, overriding any existing data
 	 * It assumes that the data has been flipped, as do all the following functions
 	 */
-	 public void bufferData(ByteBuffer buffer) {
+	 public void bufferData(ByteBuffer buffer, GL1 gl) {
 		checkBound();
-		GL15.glBufferData(m_target.getID(), buffer, m_usage.getID());
+		gl.glBufferData(m_target.getID(), buffer, m_usage.getID());
 	}
 
-	public void bufferData(FloatBuffer data) {
+	public void bufferData(FloatBuffer data, GL1 gl) {
 		checkBound();
-		GL15.glBufferData(m_target.getID(), data, m_usage.getID());
+		gl.glBufferData(m_target.getID(), data, m_usage.getID());
 	}
-	public void bufferData(IntBuffer data) {
+	public void bufferData(IntBuffer data, GL1 gl) {
 		checkBound();
-		GL15.glBufferData(m_target.getID(), data, m_usage.getID());
+		gl.glBufferData(m_target.getID(), data, m_usage.getID());
 	}
 	
-	public void bind() {
+	public void bind(GL1 gl) {
 		s_currentBuffers.put(m_target, this);
-		GL15.glBindBuffer(m_target.getID(), getHandle());
+		gl.glBindBuffer(m_target.getID(), getHandle());
 	}
-	public void unbind() {
+	public void unbind(GL1 gl) {
 		s_currentBuffers.put(m_target, null);
-		GL15.glBindBuffer(m_target.getID(), 0);
+		gl.glBindBuffer(m_target.getID(), 0);
 	}
-	public void delete() {
-		GL15.glDeleteBuffers(m_handle);
+	public void delete(GL1 gl) {
+		gl.glDeleteBuffers(m_handle);
 	}
 	private void checkBound() {
 		if (s_currentBuffers.get(m_target) != this) throw new RuntimeException("bind() must be called first!");

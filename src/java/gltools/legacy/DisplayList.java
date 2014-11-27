@@ -1,28 +1,30 @@
 package gltools.legacy;
 
-import org.lwjgl.opengl.GL11;
+import gltools.gl.GL1;
 
 @Deprecated
 public class DisplayList {
-	private int m_handle;
+	private int m_handle = -1;
 	
-	public DisplayList() {
-		this(GL11.glGenLists(1));
-	}
+	public DisplayList() {}
 	public DisplayList(int handle) {
 		m_handle = handle;
 	}
 	
-	public void start() {
-		GL11.glNewList(m_handle, GL11.GL_COMPILE);
+	public void init(GL1 gl) { 
+		if (m_handle != -1) m_handle = gl.glGenLists(1);
 	}
-	public void stop() {
-		GL11.glEndList();
+	
+	public void start(GL1 gl) {
+		gl.glNewList(m_handle, GL1.GL_COMPILE);
 	}
-	public void render() {
-		GL11.glCallList(m_handle);
+	public void stop(GL1 gl) {
+		gl.glEndList();
 	}
-	public void delete() {
-		GL11.glDeleteLists(m_handle, 1);
+	public void render(GL1 gl) {
+		gl.glCallList(m_handle);
+	}
+	public void delete(GL1 gl) {
+		gl.glDeleteLists(m_handle, 1);
 	}
 }

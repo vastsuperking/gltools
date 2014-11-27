@@ -3,6 +3,7 @@ package glextra;
 import glextra.material.GlobalParamBindingSet;
 import glextra.material.Material;
 import gltools.buffer.Geometry;
+import gltools.gl.GL;
 import gltools.shader.InputUsage;
 import gltools.util.Loadable;
 
@@ -23,23 +24,23 @@ public class Mesh {
 		}
 	}
 	
-	public void render(GlobalParamBindingSet globals) {
+	public void render(GlobalParamBindingSet globals, GL gl) {
 		for (Map.Entry<Geometry, Material> entry : m_geoMap.entrySet()) {
 			Geometry geo = entry.getKey();
 			Material mat = entry.getValue();
-			mat.bind(globals);
-			geo.render();
-			mat.unbind();
+			mat.bind(globals, gl);
+			geo.render(gl.getGL2());
+			mat.unbind(gl);
 		}
 	}
-	public void render(HashMap<InputUsage, Loadable> globals) {
+	public void render(HashMap<InputUsage, Loadable> globals, GL gl) {
 		for (Map.Entry<Geometry, Material> entry : m_geoMap.entrySet()) {
 			Geometry geo = entry.getKey();
 			Material mat = entry.getValue();
 			
-			mat.bind(globals);
-			geo.render();
-			mat.unbind();
+			mat.bind(globals, gl);
+			geo.render(gl.getGL2());
+			mat.unbind(gl);
 		}
 	}
 }

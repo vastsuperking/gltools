@@ -1,5 +1,6 @@
 package glextra.material;
 
+import gltools.gl.GL;
 import gltools.shader.DataType;
 import gltools.shader.Input;
 import gltools.shader.InputUsage;
@@ -27,9 +28,9 @@ public class MatParam {
 	public void setValue(Object value) { m_value = value; }
 	public void setName(String name) { m_name = name; }
 	
-	public void load() {
+	public void load(GL gl) {
 		Input input = Program.s_getCurrent().getInputs(m_usage.getInputType(), m_usage);
-		if (m_value != null) input.setValue(m_type, m_value);		
+		if (m_value != null) input.setValue(m_type, m_value, gl.getGL2());		
 	}
 	
 	@Override

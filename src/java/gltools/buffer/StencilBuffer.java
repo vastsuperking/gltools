@@ -1,6 +1,6 @@
 package gltools.buffer;
 
-import org.lwjgl.opengl.GL11;
+import gltools.gl.GL1;
 
 public class StencilBuffer {
 	private static StencilBuffer s_instance = null;
@@ -15,24 +15,24 @@ public class StencilBuffer {
 	
 	public boolean isEnabled() { return getMask() == 0x00 ? false : true; }
 	
-	public void setTest(StencilTest test) {
+	public void setTest(StencilTest test, GL1 gl) {
 		m_currentTest = test;
-		GL11.glStencilFunc(test.getFunction().getID(), test.getReference(), test.getMask());
+		gl.glStencilFunc(test.getFunction().getID(), test.getReference(), test.getMask());
 	}
-	public void setOperation(StencilOperation operation) {
+	public void setOperation(StencilOperation operation, GL1 gl) {
 		m_currentOP = operation;
-		GL11.glStencilOp(operation.getFail().getID(), operation.getZFail().getID(), operation.getPass().getID());
+		gl.glStencilOp(operation.getFail().getID(), operation.getZFail().getID(), operation.getPass().getID());
 	}
-	public void setMask(int mask) {
+	public void setMask(int mask, GL1 gl) {
 		m_currentMask = mask;
-		GL11.glStencilMask(mask);
+		gl.glStencilMask(mask);
 	}
-	public void setEnabled(boolean enabled) {
-		setMask(enabled ? 0xFF : 0x00);
+	public void setEnabled(boolean enabled, GL1 gl) {
+		setMask(enabled ? 0xFF : 0x00, gl);
 	}
-	public void clear() {
-		setEnabled(true);
-		GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+	public void clear(GL1 gl) {
+		setEnabled(true, gl);
+		gl.glClear(GL1.GL_STENCIL_BUFFER_BIT);
 	}
 	
 	public static StencilBuffer getInstance() {
@@ -91,8 +91,8 @@ public class StencilBuffer {
 		public void setPass(StencilOP pass) { m_pass = pass; }
 	}
 	public static enum TestFunction {
-		NEVER(GL11.GL_NEVER), ALWAYS(GL11.GL_ALWAYS), EQUAL(GL11.GL_EQUAL), NOT_EQUAL(GL11.GL_NOTEQUAL), 
-		LESS(GL11.GL_LESS), GREATER(GL11.GL_GREATER), LESS_OR_EQUAL(GL11.GL_LEQUAL), GREATER_OR_EQUAL(GL11.GL_GEQUAL);
+		NEVER(GL1.GL_NEVER), ALWAYS(GL1.GL_ALWAYS), EQUAL(GL1.GL_EQUAL), NOT_EQUAL(GL1.GL_NOTEQUAL), 
+		LESS(GL1.GL_LESS), GREATER(GL1.GL_GREATER), LESS_OR_EQUAL(GL1.GL_LEQUAL), GREATER_OR_EQUAL(GL1.GL_GEQUAL);
 		private final int m_func;
 		
 		TestFunction(int func) {
@@ -102,7 +102,7 @@ public class StencilBuffer {
 		public int getID() { return m_func; }
 	}
 	public static enum StencilOP { 
-		KEEP(GL11.GL_KEEP), ZERO(GL11.GL_ZERO), REPLACE(GL11.GL_REPLACE), INCREMENT(GL11.GL_INCR), DECREMENT(GL11.GL_DECR), INVERT(GL11.GL_INVERT); 
+		KEEP(GL1.GL_KEEP), ZERO(GL1.GL_ZERO), REPLACE(GL1.GL_REPLACE), INCREMENT(GL1.GL_INCR), DECREMENT(GL1.GL_DECR), INVERT(GL1.GL_INVERT); 
 		int m_op;
 		StencilOP(int op) { m_op = op; }
 		public int getID() { return m_op; }

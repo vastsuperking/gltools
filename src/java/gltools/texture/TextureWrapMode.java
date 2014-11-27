@@ -1,13 +1,11 @@
 package gltools.texture;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
+import gltools.gl.GL1;
 
 public enum TextureWrapMode {
-	REPEAT(GL11.GL_REPEAT),
-	CLAMP_TO_BORDER(GL13.GL_CLAMP_TO_BORDER),
-	CLAMP_TO_EDGE(GL12.GL_CLAMP_TO_EDGE);
+	REPEAT(GL1.GL_REPEAT),
+	CLAMP_TO_BORDER(GL1.GL_CLAMP_TO_BORDER),
+	CLAMP_TO_EDGE(GL1.GL_CLAMP_TO_EDGE);
 	private int m_id;
 	
 	TextureWrapMode(int id) {

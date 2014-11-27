@@ -7,6 +7,7 @@ import glcommon.vector.Vector;
 import glcommon.vector.Vector2f;
 import glcommon.vector.Vector3f;
 import glcommon.vector.Vector4f;
+import gltools.gl.GL2;
 
 public abstract class Input {
 	private InputUsage m_usage = null;
@@ -21,35 +22,35 @@ public abstract class Input {
 	public void setUsage(InputUsage usage) { m_usage = usage; }
 	public void setActive(boolean active) { m_active = active; }
 
-	public abstract void setValue(int val);
-	public abstract void setValue(float val);
-	public abstract void setValue(boolean val);
-	public abstract void setValue(Vector2f val);
-	public abstract void setValue(Vector3f val);
-	public abstract void setValue(Vector4f val);
-	public abstract void setValue(Matrix2f val);
-	public abstract void setValue(Matrix3f val);
-	public abstract void setValue(Matrix4f val);
+	public abstract void setValue(int val, GL2 gl);
+	public abstract void setValue(float val, GL2 gl);
+	public abstract void setValue(boolean val, GL2 gl);
+	public abstract void setValue(Vector2f val, GL2 gl);
+	public abstract void setValue(Vector3f val, GL2 gl);
+	public abstract void setValue(Vector4f val, GL2 gl);
+	public abstract void setValue(Matrix2f val, GL2 gl);
+	public abstract void setValue(Matrix3f val, GL2 gl);
+	public abstract void setValue(Matrix4f val, GL2 gl);
 	
-	public void setValue(DataType type, Vector v) {
+	public void setValue(DataType type, Vector v, GL2 gl) {
 		switch (type) {
-		case VEC2: setValue((Vector2f) v);
-		case VEC3: setValue((Vector3f) v);
-		case VEC4: setValue((Vector4f) v);
+		case VEC2: setValue((Vector2f) v, gl);
+		case VEC3: setValue((Vector3f) v, gl);
+		case VEC4: setValue((Vector4f) v, gl);
 		default: throw new IllegalArgumentException("Unrecognized dataType:  " + type);
 		}
 	}
-	public void setValue(DataType type, Object o) {
+	public void setValue(DataType type, Object o, GL2 gl) {
 		switch (type) {
-		case INT: setValue((Integer) o); break;
-		case BOOL: setValue((Boolean) o); break;
-		case FLOAT: setValue((Float) o); break;
-		case VEC2: setValue((Vector2f) o); break;
-		case VEC3: setValue((Vector3f) o); break;
-		case VEC4: setValue((Vector4f) o); break;
-		case MAT2: setValue((Matrix2f) o); break;
-		case MAT3: setValue((Matrix3f) o); break;
-		case MAT4: setValue((Matrix4f) o); break;
+		case INT: setValue((Integer) o, gl); break;
+		case BOOL: setValue((Boolean) o, gl); break;
+		case FLOAT: setValue((Float) o, gl); break;
+		case VEC2: setValue((Vector2f) o, gl); break;
+		case VEC3: setValue((Vector3f) o, gl); break;
+		case VEC4: setValue((Vector4f) o, gl); break;
+		case MAT2: setValue((Matrix2f) o, gl); break;
+		case MAT3: setValue((Matrix3f) o, gl); break;
+		case MAT4: setValue((Matrix4f) o, gl); break;
 		default: throw new IllegalArgumentException("Unrecognized dataType:  " + type);
 		}
 	}

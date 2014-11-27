@@ -1,9 +1,9 @@
 package gltools.texture;
 
+import gltools.gl.GL1;
+
 import java.nio.ByteBuffer;
 import java.util.HashMap;
-
-import org.lwjgl.opengl.GL11;
 
 public abstract class Texture {
 	private HashMap<Integer, Texture> s_currentTextures = new HashMap<Integer, Texture>();
@@ -26,12 +26,12 @@ public abstract class Texture {
 	//A flipped bytebuffer containing texture data
 	private ByteBuffer m_data = null;
 	
-	public Texture(int handle, TextureTarget target) {
-		m_id = handle;
+	public Texture(TextureTarget target) {
 		m_target = target;
 	}
-	public Texture(TextureTarget target) {
-		this(GL11.glGenTextures(), target);
+	
+	public void init(GL1 gl) {
+		m_id = gl.glGenTextures();
 	}
 	
 	public TextureFilterMode 	getMinFilterMode() 	{ return m_minFilterMode; 	}
@@ -57,31 +57,32 @@ public abstract class Texture {
 	
 	public void setData(ByteBuffer data)							{ m_data			= data;				}
 		
-	public boolean isValid() {
-		return GL11.glIsTexture(getID());
+	public boolean isValid(GL1 gl) {
+		return gl.glIsTexture(getID());
 	}
 	
-	public void bind(int unit) {
-		TextureUnit.s_use(unit);		
-		GL11.glBindTexture(m_target.getID(), getID());
+	public void bind(int unit, GL1 gl) {
+		TextureUnit.s_use(gl, unit);		
+		gl.glBindTexture(m_target.getID(), getID());
 		s_currentTextures.put(unit, this);
 		m_boundUnit = unit;
 	}
-	public void bind() {
-		bind(m_unit);
+	public void bind(GL1 gl) {
+		bind(m_unit, gl);
 	}
-	public void unbind() {
-		TextureUnit.s_use(m_boundUnit);
-		GL11.glBindTexture(m_target.getID(), 0);
+	public void unbind(GL1 gl) {
+		TextureUnit.s_use(gl, m_boundUnit);
+		gl.glBindTexture(m_target.getID(), 0);
 		s_currentTextures.put(m_boundUnit, null);
 	}
-	public abstract void load();
-	public abstract void loadParams();
+	public abstract void load(GL1 gl);
+	public abstract void loadParams(GL1 gl);
 	
-	public void delete() {
-		GL11.glDeleteTextures(m_id);
+	public void delete(GL1 gl) {
+		gl.glDeleteTextures(m_id);
 	}	
 	
+	//TODO: Cleanup, make this not context-specific
 	protected void checkBound() {
 		if (!isBound()) throw new RuntimeException("Must call texture.bind() first!");
 	}

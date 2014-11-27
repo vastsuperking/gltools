@@ -1,10 +1,10 @@
 package gltools.texture;
 
-import org.lwjgl.opengl.GL11;
+import gltools.gl.GL1;
 
 public enum TextureTarget {
-	TEXTURE_1D(GL11.GL_TEXTURE_1D),
-	TEXTURE_2D(GL11.GL_TEXTURE_2D);
+	TEXTURE_1D(GL1.GL_TEXTURE_1D),
+	TEXTURE_2D(GL1.GL_TEXTURE_2D);
 
 	int m_id;
 

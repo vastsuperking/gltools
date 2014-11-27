@@ -1,5 +1,6 @@
 package glcommon.image;
 
+import glcommon.BufferUtils;
 import glcommon.util.Pair;
 
 import java.awt.geom.AffineTransform;
@@ -7,8 +8,6 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.nio.ByteBuffer;
-
-import org.lwjgl.BufferUtils;
 
 public class ImageUtils {
 	public static final int BYTES_PER_PIXEL_RGBA = 4; //4 for RGBA, 3 for RGB

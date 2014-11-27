@@ -1,5 +1,6 @@
 package glextra.material;
 
+import gltools.gl.GL;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
@@ -83,7 +84,7 @@ public class Technique {
 	/**
 	 * Will recompile the technique
 	 */
-	public void recompile(HashMap<String, MatParam> params) {
+	public void recompile(HashMap<String, MatParam> params, GL gl) {
 		for (Shader s : m_program.getShaders()) {
 			//Setup shader source and defines
 			ShaderSource source = s.getSource();
@@ -102,59 +103,59 @@ public class Technique {
 			}
 			//Compile the shader again
 			try {
-				s.compile();
+				s.compile(gl.getGL2());
 			} catch (ShaderCompileException e) {
 				throw new RuntimeException("Could not load technique: " + e);
 			}
 		}
 		try {
-			m_program.bind();
-			m_program.link();
-			m_program.unbind();
+			m_program.bind(gl.getGL2());
+			m_program.link(gl.getGL2());
+			m_program.unbind(gl.getGL2());
 		} catch (ProgramLinkException e) {
 			e.printStackTrace();
 		}
 		m_needsRecompile = false;
 	}
 	
-	public void bind(HashMap<String, MatParam> params, HashMap<InputUsage, Loadable> globalParamMap) {
-		m_program.bind();
+	public void bind(HashMap<String, MatParam> params, HashMap<InputUsage, Loadable> globalParamMap, GL gl) {
+		m_program.bind(gl.getGL2());
 		//Will check to make sure compiled and uniforms up to date
-		load(params, globalParamMap);
+		load(params, globalParamMap, gl);
 		
 		try {
-			m_program.validate();
+			m_program.validate(gl.getGL2());
 		} catch (ProgramValidateException e) {
 			e.printStackTrace();
 		}
 	}
-	public void unbind(HashMap<String, MatParam> params) {
-		m_program.unbind();
+	public void unbind(HashMap<String, MatParam> params, GL gl) {
+		m_program.unbind(gl.getGL2());
 		for (MatParam p : params.values()) {
 			if (p instanceof MatTexParam) {
 				Texture t = ((MatTexParam) p).getValue();
-				if (t != null) t.unbind();
+				if (t != null) t.unbind(gl.getGL1());
 				
 			}
 		}
 	}
-	public void load(HashMap<String, MatParam> params, HashMap<InputUsage, Loadable> globalParamMap) {
+	public void load(HashMap<String, MatParam> params, HashMap<InputUsage, Loadable> globalParamMap, GL gl) {
 		//make sure the program is compiled correctly
 		if (m_needsRecompile) {
 			//Unbind before recompiling
-			m_program.unbind();
-			recompile(params);
-			m_program.bind();
+			m_program.unbind(gl.getGL2());
+			recompile(params, gl);
+			m_program.bind(gl.getGL2());
 		}
 
 		//Set the params
 		for (MatParam p : params.values()) {
-			p.load();
+			p.load(gl);
 		}
 		//Now globals
 		for (InputUsage p : m_globalParams) {
 			if (globalParamMap.containsKey(p)) {
-				globalParamMap.get(p).load(p);
+				globalParamMap.get(p).load(p, gl);
 			} else {
 				logger.warn("No global param vailable for: {}", p);
 			}

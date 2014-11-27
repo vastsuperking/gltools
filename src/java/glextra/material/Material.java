@@ -4,6 +4,7 @@ import glcommon.Color;
 import glcommon.vector.Vector2f;
 import glcommon.vector.Vector3f;
 import glcommon.vector.Vector4f;
+import gltools.gl.GL;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.texture.Texture1D;
@@ -145,41 +146,41 @@ public class Material {
 	 * Will ready the current technique or select one
 	 * if the current technique has not been defined
 	 */
-	public void ready() {
+	public void ready(GL gl) {
 		if (m_currentTechnique == null) selectTechnique();
-		if (m_currentTechnique.needsRecompile()) m_currentTechnique.recompile(m_parameters);
+		if (m_currentTechnique.needsRecompile()) m_currentTechnique.recompile(m_parameters, gl);
 	}
 
 	/**
 	 * Will load the mat params again and load the globals using the GlobalParamSet
 	 */
-	public void load(GlobalParamBindingSet globals) {
-		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters, globals.getParamMap());
+	public void load(GlobalParamBindingSet globals, GL gl) {
+		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters, globals.getParamMap(), gl);
 		else logger.warn("CurrentTechnique null!, params not updated");
 	}
 	
-	public void bind(GlobalParamBindingSet globals) {
+	public void bind(GlobalParamBindingSet globals, GL gl) {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
-		m_currentTechnique.bind(m_parameters, globals.getParamMap());
+		m_currentTechnique.bind(m_parameters, globals.getParamMap(), gl);
 	}
 
 	/**
 	 * Will load the mat params again
 	 */
-	public void load(HashMap<InputUsage, Loadable> globals) {
-		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters, globals);
+	public void load(HashMap<InputUsage, Loadable> globals, GL gl) {
+		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters, globals, gl);
 		else logger.warn("Warning, currentTechnique null!, params not updated");
 	}
 	
-	public void bind(HashMap<InputUsage, Loadable> globals) {
+	public void bind(HashMap<InputUsage, Loadable> globals, GL gl) {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
-		m_currentTechnique.bind(m_parameters, globals);
+		m_currentTechnique.bind(m_parameters, globals, gl);
 	}
 
 	
-	public void unbind() {
+	public void unbind(GL gl) {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
-		m_currentTechnique.unbind(m_parameters);
+		m_currentTechnique.unbind(m_parameters, gl);
 	}
 	
 	@Override

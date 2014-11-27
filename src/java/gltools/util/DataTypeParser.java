@@ -1,5 +1,6 @@
 package gltools.util;
 
+import glcommon.BufferUtils;
 import glcommon.vector.Matrix2f;
 import glcommon.vector.Matrix4f;
 import glcommon.vector.Vector2f;
@@ -8,8 +9,6 @@ import glcommon.vector.Vector4f;
 import gltools.shader.DataType;
 
 import java.nio.FloatBuffer;
-
-import org.lwjgl.BufferUtils;
 
 public class DataTypeParser {
 	@SuppressWarnings("unused")

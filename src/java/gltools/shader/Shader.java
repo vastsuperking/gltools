@@ -1,19 +1,24 @@
 package gltools.shader;
 
+import gltools.gl.GL1;
+import gltools.gl.GL2;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Shader {
+	private static final Logger logger = LoggerFactory.getLogger(Shader.class);
+	
 	private ShaderType m_type;
 	private ShaderSource m_source = null;
-	private int m_id;
+	private int m_id = -1;
+	private boolean m_compiled = false;
 
 	public Shader(ShaderType type) {
-		setID(GL20.glCreateShader(type.getType()));
 		setShaderType(type);
 	}
 	public Shader(Shader src) {
@@ -42,25 +47,44 @@ public class Shader {
 	public ShaderType getShaderType() { return m_type; }
 	public ShaderSource getSource() { return m_source; }
 	
-	public void compile() throws ShaderCompileException {
-		if (m_source == null) throw new ShaderCompileException("Source not set!");
-		GL20.glShaderSource(getID(), m_source.getFullSource());
-		GL20.glCompileShader(getID());
-		if (!isCompiled()) {
-			throw new ShaderCompileException("Could not compile " + getShaderType() + " : " + getInfoLog());
-		}
-	}
-	public boolean isCompiled() {
-		return (GL20.glGetShaderi(getID(), GL20.GL_COMPILE_STATUS) 
-					== GL11.GL_TRUE);
+	public void init(GL2 gl) {
+		if (m_id == -1) setID(gl.glCreateShader(m_type.getType()));	
 	}
 	
-	public void delete() {
-		GL20.glDeleteShader(getID());
+	public void compile(GL2 gl) throws ShaderCompileException {
+		if (m_source == null) throw new ShaderCompileException("Source not set!");
+		gl.glShaderSource(getID(), m_source.getFullSource());
+		gl.glCompileShader(getID());
+		if (gl.glGetShaderi(getID(), GL2.GL_COMPILE_STATUS) 
+				!= GL1.GL_TRUE) {
+			m_compiled = false;
+			throw new ShaderCompileException("Could not compile " + getShaderType() + " : " + getInfoLog(gl));
+		} else m_compiled = true;
+	}
+	public boolean isCompiled(GL2 gl) {
+		return m_compiled;
+	}
+	
+	public void delete(GL2 gl) {
+		gl.glDeleteShader(getID());
 	}
 
-	public String getInfoLog() {
-		return GL20.glGetShaderInfoLog(getID(), GL20.glGetShaderi(getID(), GL20.GL_INFO_LOG_LENGTH));
+	public String getInfoLog(GL2 gl) {
+		checkValid();
+		int len = gl.glGetShaderi(getID(), GL2.GL_INFO_LOG_LENGTH);
+		logger.info("Len {}", len);
+		//If there is more than a null byte
+		if (len > 1) return gl.glGetShaderInfoLog(getID(), len);
+		else return "";
+	}
+	
+	@Override
+	public void finalize() {
+		logger.warn("Shader {} not destroyed!", getID());
+	}
+	
+	private void checkValid() {
+		if (m_id == -1) throw new RuntimeException("Shader not initialized!");
 	}
 	
 	public static class ShaderCompileException extends Exception {

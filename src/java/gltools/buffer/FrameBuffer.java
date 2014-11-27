@@ -1,17 +1,16 @@
 package gltools.buffer;
 
+import gltools.gl.GL1;
+import gltools.gl.GL3;
 import gltools.texture.Texture2D;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
 
 public class FrameBuffer {
 	public enum AttachmentPoint {
-		COLOR_ATTACHMENT0(GL30.GL_COLOR_ATTACHMENT0),
-		COLOR_ATTACHMENT1(GL30.GL_COLOR_ATTACHMENT1),
-		COLOR_ATTACHMENT2(GL30.GL_COLOR_ATTACHMENT2),
-		COLOR_ATTACHMENT3(GL30.GL_COLOR_ATTACHMENT3),
-		DEPTH_ATTACHMENT(GL30.GL_DEPTH_ATTACHMENT);
+		COLOR_ATTACHMENT0(GL3.GL_COLOR_ATTACHMENT0),
+		COLOR_ATTACHMENT1(GL3.GL_COLOR_ATTACHMENT1),
+		COLOR_ATTACHMENT2(GL3.GL_COLOR_ATTACHMENT2),
+		COLOR_ATTACHMENT3(GL3.GL_COLOR_ATTACHMENT3),
+		DEPTH_ATTACHMENT(GL3.GL_DEPTH_ATTACHMENT);
 		
 		private int m_id;
 		
@@ -21,8 +20,8 @@ public class FrameBuffer {
 		public int getID() { return m_id; }
 	}
 	public enum AttachmentType {
-		NONE(GL11.GL_NONE), RENDER_BUFFER(GL30.GL_RENDERBUFFER),
-		TEXTURE(GL11.GL_TEXTURE);
+		NONE(GL1.GL_NONE), RENDER_BUFFER(GL3.GL_RENDERBUFFER),
+		TEXTURE(GL1.GL_TEXTURE);
 		
 		int m_id;
 		AttachmentType(int id) {
@@ -42,43 +41,45 @@ public class FrameBuffer {
 	private int m_id = -1;
 	
 	public FrameBuffer(int id) { m_id = id; }
-	public FrameBuffer() {
-		this(GL30.glGenFramebuffers());
-	}
+	public FrameBuffer() {}
 	
 	public int getID() { return m_id; }
 	
-	public boolean isComplete() {
+	public boolean isComplete(GL3 gl) {
 		checkBound();
-		return GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER) == GL30.GL_FRAMEBUFFER_COMPLETE;
+		return gl.glCheckFramebufferStatus(GL3.GL_FRAMEBUFFER) == GL3.GL_FRAMEBUFFER_COMPLETE;
 	}
 	
-	public void attach(Texture2D t, AttachmentPoint attachmentPoint) {
-		checkBound();
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, attachmentPoint.getID(), GL11.GL_TEXTURE_2D, t.getID(), 0);
+	public void init(GL3 gl) {
+		if (m_id == -1) m_id = gl.glGenFramebuffers();
 	}
-	public void attach(RenderBuffer r, AttachmentPoint attachment) {
+	
+	public void attach(Texture2D t, AttachmentPoint attachmentPoint, GL3 gl) {
 		checkBound();
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, attachment.getID(), GL30.GL_RENDERBUFFER, r.getID());
+		gl.glFramebufferTexture2D(GL3.GL_FRAMEBUFFER, attachmentPoint.getID(), GL1.GL_TEXTURE_2D, t.getID(), 0);
 	}
-	public AttachmentType getAttachmentType(AttachmentPoint attachment) {
+	public void attach(RenderBuffer r, AttachmentPoint attachment, GL3 gl) {
 		checkBound();
-		int id = GL30.glGetFramebufferAttachmentParameteri(GL30.GL_FRAMEBUFFER, attachment.getID(), GL30.GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE);
+		gl.glFramebufferRenderbuffer(GL3.GL_FRAMEBUFFER, attachment.getID(), GL3.GL_RENDERBUFFER, r.getID());
+	}
+	public AttachmentType getAttachmentType(AttachmentPoint attachment, GL3 gl) {
+		checkBound();
+		int id = gl.glGetFramebufferAttachmentParameteri(GL3.GL_FRAMEBUFFER, attachment.getID(), GL3.GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE);
 		return AttachmentType.getType(id);
 	}
-	public void bind() {
+	public void bind(GL3 gl) {
 		if (m_id > 0) {
-			GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, m_id);
+			gl.glBindFramebuffer(GL3.GL_FRAMEBUFFER, m_id);
 			s_current = this;
 		}
 	}
-	public void unbind() {
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
+	public void unbind(GL3 gl) {
+		gl.glBindFramebuffer(GL3.GL_FRAMEBUFFER, 0);
 		s_current = null;
 	}
 	
-	public void destroy() {
-		GL30.glDeleteFramebuffers(getID());
+	public void destroy(GL3 gl) {
+		gl.glDeleteFramebuffers(getID());
 	}
 	
 	private void checkBound() {	

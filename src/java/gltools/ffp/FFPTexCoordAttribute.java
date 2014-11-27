@@ -1,13 +1,15 @@
 package gltools.ffp;
 
+import glcommon.vector.Matrix2f;
+import glcommon.vector.Matrix3f;
 import glcommon.vector.Matrix4f;
 import glcommon.vector.Vector2f;
 import glcommon.vector.Vector3f;
 import glcommon.vector.Vector4f;
+import gltools.gl.GL1;
+import gltools.gl.GL2;
 import gltools.shader.Attribute;
 import gltools.shader.InputUsage;
-
-import org.lwjgl.opengl.GL11;
 
 public class FFPTexCoordAttribute extends Attribute {
 	public FFPTexCoordAttribute() {
@@ -15,37 +17,41 @@ public class FFPTexCoordAttribute extends Attribute {
 	}
 	
 	@Override
-	public void enable() {
-		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+	public void enableArray(GL2 gl) {
+		gl.glEnableClientState(GL1.GL_TEXTURE_COORD_ARRAY);
 	}
 	@Override
-	public void disable() {
-		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+	public void disableArray(GL2 gl) {
+		gl.glDisableClientState(GL1.GL_TEXTURE_COORD_ARRAY);
 	}
 	@Override
-	public void point(int stride, long offset) {
-		GL11.glTexCoordPointer(getUsage().getDataType().getComponents(), getUsage().getDataType().getComponentType().getID(), stride, offset);
-	}
-	
-	
-	@Override
-	public void setValue(float val) {
-		GL11.glTexCoord1f(val);
+	public void point(int stride, long offset, GL2 gl) {
+		gl.glTexCoordPointer(getUsage().getDataType().getComponents(), getUsage().getDataType().getComponentType().getID(), stride, offset);
 	}
 	
+	
 	@Override
-	public void setValue(Vector2f val) {
-		GL11.glTexCoord2f(val.getX(), val.getY());
-	}
-	@Override
-	public void setValue(Vector3f val) {
-		GL11.glTexCoord3f(val.getX(), val.getY(), val.getZ());
-	}
-	@Override
-	public void setValue(Vector4f val) {
-		GL11.glTexCoord4f(val.getX(), val.getY(), val.getZ(), val.getW());
+	public void setValue(float val, GL2 gl) {
+		gl.glTexCoord1f(val);
 	}
 	
 	@Override
-	public void setValue(Matrix4f val) {}
+	public void setValue(Vector2f val, GL2 gl) {
+		gl.glTexCoord2f(val.getX(), val.getY());
+	}
+	@Override
+	public void setValue(Vector3f val, GL2 gl) {
+		gl.glTexCoord3f(val.getX(), val.getY(), val.getZ());
+	}
+	@Override
+	public void setValue(Vector4f val, GL2 gl) {
+		gl.glTexCoord4f(val.getX(), val.getY(), val.getZ(), val.getW());
+	}
+	
+	@Override
+	public void setValue(Matrix2f val, GL2 gl) {}
+	@Override
+	public void setValue(Matrix3f val, GL2 gl) {}
+	@Override
+	public void setValue(Matrix4f val, GL2 gl) {}
 }

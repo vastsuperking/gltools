@@ -1,8 +1,9 @@
 package gltools.buffer;
 
-import java.nio.FloatBuffer;
+import glcommon.BufferUtils;
+import gltools.gl.GL1;
 
-import org.lwjgl.BufferUtils;
+import java.nio.FloatBuffer;
 
 
 public class VertexBuffer extends Buffer {
@@ -16,10 +17,10 @@ public class VertexBuffer extends Buffer {
 		setTarget(BufferTarget.ARRAY_BUFFER);
 		setUsage(usage);
 	}
-	public void setValues(float[] values) {
+	public void setValues(float[] values, GL1 gl) {
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
 		buffer.put(values);
 		buffer.flip();
-		bufferData(buffer);
+		bufferData(buffer, gl);
 	}
 }

@@ -6,6 +6,7 @@ import glcommon.util.ResourceLocator.ClasspathResourceLocator;
 import glcommon.util.ResourceUtils;
 import glextra.material.Material;
 import glextra.material.MaterialXMLLoader;
+import gltools.gl.GL;
 import gltools.shader.Program.ProgramLinkException;
 import gltools.shader.Shader.ShaderCompileException;
 import gltools.texture.Texture2D;
@@ -18,7 +19,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 
 public class OBJMaterialReader {
-	public static HashMap<String, Material> s_readMaterials(String resource, ResourceLocator locator) throws IOException {
+	public static HashMap<String, Material> s_readMaterials(String resource, ResourceLocator locator, GL gl) throws IOException {
 		HashMap<String, Material> mats = new HashMap<String, Material>();
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(locator.getResource(resource)));
@@ -28,9 +29,9 @@ public class OBJMaterialReader {
 		String line;
 		while ((line = reader.readLine()) != null) {
 			if (line.startsWith("newmtl ")) {
-				if (current != null) current.ready();
+				if (current != null) current.ready(gl);
 				String name = line.substring(7);
-				current = s_newMTL();
+				current = s_newMTL(gl);
 				current.setName(name);
 				mats.put(name, current);
 			} else if (line.startsWith("Ka ")) {
@@ -43,16 +44,16 @@ public class OBJMaterialReader {
 				String texLoc = line.substring(7);
 				String parent = ResourceUtils.s_getParentDirectory(resource);
 				String texResource = parent + texLoc;
-				Texture2D tex = TextureFactory.s_loadTexture(texResource, locator);
+				Texture2D tex = TextureFactory.s_loadTexture(texResource, locator, gl.getGL1());
 				tex.setSWrapMode(TextureWrapMode.REPEAT);
 				tex.setTWrapMode(TextureWrapMode.REPEAT);
-				tex.bind();
-				tex.loadParams();
-				tex.unbind();
+				tex.bind(gl.getGL1());
+				tex.loadParams(gl.getGL1());
+				tex.unbind(gl.getGL1());
 				current.setTexture2D("diffuseMap", tex);
 			}
 		}
-		if (current != null) current.ready();
+		if (current != null) current.ready(gl);
 		return mats;
 	}
 	private static Color s_parseColor(String string) {
@@ -63,9 +64,9 @@ public class OBJMaterialReader {
 		return new Color(red, green, blue);
 	}
 	
-	public static Material s_newMTL() throws IOException {
+	public static Material s_newMTL(GL gl) throws IOException {
 		try {
-			Material m = MaterialXMLLoader.s_load("Materials/M3D/obj.mat", new ClasspathResourceLocator()).get(0);
+			Material m = MaterialXMLLoader.s_load("Materials/M3D/obj.mat", new ClasspathResourceLocator(), gl).get(0);
 			return m;
 		} catch (ShaderCompileException e) {
 			e.printStackTrace();

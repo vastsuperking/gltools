@@ -76,9 +76,9 @@ public class FocusCamera3DController implements Camera3DController, MouseListene
 		
 	}
 	@Override
-	public void mouseWheelMoved(Mouse m, int dm) {
+	public void mouseScroll(Mouse m, float dx, float dy) {
 		if (m_zoomEnabled) {
-			float nd = m_distance - dm * m_scrollSensitivity;
+			float nd = m_distance - dy * m_scrollSensitivity;
 			if (nd < m_minZoom) nd = m_minZoom;
 			m_distance = nd;
 			m_updatePos = true;
@@ -100,4 +100,9 @@ public class FocusCamera3DController implements Camera3DController, MouseListene
 	public void mouseButtonReleased(Mouse m, MouseButton button) {
 		m_dragging = false;
 	}
+
+	@Override
+	public void mouseEntered(Mouse m) {}
+	@Override
+	public void mouseExited(Mouse m) {}
 }

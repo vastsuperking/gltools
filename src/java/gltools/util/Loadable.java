@@ -1,5 +1,6 @@
 package gltools.util;
 
+import gltools.gl.GL;
 import gltools.shader.InputUsage;
 
 /**
@@ -7,5 +8,5 @@ import gltools.shader.InputUsage;
  * can update a value or do something, bind a shader, etc.
  */
 public interface Loadable {
-	public void load(InputUsage usage);
+	public void load(InputUsage usage, GL gl);
 }

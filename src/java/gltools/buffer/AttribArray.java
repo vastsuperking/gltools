@@ -1,5 +1,7 @@
 package gltools.buffer;
 
+import gltools.gl.GL1;
+import gltools.gl.GL2;
 import gltools.shader.Attribute;
 import gltools.shader.InputList;
 import gltools.shader.InputUsage;
@@ -36,30 +38,30 @@ public class AttribArray {
 		return "AttribArray(" + m_vbo + ", " + m_usage + ", Stride: " + m_stride + " offset: " + m_offset + ")";
 	}
 
-	public void enable() {
+	public void enable(GL2 gl) {
 		InputList<Attribute> attributes = Program.s_getCurrent().getInputs(Attribute.class, m_usage);
 		for (Attribute a : attributes) {
-			a.enable();
+			a.enableArray(gl);
 		}
 	}
-	public void disable() {
+	public void disable(GL2 gl) {
 		InputList<Attribute> attributes = Program.s_getCurrent().getInputs(Attribute.class, m_usage);
 		for (Attribute a : attributes) {
-			a.disable();
+			a.disableArray(gl);
 		}
 	}
-	public void bind() {
-		if (m_vbo != null) m_vbo.bind();
+	public void bind(GL1 gl) {
+		if (m_vbo != null) m_vbo.bind(gl);
 	}
-	public void unbind() {
-		if (m_vbo != null) m_vbo.unbind();
+	public void unbind(GL1 gl) {
+		if (m_vbo != null) m_vbo.unbind(gl);
 	}
-	public void point() {
-		bind();
+	public void point(GL2 gl) {
+		bind(gl);
 		InputList<Attribute> attributes = Program.s_getCurrent().getInputs(Attribute.class, m_usage);
 		for (Attribute a : attributes) {
-			a.point(m_stride, m_offset);
+			a.point(m_stride, m_offset, gl);
 		}
-		unbind();
+		unbind(gl);
 	}
 }

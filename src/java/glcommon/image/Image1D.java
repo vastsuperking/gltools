@@ -1,11 +1,10 @@
 package glcommon.image;
 
+import glcommon.BufferUtils;
 import glcommon.util.Pair;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-
-import org.lwjgl.BufferUtils;
 
 public class Image1D {
 	private int m_length;

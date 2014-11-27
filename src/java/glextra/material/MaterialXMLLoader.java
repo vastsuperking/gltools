@@ -4,6 +4,7 @@ import glcommon.util.ResourceLocator;
 import glcommon.vector.Vector2f;
 import glcommon.vector.Vector3f;
 import glcommon.vector.Vector4f;
+import gltools.gl.GL;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
@@ -31,21 +32,21 @@ import org.jsoup.select.Elements;
 
 public class MaterialXMLLoader {
 	private static final boolean DEBUG = false;
-	public static List<Material> s_load(String resource, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
-		return s_load(locator.getResource(resource), locator);
+	public static List<Material> s_load(String resource, ResourceLocator locator, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {
+		return s_load(locator.getResource(resource), locator, gl);
 	}
-	public static List<Material> s_load(InputStream in, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
+	public static List<Material> s_load(InputStream in, ResourceLocator locator, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {
 		String content = FileUtils.s_readAll(in);
 		Document doc = Jsoup.parse(content, "", Parser.xmlParser());
 		Elements mats = doc.getElementsByTag("material");
 		
 		List<Material> materials = new ArrayList<Material>();
 		for (Element m : mats) {
-			materials.add(s_parseMaterial(m, locator));
+			materials.add(s_parseMaterial(m, locator, gl));
 		}
 		return materials;
 	}
-	private static Material s_parseMaterial(Element m, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
+	private static Material s_parseMaterial(Element m, ResourceLocator locator, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {
 		Material mat = new Material(m.attr("name"));
 		
 		Elements paramsElements = m.getElementsByTag("parameters");
@@ -53,7 +54,7 @@ public class MaterialXMLLoader {
 		Element paramsElement = paramsElements.first();
 		Elements params = paramsElement.children();
 		for (Element param : params) {
-			MatParam p = s_parseParam(param, locator);
+			MatParam p = s_parseParam(param, locator, gl);
 			if (DEBUG) System.out.println("Parsed Param: " + p);
 			mat.addParameter(p);
 		}
@@ -61,7 +62,7 @@ public class MaterialXMLLoader {
 		Elements techniques = m.getElementsByTag("technique");
 		for (Element t : techniques) {
 			boolean def = Boolean.parseBoolean(t.attr("default"));
-			Technique technique = s_parseTechnique(t, locator);
+			Technique technique = s_parseTechnique(t, locator, gl);
 			if (def) mat.setDefaultTechnique(technique);
 			else mat.addTechnique(technique);
 		}
@@ -71,14 +72,14 @@ public class MaterialXMLLoader {
 
 		//Will do all the compiling
 		//and select the technique
-		mat.ready();
+		mat.ready(gl);
 		return mat;
 	}
-	private static MatParam s_parseParam(Element p, ResourceLocator locator) throws IOException {
+	private static MatParam s_parseParam(Element p, ResourceLocator locator, GL gl) throws IOException {
 		DataType type = s_parseParamType(p.tagName());
 		String valueString = p.attr("value");
 		Object value = null;
-		if (valueString != null && !valueString.equals("")) value = s_parseParamValue(type, valueString, locator);
+		if (valueString != null && !valueString.equals("")) value = s_parseParamValue(type, valueString, locator, gl);
 		String name = p.attr("name");
 		//The usage is always a uniform
 		InputUsage usage = new InputUsage(p.attr("usage"), type, Uniform.class);
@@ -88,7 +89,7 @@ public class MaterialXMLLoader {
 			return new MatTexParam(type, name, usage, (Texture) value, unit);
 		} else return new MatParam(type, name, usage, value);
 	}
-	private static Technique s_parseTechnique(Element t, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
+	private static Technique s_parseTechnique(Element t, ResourceLocator locator, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {
 		String name = t.attr("name");
 		String[] modes = t.attr("modes").split(",");
 		
@@ -96,7 +97,7 @@ public class MaterialXMLLoader {
 		if (programs.size() < 1) throw new RuntimeException("Unable to find program tag");
 		Element programElement = programs.first();
 		String programLocation = programElement.attr("resource");
-		Program program = ProgramXMLLoader.s_load(programLocation, locator).get(0);
+		Program program = ProgramXMLLoader.s_load(programLocation, locator, gl).get(0);
 		Technique technique = new Technique(name, program);
 		Elements definesElements = t.getElementsByTag("defines");
 		if (definesElements.size() > 0) s_parseDefines(definesElements.first(), technique);
@@ -166,25 +167,25 @@ public class MaterialXMLLoader {
 	 * Sampler2D corresponds to Texture2D
 	 * and Sampler1D corresponds to Texture1D 
 	 */
-	 private static Object s_parseParamValue(DataType type, String value, ResourceLocator locator) throws IOException {
+	 private static Object s_parseParamValue(DataType type, String value, ResourceLocator locator, GL gl) throws IOException {
 		 switch(type) {
 		 case BOOL: return s_parseBoolean(value);
 		 case VEC4: return s_parseVector4f(value);
 		 case VEC3: return s_parseVector3f(value);
 		 case VEC2: return s_parseVector2f(value);
 		 case FLOAT: return s_parseFloat(value);
-		 case SAMPLER1D: return s_parseTex1D(value, locator);
-		 case SAMPLER2D: return s_parseTex2D(value, locator);
+		 case SAMPLER1D: return s_parseTex1D(value, locator, gl);
+		 case SAMPLER2D: return s_parseTex2D(value, locator, gl);
 		 default: throw new RuntimeException("Unable to parse value for ParamType: " + type);
 		 }
 	 }
-	 private static Texture2D s_parseTex2D(String value, ResourceLocator locator) throws IOException {
+	 private static Texture2D s_parseTex2D(String value, ResourceLocator locator, GL gl) throws IOException {
 		 if (value == null || value.equals("")) return null;
-		 return TextureFactory.s_loadTexture(value, locator);
+		 return TextureFactory.s_loadTexture(value, locator, gl.getGL1());
 	 }
-	 private static Texture1D s_parseTex1D(String value, ResourceLocator locator) throws IOException {
+	 private static Texture1D s_parseTex1D(String value, ResourceLocator locator, GL gl) throws IOException {
 		 if (value == null || value.equals("")) return null;
-		 return TextureFactory.s_loadTexture1D(value, locator);
+		 return TextureFactory.s_loadTexture1D(value, locator, gl.getGL1());
 	 }
 	 private static boolean s_parseBoolean(String value) {
 		 if (value == null || value.equals("")) return false;

@@ -1,5 +1,6 @@
 package glextra.material;
 
+import gltools.gl.GL;
 import gltools.shader.DataType;
 import gltools.shader.Input;
 import gltools.shader.InputUsage;
@@ -32,10 +33,10 @@ public class MatTexParam extends MatParam {
 		m_texture = t;
 	}
 	@Override
-	public void load() {
+	public void load(GL gl) {
 		Input input = Program.s_getCurrent().getInputs(m_usage.getInputType(), m_usage);
-		input.setValue(m_unit);
-		if (m_texture != null) m_texture.bind(m_unit);
+		input.setValue(m_unit, gl.getGL2());
+		if (m_texture != null) m_texture.bind(m_unit, gl.getGL1());
 	}
 	@Override
 	public String toString() {

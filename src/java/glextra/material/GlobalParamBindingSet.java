@@ -1,5 +1,6 @@
 package glextra.material;
 
+import gltools.gl.GL;
 import gltools.shader.InputUsage;
 import gltools.util.Loadable;
 
@@ -20,9 +21,9 @@ public class GlobalParamBindingSet {
 		m_map.remove(usage);
 	}
 	
-	public void loadAll() {
+	public void loadAll(GL gl) {
 		for (Entry<InputUsage,Loadable> p : m_map.entrySet()) {
-			p.getValue().load(p.getKey());
+			p.getValue().load(p.getKey(), gl);
 		}
 	}
 }

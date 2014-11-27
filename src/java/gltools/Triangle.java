@@ -1,10 +1,11 @@
 package gltools;
 
+import gltools.gl.GL;
+import gltools.gl.GL1;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-
-import org.lwjgl.opengl.GL11;
 
 public class Triangle implements Primitive {
 	private Vertex[] m_vertices = new Vertex[3];
@@ -49,13 +50,14 @@ public class Triangle implements Primitive {
 	 * This functions might be removed in the future
 	 */
 	@Deprecated
-	public void render() {
-		GL11.glBegin(GL11.GL_TRIANGLES);
+	public void render(GL gl) {
+		GL1 gl1 = gl.getGL1();
+		gl1.glBegin(GL1.GL_TRIANGLES);
 		for (Vertex v : m_vertices) {
 			if (v != null) {
-				v.render();
+				v.render(gl);
 			}
 		}
-		GL11.glEnd();
+		gl1.glEnd();
 	}
 }

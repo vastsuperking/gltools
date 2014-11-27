@@ -1,15 +1,15 @@
 package gltools.shader;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
+import gltools.gl.GL1;
+import gltools.gl.GL2;
 
 public enum DataType {
-	BYTE(GL11.GL_BYTE, 1),
-	SHORT(GL11.GL_SHORT, 2),
-	FLOAT(GL11.GL_FLOAT, 4),
-	DOUBLE(GL11.GL_DOUBLE, 8),
-	INT(GL11.GL_INT, 4),
-	BOOL(GL20.GL_BOOL, 4),
+	BYTE(GL1.GL_BYTE, 1),
+	SHORT(GL1.GL_SHORT, 2),
+	FLOAT(GL1.GL_FLOAT, 4),
+	DOUBLE(GL1.GL_DOUBLE, 8),
+	INT(GL1.GL_INT, 4),
+	BOOL(GL2.GL_BOOL, 4),
 	
 	VEC2(FLOAT, 2),
 	VEC3(FLOAT, 3),
@@ -19,8 +19,8 @@ public enum DataType {
 	MAT4(FLOAT, 16),
 	//Not really datatypes, but they are glsl datatype
 	//Only uniforms can have this datatype
-	SAMPLER1D(GL11.GL_INT, 4),
-	SAMPLER2D(GL11.GL_INT, 4);
+	SAMPLER1D(GL1.GL_INT, 4),
+	SAMPLER2D(GL1.GL_INT, 4);
 	
 	private final int m_id;
 	private final int m_size;

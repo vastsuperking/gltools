@@ -1,10 +1,10 @@
 package gltools.buffer;
 
-import org.lwjgl.opengl.GL15;
+import gltools.gl.GL1;
 
 public enum BufferTarget {
-	ARRAY_BUFFER(GL15.GL_ARRAY_BUFFER),
-	ELEMENT_ARRAY_BUFFER(GL15.GL_ELEMENT_ARRAY_BUFFER);
+	ARRAY_BUFFER(GL1.GL_ARRAY_BUFFER),
+	ELEMENT_ARRAY_BUFFER(GL1.GL_ELEMENT_ARRAY_BUFFER);
 	
 	private int m_id;
 	

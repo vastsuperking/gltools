@@ -1,6 +1,7 @@
 package gltools.util;
 
 import glcommon.vector.Matrix4f;
+import gltools.gl.GL;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
@@ -47,16 +48,16 @@ public class GLMatrix4f implements Loadable {
 	 * Will update the matrix so the openGL and local matrices are in sync,
 	 * using the default usage
 	 */
-	public void load() {
+	public void load(GL gl) {
 		if (m_usage == null) throw new RuntimeException("Default usage is null, cannot use load()!");
-		load(m_usage);
+		load(m_usage, gl);
 	}
-	public void load(InputUsage usage) {
+	public void load(InputUsage usage, GL gl) {
 		if (usage.getDataType() != DataType.MAT4) throw new RuntimeException("Not a mat4!");
 		if (Program.s_getCurrent() == null) {
 			System.err.println("Warning! No current program, matrix value not set!");
 			return;
 		}
-		Program.s_getCurrent().getInputs(Uniform.class, usage).setValue(m_matrix);
+		Program.s_getCurrent().getInputs(Uniform.class, usage).setValue(m_matrix, gl.getGL2());
 	}
 }

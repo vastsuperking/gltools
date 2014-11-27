@@ -1,9 +1,10 @@
 package gltools;
 
+import gltools.gl.GL;
+import gltools.gl.GL1;
+
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import org.lwjgl.opengl.GL11;
 
 public class Point implements Primitive {
 	private Vertex m_vertex = null;
@@ -29,10 +30,11 @@ public class Point implements Primitive {
 	public void setVertex(Vertex vertex) { m_vertex = vertex; }
 	
 	@Deprecated
-	public void render() {
-		GL11.glBegin(GL11.GL_POINTS);
-		m_vertex.render();
-		GL11.glEnd();
+	public void render(GL gl) {
+		GL1 gl1 = gl.getGL1();
+		gl1.glBegin(GL1.GL_POINTS);
+		m_vertex.render(gl);
+		gl1.glEnd();
 	}
 	
 	@Override

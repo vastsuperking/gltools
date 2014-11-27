@@ -3,10 +3,11 @@ package gltools.shader;
 import glcommon.util.ResourceLocator;
 import gltools.ffp.FFPTexCoordAttribute;
 import gltools.ffp.FFPVertexAttribute;
+import gltools.gl.GL;
 import gltools.shader.Program.ProgramLinkException;
 import gltools.shader.Shader.ShaderCompileException;
 import gltools.util.FileUtils;
-import gltools.util.LWJGLUtils;
+import gltools.util.GLUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,15 +20,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
-import org.lwjgl.opengl.GL11;
 
 public class ProgramXMLLoader {
 	private static final boolean DEBUG = false;
 	
-	public static List<Program> s_load(String resource, ResourceLocator resources) throws IOException, ShaderCompileException, ProgramLinkException {
-		return s_load(resources.getResource(resource), resources);
+	public static List<Program> s_load(String resource, ResourceLocator resources, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {
+		return s_load(resources.getResource(resource), resources, gl);
 	}
-	public static List<Program> s_load(InputStream input, ResourceLocator resources) throws IOException, ShaderCompileException, ProgramLinkException {
+	public static List<Program> s_load(InputStream input, ResourceLocator resources, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {
 		String file = FileUtils.s_readAll(input);
 		Document doc = Jsoup.parse(file, "", Parser.xmlParser());
 		
@@ -35,35 +35,42 @@ public class ProgramXMLLoader {
 		
 		List<Program> programs = new ArrayList<Program>();
 		for (Element p : pgms) {
-			programs.add(s_parseProgram(p, resources));
+			programs.add(s_parseProgram(p, resources, gl));
 		}
 		return programs;
 	}
-	private static Program s_parseProgram(Element p, ResourceLocator resources) throws ShaderCompileException, ProgramLinkException, IOException {
+	private static Program s_parseProgram(Element p, ResourceLocator resources, GL gl) throws ShaderCompileException, ProgramLinkException, IOException {
 		Program program = new Program();
+		program.init(gl.getGL2());
+		
 		Element shaders = p.getElementsByTag("shaders").get(0);
 		for (Element s : shaders.children()) { 
 			Shader shader = s_parseShader(s, resources);
+			shader.init(gl.getGL2());
 			if (DEBUG) System.out.println("Compiling shader: " + shader);
-			shader.compile();
+			shader.compile(gl.getGL2());
 			if (DEBUG) System.out.println("Done compiling shader, attaching");
-			program.attachShader(shader);
+			program.attachShader(shader, gl.getGL2());
 		}
 		if (DEBUG) System.out.println("Linking program...");
-		program.link();
+		program.link(gl.getGL2());
 		if (p.getElementsByTag("uniforms").size() != 0) {
 			Element uniforms  = p.getElementsByTag("uniforms").get(0);
 			for (Element uni : uniforms.children()) {
-				program.getInputs().addInput(s_parseUniform(uni, program));
+				Uniform uniform = s_parseUniform(uni, program);
+				uniform.init(gl.getGL2());
+				program.getInputs().addInput(uniform);
 			}
 		}
 		if (p.getElementsByTag("attributes").size() != 0) {
 			Element attributes = p.getElementsByTag("attributes").get(0);
 			for (Element attr : attributes.children()) {
-				program.getInputs().addInput(s_parseAttribute(attr, program));
+				Attribute attrib = s_parseAttribute(attr, program);
+				attrib.init(gl.getGL2());
+				program.getInputs().addInput(attrib);
 			}
 		}
-		if (DEBUG) System.out.println("Program Creation Error State: " + LWJGLUtils.transError(GL11.glGetError()));
+		if (DEBUG) System.out.println("Program Creation Error State: " + GLUtils.getError(gl.getGL1()));
 		return program;
 	}
 	private static Uniform s_parseUniform(Element u, Program p) {
