@@ -28,7 +28,7 @@ public class Mesh {
 		for (Map.Entry<Geometry, Material> entry : m_geoMap.entrySet()) {
 			Geometry geo = entry.getKey();
 			Material mat = entry.getValue();
-			mat.bind(globals, gl);
+			mat.bind(gl, globals);
 			geo.render(gl.getGL2());
 			mat.unbind(gl);
 		}
@@ -38,7 +38,7 @@ public class Mesh {
 			Geometry geo = entry.getKey();
 			Material mat = entry.getValue();
 			
-			mat.bind(globals, gl);
+			mat.bind(gl, globals);
 			geo.render(gl.getGL2());
 			mat.unbind(gl);
 		}

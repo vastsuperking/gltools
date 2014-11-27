@@ -17,10 +17,10 @@ public class VertexBuffer extends Buffer {
 		setTarget(BufferTarget.ARRAY_BUFFER);
 		setUsage(usage);
 	}
-	public void setValues(float[] values, GL1 gl) {
+	public void setValues(GL1 gl, float[] values) {
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
 		buffer.put(values);
 		buffer.flip();
-		bufferData(buffer, gl);
+		bufferData(gl, buffer);
 	}
 }

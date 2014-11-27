@@ -28,11 +28,11 @@ public class Buffer {
 	public void setTarget(BufferTarget target) { m_target = target; }
 	public void setUsage(BufferUsage usage) { m_usage = usage; }
 	
-	public void getData(long offset, FloatBuffer dest, GL1 gl) {
+	public void getData(GL1 gl, long offset, FloatBuffer dest) {
 		checkBound();
 		gl.glGetBufferSubData(m_target.getID(), offset, dest);
 	}
-	public void getData(long offset, IntBuffer dest, GL1 gl) {
+	public void getData(GL1 gl, long offset, IntBuffer dest) {
 		checkBound();
 		gl.glGetBufferSubData(m_target.getID(), offset, dest);
 	}
@@ -45,16 +45,16 @@ public class Buffer {
 	 * This function will buffer an array of bytes, overriding any existing data
 	 * It assumes that the data has been flipped, as do all the following functions
 	 */
-	 public void bufferData(ByteBuffer buffer, GL1 gl) {
+	 public void bufferData(GL1 gl, ByteBuffer buffer) {
 		checkBound();
 		gl.glBufferData(m_target.getID(), buffer, m_usage.getID());
 	}
 
-	public void bufferData(FloatBuffer data, GL1 gl) {
+	public void bufferData(GL1 gl ,FloatBuffer data) {
 		checkBound();
 		gl.glBufferData(m_target.getID(), data, m_usage.getID());
 	}
-	public void bufferData(IntBuffer data, GL1 gl) {
+	public void bufferData(GL1 gl, IntBuffer data) {
 		checkBound();
 		gl.glBufferData(m_target.getID(), data, m_usage.getID());
 	}

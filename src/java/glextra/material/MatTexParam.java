@@ -36,7 +36,7 @@ public class MatTexParam extends MatParam {
 	public void load(GL gl) {
 		Input input = Program.s_getCurrent().getInputs(m_usage.getInputType(), m_usage);
 		input.setValue(m_unit, gl.getGL2());
-		if (m_texture != null) m_texture.bind(m_unit, gl.getGL1());
+		if (m_texture != null) m_texture.bind(gl.getGL1(), m_unit);
 	}
 	@Override
 	public String toString() {

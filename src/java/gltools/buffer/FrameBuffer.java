@@ -54,15 +54,15 @@ public class FrameBuffer {
 		if (m_id == -1) m_id = gl.glGenFramebuffers();
 	}
 	
-	public void attach(Texture2D t, AttachmentPoint attachmentPoint, GL3 gl) {
+	public void attach(GL3 gl, Texture2D t, AttachmentPoint attachmentPoint) {
 		checkBound();
 		gl.glFramebufferTexture2D(GL3.GL_FRAMEBUFFER, attachmentPoint.getID(), GL1.GL_TEXTURE_2D, t.getID(), 0);
 	}
-	public void attach(RenderBuffer r, AttachmentPoint attachment, GL3 gl) {
+	public void attach(GL3 gl, RenderBuffer r, AttachmentPoint attachment) {
 		checkBound();
 		gl.glFramebufferRenderbuffer(GL3.GL_FRAMEBUFFER, attachment.getID(), GL3.GL_RENDERBUFFER, r.getID());
 	}
-	public AttachmentType getAttachmentType(AttachmentPoint attachment, GL3 gl) {
+	public AttachmentType getAttachmentType(GL3 gl, AttachmentPoint attachment) {
 		checkBound();
 		int id = gl.glGetFramebufferAttachmentParameteri(GL3.GL_FRAMEBUFFER, attachment.getID(), GL3.GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE);
 		return AttachmentType.getType(id);

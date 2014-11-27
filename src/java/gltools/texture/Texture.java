@@ -61,14 +61,14 @@ public abstract class Texture {
 		return gl.glIsTexture(getID());
 	}
 	
-	public void bind(int unit, GL1 gl) {
+	public void bind(GL1 gl, int unit) {
 		TextureUnit.s_use(gl, unit);		
 		gl.glBindTexture(m_target.getID(), getID());
 		s_currentTextures.put(unit, this);
 		m_boundUnit = unit;
 	}
 	public void bind(GL1 gl) {
-		bind(m_unit, gl);
+		bind(gl, m_unit);
 	}
 	public void unbind(GL1 gl) {
 		TextureUnit.s_use(gl, m_boundUnit);

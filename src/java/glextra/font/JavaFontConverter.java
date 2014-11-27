@@ -3,6 +3,7 @@ package glextra.font;
 import glcommon.Color;
 import glcommon.image.Image2D;
 import glextra.font.BMFont.BMGlyph;
+import gltools.gl.GL1;
 import gltools.texture.Texture2D;
 import gltools.texture.TextureFactory;
 
@@ -19,18 +20,18 @@ public class JavaFontConverter {
 	private static final String ALL_CHARS_STRING = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ -1234567890+=!@#$%^&*()_|'\"/?><[]{},.`~:;\t\\";
 	private static final char[] ALL_CHARS = ALL_CHARS_STRING.toCharArray();
 	
-	public static BMFont s_convert(Font font) {
-		return s_convert(font, s_getAllChars(), Color.WHITE);
+	public static BMFont s_convert(GL1 gl, Font font) {
+		return s_convert(gl, font, s_getAllChars(), Color.WHITE);
 	}
-	public static BMFont s_convert(Font font, char[] chars) {
-		return s_convert(font, chars, Color.WHITE);
-	}
-	//Don't fool around with the color unless you know what you are doing!!!1
-	public static BMFont s_convert(Font font, Color color) {
-		return s_convert(font, s_getAllChars(), color);
+	public static BMFont s_convert(GL1 gl, Font font, char[] chars) {
+		return s_convert(gl, font, chars, Color.WHITE);
 	}
 	//Don't fool around with the color unless you know what you are doing!!!1
-	public static BMFont s_convert(Font font, char[] chars, Color color) {
+	public static BMFont s_convert(GL1 gl, Font font, Color color) {
+		return s_convert(gl, font, s_getAllChars(), color);
+	}
+	//Don't fool around with the color unless you know what you are doing!!!1
+	public static BMFont s_convert(GL1 gl, Font font, char[] chars, Color color) {
 		BMFont bmfont = new BMFont();
 		bmfont.setSize(font.getSize());
 		bmfont.setItalic(font.isItalic());
@@ -54,7 +55,7 @@ public class JavaFontConverter {
 			g2d.drawString(Character.toString(c), 0, height - metrics.getDescent());
 			g2d.dispose();
 			
-			Texture2D texture = TextureFactory.s_loadTexture(new Image2D(image));
+			Texture2D texture = TextureFactory.s_loadTexture(gl, new Image2D(image));
 			
 			//Add a one pixel extra offset to the xadvance
 			BMGlyph glyph = new BMGlyph(bmfont, c, texture, 0, 0, width + 1);

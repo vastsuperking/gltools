@@ -14,6 +14,7 @@ import gltools.Vertex.VertexNormal;
 import gltools.buffer.Geometry;
 import gltools.extra.GeometryFactory;
 import gltools.gl.GL;
+import gltools.gl.GL2;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,7 +59,7 @@ public class OBJReader {
 			else if (line.startsWith("usemtl ")) {
 				//Finish the old geometry
 				if (primitives.size() > 0) {
-					Geometry geo = GeometryFactory.s_generateGeometry(gl, primitives.toArray(new Triangle[0]));
+					Geometry geo = GeometryFactory.s_generateGeometry(gl.getGL2(), primitives.toArray(new Triangle[0]));
 					primitives.clear();
 					mesh.addGeometry(geo, currentMaterial);
 				}
@@ -70,12 +71,12 @@ public class OBJReader {
 				String libloc = line.substring(7);
 				String parent = ResourceUtils.s_getParentDirectory(resource);
 				String libResource = parent + libloc;
-				materials.putAll(OBJMaterialReader.s_readMaterials(libResource, locator, gl));
+				materials.putAll(OBJMaterialReader.s_readMaterials(gl, libResource, locator));
 			}
 		}
 		//Finish last geometry
 		if (primitives.size() > 0) {
-			Geometry geo = GeometryFactory.s_generateGeometry(gl, primitives.toArray(new Triangle[0]));
+			Geometry geo = GeometryFactory.s_generateGeometry(gl.getGL2(), primitives.toArray(new Triangle[0]));
 			mesh.addGeometry(geo, currentMaterial);
 			primitives.clear();
 		}
@@ -109,7 +110,7 @@ public class OBJReader {
 			else if (line.startsWith("usemtl ")) {
 				//Finish the old geometry
 				if (primitives.size() > 0) {
-					Geometry geo = GeometryFactory.s_generateGeometry(gl, primitives.toArray(new Triangle[0]));
+					Geometry geo = GeometryFactory.s_generateGeometry(gl.getGL2(), primitives.toArray(new Triangle[0]));
 					primitives.clear();
 					
 					mesh.addGeometry(geo, currentMaterial);
@@ -122,7 +123,7 @@ public class OBJReader {
 		}
 		//Finish last geometry
 		if (primitives.size() > 0) {
-			Geometry geo = GeometryFactory.s_generateGeometry(gl, primitives.toArray(new Triangle[0]));
+			Geometry geo = GeometryFactory.s_generateGeometry(gl.getGL2(), primitives.toArray(new Triangle[0]));
 			mesh.addGeometry(geo, currentMaterial);
 			primitives.clear();
 		}
@@ -130,14 +131,14 @@ public class OBJReader {
 		return mesh;
 	}
 	public static Geometry s_readGeometry(String resource,
-			ResourceLocator locator, GL gl) throws IOException {
+			ResourceLocator locator, GL2 gl) throws IOException {
 		return s_readGeometry(locator.getResource(resource), gl);
 	}
 	/**
 	 * Will read and parse a .obj file from an InputStream - only reads the actual geometry, not the materials as well
 	 * @param input the stream to read text from
 	 */
-	public static Geometry s_readGeometry(InputStream input, GL gl) throws IOException {
+	public static Geometry s_readGeometry(InputStream input, GL2 gl) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		
 		ArrayList<Vertex> vertices = new ArrayList<Vertex>();

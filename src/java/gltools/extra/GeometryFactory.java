@@ -9,7 +9,7 @@ import gltools.buffer.AttribArray;
 import gltools.buffer.Geometry;
 import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
-import gltools.gl.GL;
+import gltools.gl.GL2;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 
@@ -60,7 +60,7 @@ public class GeometryFactory {
 	 * necessary attributes
 	 */
 	@SuppressWarnings("unchecked")
-	public static <P extends Primitive> Geometry s_generateGeometry(GL gl, P... primitives) {
+	public static <P extends Primitive> Geometry s_generateGeometry(GL2 gl, P... primitives) {
 		if (primitives.length < 1) throw new IllegalArgumentException("Need at least 1 triangle to build VAO");
 
 		P firstPrimitive = primitives[0];
@@ -91,7 +91,7 @@ public class GeometryFactory {
 		//Make it linked, just to be safe
 		LinkedHashMap<InputUsage, AttribArray> arrays = new LinkedHashMap<InputUsage, AttribArray>();
 		VertexBuffer vbo = new VertexBuffer();
-		vbo.init(gl.getGL1());
+		vbo.init(gl);
 		
 		int arrayOffset = 0;
 		for (InputUsage u : activeUsages) {
@@ -130,9 +130,9 @@ public class GeometryFactory {
 		}
 		vboBuffer.flip();
 		if (DEBUG) System.out.println(BufferUtils.asString(vboBuffer.asFloatBuffer()));
-		vbo.bind(gl.getGL1());
-		vbo.bufferData(vboBuffer, gl.getGL1());
-		vbo.unbind(gl.getGL1());
+		vbo.bind(gl);
+		vbo.bufferData(gl, vboBuffer);
+		vbo.unbind(gl);
 		
 		Geometry geometry = new Geometry();
 		geometry.setVertexCount(primitives.length * verticesPerPrimitive);
@@ -144,19 +144,19 @@ public class GeometryFactory {
 		if (DEBUG) System.out.println("Mode: " + geometry.getMode());
 		return geometry;
 	}
-	public static Geometry s_generateFullScreenQuad(GL gl) {
+	public static Geometry s_generateFullScreenQuad(GL2 gl) {
 		VertexBuffer vbo = new VertexBuffer();
 		IndexBuffer ibo = new IndexBuffer();
-		vbo.init(gl.getGL1());
-		ibo.init(gl.getGL1());
+		vbo.init(gl);
+		ibo.init(gl);
 
-		vbo.bind(gl.getGL1());
-		vbo.setValues(QUAD_VBO, gl.getGL1());
-		vbo.unbind(gl.getGL1());
+		vbo.bind(gl);
+		vbo.setValues(gl, QUAD_VBO);
+		vbo.unbind(gl);
 		
-		ibo.bind(gl.getGL1());
-		ibo.setValues(QUAD_IBO, gl.getGL1());
-		ibo.unbind(gl.getGL1());
+		ibo.bind(gl);
+		ibo.setValues(gl, QUAD_IBO);
+		ibo.unbind(gl);
 				
 		Geometry geometry = new Geometry();
 		geometry.setMode(Mode.TRIANGLES);

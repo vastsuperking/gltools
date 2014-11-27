@@ -3,6 +3,7 @@ package glextra.font;
 import glcommon.image.Image2D;
 import glcommon.util.Pair;
 import glextra.font.BMFont.BMGlyph;
+import gltools.gl.GL1;
 import gltools.texture.Texture2D;
 import gltools.texture.TextureFactory;
 
@@ -27,7 +28,7 @@ import org.xml.sax.SAXException;
 public class BMFontXMLLoader {
 	// TODO: Implement
 
-	public static List<BMFont> loadFonts(URL xmlURL) throws SAXException, IOException, ParserConfigurationException {
+	public static List<BMFont> loadFonts(GL1 gl, URL xmlURL) throws SAXException, IOException, ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
 		// Get the DOM Builder
@@ -44,14 +45,14 @@ public class BMFontXMLLoader {
 		for (int i = 0; i < nodes.getLength(); i++) {
 			Node n = nodes.item(i);
 			if (n instanceof Element) {
-				fonts.add(parseFont((Element) n, xmlURL.toString()));
+				fonts.add(parseFont(gl, (Element) n, xmlURL.toString()));
 			}
 		}
 
 		return fonts;
 	}
 
-	public static BMFont parseFont(Element e, String xmlURL) throws IOException {
+	public static BMFont parseFont(GL1 gl, Element e, String xmlURL) throws IOException {
 		BMFont font = new BMFont();
 
 		// TODO: Extract info
@@ -87,7 +88,7 @@ public class BMFontXMLLoader {
 			Node node = charList.item(i);
 			Element c = (Element) node;
 
-			BMGlyph glyph = parseChar(font, c, pages);
+			BMGlyph glyph = parseChar(gl, font, c, pages);
 
 			font.addGlyph(glyph.getChar(), glyph);
 		}
@@ -98,7 +99,7 @@ public class BMFontXMLLoader {
 		return font;
 	}
 
-	public static BMGlyph parseChar(Font f, Element c, HashMap<Integer, Page> pages) {
+	public static BMGlyph parseChar(GL1 gl, Font f, Element c, HashMap<Integer, Page> pages) {
 		int id = Integer.parseInt(c.getAttribute("id"));
 
 		int x = Integer.parseInt(c.getAttribute("x"));
@@ -116,7 +117,7 @@ public class BMFontXMLLoader {
 
 		BufferedImage image = page.getImage().getSubimage(x, y, width, height);
 
-		Texture2D texture = TextureFactory.s_loadTexture(new Image2D(image));
+		Texture2D texture = TextureFactory.s_loadTexture(gl, new Image2D(image));
 		
 		char character = (char) id;
 

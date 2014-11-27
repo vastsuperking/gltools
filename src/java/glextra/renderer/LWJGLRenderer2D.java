@@ -17,17 +17,17 @@ import gltools.buffer.FrameBuffer.AttachmentPoint;
 import gltools.buffer.Geometry;
 import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
-import gltools.display.Window;
 import gltools.display.ResizeListener;
+import gltools.display.Window;
 import gltools.extra.GeometryFactory;
+import gltools.gl.GL;
+import gltools.gl.GL1;
 import gltools.shader.InputUsage;
 import gltools.texture.TextureFormat;
 import gltools.util.GLMatrix3f;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-
-import org.lwjgl.opengl.GL11;
 
 /*
  * Notes on non-lighted rendering in deferred (startLighting()) mode
@@ -68,18 +68,22 @@ public class LWJGLRenderer2D implements Renderer2D {
 	
 	private GlobalParamBindingSet m_globals = new GlobalParamBindingSet();
 	
+	private GL m_gl;
+	
 	private LWJGLRenderer2D() {
 	}
 	
 	@Override
-	public void init(float left, float right, float top, float bottom, Window display) {
-		m_gBuffer = new GBuffer(display.getWidth(), display.getHeight());
+	public void init(float left, float right, float top, float bottom, Window window) {
+		m_gl = window.getGL();
+		
+		m_gBuffer = new GBuffer(window.getWidth(), window.getHeight());
 		m_gBuffer.addAttachment(new GBufferAttachment(0, AttachmentPoint.COLOR_ATTACHMENT0, InputUsage.GBUFFER_VERTEX_SAMPLER, TextureFormat.RGBA16F));
 		m_gBuffer.addAttachment(new GBufferAttachment(1, AttachmentPoint.COLOR_ATTACHMENT1, InputUsage.GBUFFER_NORMAL_SAMPLER, TextureFormat.RGBA16F));
 		m_gBuffer.addAttachment(new GBufferAttachment(2, AttachmentPoint.COLOR_ATTACHMENT2, InputUsage.GBUFFER_DIFFUSE_SAMPLER, TextureFormat.RGBA8));
-		m_gBuffer.init();
+		m_gBuffer.init(m_gl.getGL3());
 		
-		m_fullScreenQuad = GeometryFactory.s_generateFullScreenQuad();
+		m_fullScreenQuad = GeometryFactory.s_generateFullScreenQuad(m_gl.getGL2());
 		
 		m_modelMat = new GLMatrix3f();
 		m_viewMat = new GLMatrix3f();
@@ -94,10 +98,10 @@ public class LWJGLRenderer2D implements Renderer2D {
 		
 		updateProjection(left, right, top, bottom);
 		
-		display.addResizedListener(new ResizeListener() {
+		window.addResizedListener(new ResizeListener() {
 			public void onResize(int width, int height) {
-				GL11.glViewport(0, 0, width, height);
-				m_gBuffer.resize(width, height);
+				m_gl.getGL1().glViewport(0, 0, width, height);
+				m_gBuffer.resize(m_gl.getGL3(), width, height);
 			}
 		});
 		
@@ -105,10 +109,17 @@ public class LWJGLRenderer2D implements Renderer2D {
 		m_texCoordsBuf = new VertexBuffer();
 		m_indicesBuf = new IndexBuffer();
 		
+		m_verticesBuf.init(m_gl.getGL1());
+		m_texCoordsBuf.init(m_gl.getGL1());
+		m_indicesBuf.init(m_gl.getGL1());
 
 		
-		m_display = display;
+
+		
+		m_display = window;
 	}
+	@Override
+	public GL getGL() { return m_gl; }
 	
 	@Override
 	public void setMaterial(Material mat) {
@@ -246,10 +257,10 @@ public class LWJGLRenderer2D implements Renderer2D {
 		HashSet<String> modes = new HashSet<String>();
 		if (m_usingDeferred) modes.add("DEFERRED");
 		m_material.selectTechnique(modes);
-		m_material.bind(m_globals);
+		m_material.bind(m_gl, m_globals);
 		//Sets the output buffers to point
 		//to the correct attachments
-		m_gBuffer.setDrawBuffers();
+		m_gBuffer.setDrawBuffers(m_gl.getGL2());
 		//For bottom left origin
 		float vertices[] = {x + width, y + height,
 							 x, y + height,
@@ -262,17 +273,17 @@ public class LWJGLRenderer2D implements Renderer2D {
 							  texCoordWidth, 0 };
 		int indices[] = {0, 1, 2, 0, 2, 3};
 		
-		m_verticesBuf.bind();
-		m_verticesBuf.setValues(vertices);
-		m_verticesBuf.unbind();
+		m_verticesBuf.bind(m_gl.getGL1());
+		m_verticesBuf.setValues(m_gl.getGL1(), vertices);
+		m_verticesBuf.unbind(m_gl.getGL1());
 		
-		m_texCoordsBuf.bind();
-		m_texCoordsBuf.setValues(texCoords);
-		m_texCoordsBuf.unbind();
+		m_texCoordsBuf.bind(m_gl.getGL1());
+		m_texCoordsBuf.setValues(m_gl.getGL1(), texCoords);
+		m_texCoordsBuf.unbind(m_gl.getGL1());
 		
-		m_indicesBuf.bind();
-		m_indicesBuf.setValues(indices);
-		m_indicesBuf.unbind();
+		m_indicesBuf.bind(m_gl.getGL1());
+		m_indicesBuf.setValues(m_gl.getGL1(), indices);
+		m_indicesBuf.unbind(m_gl.getGL1());
 		
 		Geometry geo = new Geometry();
 		geo.addArray(new AttribArray(m_verticesBuf, InputUsage.VERTEX_POSITION_2D, 0, 0));
@@ -281,8 +292,8 @@ public class LWJGLRenderer2D implements Renderer2D {
 		geo.setMode(Mode.TRIANGLES);
 		geo.setIndexBuffer(m_indicesBuf);
 		
-		geo.render();
-		m_material.unbind();		
+		geo.render(m_gl.getGL2());
+		m_material.unbind(m_gl);		
 	}
 	
 	@Override
@@ -309,15 +320,16 @@ public class LWJGLRenderer2D implements Renderer2D {
 	@Override
 	public void doLightingComputations() {
 		//Light alpha blending - additive
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+		GL1 gl = m_gl.getGL1();
+		gl.glEnable(GL1.GL_BLEND);
+		gl.glBlendFunc(GL1.GL_ONE, GL1.GL_ONE);
 		for (Light l : m_lights) {
-			l.bind(m_gBuffer);
-			m_fullScreenQuad.render();
-			l.unbind(m_gBuffer);
+			l.bind(m_gl.getGL3(), m_gBuffer);
+			m_fullScreenQuad.render(m_gl.getGL2());
+			l.unbind(m_gl.getGL3(), m_gBuffer);
 		}
 		//Disable blending after done
-		GL11.glDisable(GL11.GL_BLEND);
+		gl.glDisable(GL1.GL_BLEND);
 		
 		//Clear lights array - already rendered these
 		m_lights.clear();
@@ -333,39 +345,40 @@ public class LWJGLRenderer2D implements Renderer2D {
 		m_modelMat.getCurrentMatrix().setIdentity();
 		m_viewMat.getCurrentMatrix().setIdentity();	
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA,	GL11.GL_ONE_MINUS_SRC_ALPHA);
+		m_gl.getGL1().glEnable(GL1.GL_BLEND);
+		m_gl.getGL1().glBlendFunc(GL1.GL_SRC_ALPHA,	GL1.GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
 	@Override
 	public void finishGeometry() {
 		//Disable blending
-		GL11.glDisable(GL11.GL_BLEND);
+		m_gl.getGL1().glDisable(GL1.GL_BLEND);
 	}
 	
 	@Override
 	public void startLighted() {
-		m_gBuffer.bind(GBufferMode.WRITE);	
+		m_gBuffer.bind(m_gl.getGL3(), GBufferMode.WRITE);	
 		m_usingDeferred = true;
 	}
 	@Override
 	public void finishLighted() {
-		m_gBuffer.unbind(GBufferMode.WRITE);
+		m_gBuffer.unbind(m_gl.getGL3(), GBufferMode.WRITE);
 		m_usingDeferred = false;
 	}
 	
 	
 	@Override
 	public void clear() {
+		GL1 gl = m_gl.getGL1();
 		//Bind gbuffer and clear that too
-		m_gBuffer.bind(GBufferMode.WRITE);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | 
-				 GL11.GL_DEPTH_BUFFER_BIT |
-				 GL11.GL_STENCIL_BUFFER_BIT);
-		m_gBuffer.unbind(GBufferMode.WRITE);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | 
-				 GL11.GL_DEPTH_BUFFER_BIT |
-				 GL11.GL_STENCIL_BUFFER_BIT);
+		m_gBuffer.bind(m_gl.getGL3(), GBufferMode.WRITE);
+		gl.glClear(GL1.GL_COLOR_BUFFER_BIT | 
+				 GL1.GL_DEPTH_BUFFER_BIT |
+				 GL1.GL_STENCIL_BUFFER_BIT);
+		m_gBuffer.unbind(m_gl.getGL3(), GBufferMode.WRITE);
+		gl.glClear(GL1.GL_COLOR_BUFFER_BIT | 
+				 GL1.GL_DEPTH_BUFFER_BIT |
+				 GL1.GL_STENCIL_BUFFER_BIT);
 	}
 	
 	public static LWJGLRenderer2D getInstance() {

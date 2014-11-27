@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 
 public class OBJMaterialReader {
-	public static HashMap<String, Material> s_readMaterials(String resource, ResourceLocator locator, GL gl) throws IOException {
+	public static HashMap<String, Material> s_readMaterials(GL gl, String resource, ResourceLocator locator) throws IOException {
 		HashMap<String, Material> mats = new HashMap<String, Material>();
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(locator.getResource(resource)));
@@ -44,7 +44,7 @@ public class OBJMaterialReader {
 				String texLoc = line.substring(7);
 				String parent = ResourceUtils.s_getParentDirectory(resource);
 				String texResource = parent + texLoc;
-				Texture2D tex = TextureFactory.s_loadTexture(texResource, locator, gl.getGL1());
+				Texture2D tex = TextureFactory.s_loadTexture(gl.getGL1(), texResource, locator);
 				tex.setSWrapMode(TextureWrapMode.REPEAT);
 				tex.setTWrapMode(TextureWrapMode.REPEAT);
 				tex.bind(gl.getGL1());

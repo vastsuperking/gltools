@@ -84,7 +84,7 @@ public class Technique {
 	/**
 	 * Will recompile the technique
 	 */
-	public void recompile(HashMap<String, MatParam> params, GL gl) {
+	public void recompile(GL gl, HashMap<String, MatParam> params) {
 		for (Shader s : m_program.getShaders()) {
 			//Setup shader source and defines
 			ShaderSource source = s.getSource();
@@ -118,10 +118,10 @@ public class Technique {
 		m_needsRecompile = false;
 	}
 	
-	public void bind(HashMap<String, MatParam> params, HashMap<InputUsage, Loadable> globalParamMap, GL gl) {
+	public void bind(GL gl, HashMap<String, MatParam> params, HashMap<InputUsage, Loadable> globalParamMap) {
 		m_program.bind(gl.getGL2());
 		//Will check to make sure compiled and uniforms up to date
-		load(params, globalParamMap, gl);
+		load(gl, params, globalParamMap);
 		
 		try {
 			m_program.validate(gl.getGL2());
@@ -129,7 +129,7 @@ public class Technique {
 			e.printStackTrace();
 		}
 	}
-	public void unbind(HashMap<String, MatParam> params, GL gl) {
+	public void unbind(GL gl, HashMap<String, MatParam> params) {
 		m_program.unbind(gl.getGL2());
 		for (MatParam p : params.values()) {
 			if (p instanceof MatTexParam) {
@@ -139,12 +139,12 @@ public class Technique {
 			}
 		}
 	}
-	public void load(HashMap<String, MatParam> params, HashMap<InputUsage, Loadable> globalParamMap, GL gl) {
+	public void load(GL gl, HashMap<String, MatParam> params, HashMap<InputUsage, Loadable> globalParamMap) {
 		//make sure the program is compiled correctly
 		if (m_needsRecompile) {
 			//Unbind before recompiling
 			m_program.unbind(gl.getGL2());
-			recompile(params, gl);
+			recompile(gl, params);
 			m_program.bind(gl.getGL2());
 		}
 

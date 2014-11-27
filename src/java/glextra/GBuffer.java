@@ -5,6 +5,9 @@ import gltools.buffer.FrameBuffer;
 import gltools.buffer.FrameBuffer.AttachmentPoint;
 import gltools.buffer.RenderBuffer;
 import gltools.buffer.RenderBuffer.RBOFormat;
+import gltools.gl.GL1;
+import gltools.gl.GL2;
+import gltools.gl.GL3;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
 import gltools.shader.Uniform;
@@ -15,8 +18,6 @@ import gltools.texture.TextureFormat;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +39,6 @@ public class GBuffer {
 	public GBuffer(int width, int height) {
 		m_width = width;
 		m_height = height;
-		
-
 	}
 	public int getWidth() { return m_width; }
 	public int getHeight() { return m_height; }
@@ -51,49 +50,49 @@ public class GBuffer {
 		m_attachments.add(a);
 	}
 	
-	public void resize(int width, int height) {
+	public void resize(GL3 gl, int width, int height) {
 		if (m_rbo != null) {
-			m_rbo.bind();
-			m_rbo.setStorage(RBOFormat.DEPTH_COMPONENT24, width, height);
-			m_rbo.unbind();
+			m_rbo.bind(gl);
+			m_rbo.setStorage(RBOFormat.DEPTH_COMPONENT24, width, height, gl);
+			m_rbo.unbind(gl);
 		}
 		
 		for (GBufferAttachment a : m_attachments) {
-			a.resize(width, height);
+			a.resize(gl, width, height);
 		}
 		
 		if (m_fbo != null) {
-			m_fbo.bind();
+			m_fbo.bind(gl);
 			//Resize the fbo viewport
-			GL11.glViewport(0, 0, width, height);
-			m_fbo.unbind();
+			gl.glViewport(0, 0, width, height);
+			m_fbo.unbind(gl);
 		}
 		
 		m_width = width;
 		m_height = height;
 	}
 
-	public void attachTo(FrameBuffer fbo) {
+	public void attachTo(FrameBuffer fbo, GL3 gl) {
 		if (FrameBuffer.s_getCurrent() != fbo) 
 			throw new RuntimeException("FrameBuffer.bind() must be called before GBuffer.attachTo(FrameBuffer)");
 		
-		fbo.attach(m_rbo, AttachmentPoint.DEPTH_ATTACHMENT);
+		fbo.attach(gl, m_rbo, AttachmentPoint.DEPTH_ATTACHMENT);
 		
 		for (GBufferAttachment a : m_attachments) {
-			a.attachTo(fbo);
+			a.attachTo(gl, fbo);
 		}
 	}
 	/**
 	 * This function is called internally, but
 	 * it calls glDrawBuffers when the FBO is being initialized
 	 */
-	public void setDrawBuffers() {
+	public void setDrawBuffers(GL2 gl) {
 		//Now set the output buffers to the textures
 		IntBuffer buffer = BufferUtils.createIntBuffer(m_attachments.size());
 		for (GBufferAttachment a : m_attachments) {
 			a.addDrawBuffer(buffer);
 		}
-		GL20.glDrawBuffers(buffer);
+		gl.glDrawBuffers(buffer);
 	}
 	/**
 	 * Will set the sampler uniforms of the currently bound program
@@ -101,70 +100,74 @@ public class GBuffer {
 	 * but if a program has not been bound before the GBuffer is bound, this call
 	 * must be made after the program is bound
 	 */
-	public void setReadSamplers() {
+	public void setReadSamplers(GL2 gl) {
 		for (GBufferAttachment a : m_attachments) {
-			a.setReadSampler();
+			a.setReadSampler(gl);
 		}
 	}
 	
 	/**
 	 * Attaches all attachments and sets read samplers
 	 */
-	public void init() {
+	public void init(GL3 gl) {
 		m_fbo = new FrameBuffer();
 		m_rbo = new RenderBuffer();
 		
-		m_rbo.bind();
-		m_rbo.setStorage(RBOFormat.DEPTH_COMPONENT24, m_width, m_height);
-		m_rbo.unbind();
+		m_fbo.init(gl);
+		m_rbo.init(gl);
+		
+		m_rbo.bind(gl);
+		m_rbo.setStorage(RBOFormat.DEPTH_COMPONENT24, m_width, m_height, gl);
+		m_rbo.unbind(gl);
 		
 		for (GBufferAttachment a : m_attachments) {
-			a.init(m_width, m_height);
+			a.init(m_width, m_height, gl);
 		}
 		
-		m_fbo.bind();
-		attachTo(m_fbo);
-		logger.info("GBuffer Complete: " + m_fbo.isComplete());
+		m_fbo.bind(gl);
+		attachTo(m_fbo, gl);
+		logger.info("GBuffer Complete: " + m_fbo.isComplete(gl));
 		for (GBufferAttachment a : m_attachments) {
-			logger.info("Attachment " + a.getAttachmentPoint() + " is valid " + a.getTexture().isValid());
+			logger.info("Attachment " + a.getAttachmentPoint() + " is valid " + a.getTexture().isValid(gl));
 		}
-		setDrawBuffers();
-		m_fbo.unbind();
+		setDrawBuffers(gl);
+		m_fbo.unbind(gl);
 	}
 
-	public void bind(GBufferMode mode) {
+	public void bind(GL3 gl, GBufferMode mode) {
 		switch(mode) {
 		//Attach all the textures to their samplers
 		case READ: {
-			setReadSamplers();
-	    	for (GBufferAttachment a : m_attachments) a.bind();
+			setReadSamplers(gl);
+	    	for (GBufferAttachment a : m_attachments) a.bind(gl);
 		} break;
 		case WRITE: {
-			m_fbo.bind();
+			m_fbo.bind(gl);
 		} break;
 		}
 	}
-	public void unbind(GBufferMode mode) {
+	public void unbind(GL3 gl, GBufferMode mode) {
 		switch(mode) {
 		case READ: {
-			for (GBufferAttachment a : m_attachments) a.unbind();
+			for (GBufferAttachment a : m_attachments) a.unbind(gl);
 		} break;
 		case WRITE: {
-			m_fbo.unbind();
+			m_fbo.unbind(gl);
 		} break;
 		}
 	}
 
-	public static Texture2D s_createBuffer(int unit, TextureFormat format, int width, int height) {
+	public static Texture2D s_createBuffer(int unit, TextureFormat format, int width, int height, GL1 gl) {
 		Texture2DBuilder builder = new Texture2DBuilder();
 		builder.setUnit(unit);
 		builder.setWidth(width);
 		builder.setHeight(height);
 		builder.setFormat(format);
 		Texture2D tex = builder.build();
-		tex.bind();
-		tex.load();
-		tex.unbind();
+		tex.init(gl);
+		tex.bind(gl);
+		tex.load(gl);
+		tex.unbind(gl);
 		return tex;
 	}
 	
@@ -186,35 +189,35 @@ public class GBuffer {
 		public Texture2D getTexture() { return m_buffer; }
 		public AttachmentPoint getAttachmentPoint() { return m_attachment; }
 		
-		public void init(int width, int height) {
-			m_buffer = s_createBuffer(m_unit, m_format, width, height);			
+		public void init(int width, int height, GL1 gl) {
+			m_buffer = s_createBuffer(m_unit, m_format, width, height, gl);			
 		}
-		public void resize(int width, int height) {
+		public void resize(GL1 gl, int height, int width) {
 			if (m_buffer != null) {
-				m_buffer.bind();
+				m_buffer.bind(gl);
 				m_buffer.setWidth(width);
 				m_buffer.setHeight(height);
-				m_buffer.load();	
-				m_buffer.unbind();
+				m_buffer.load(gl);	
+				m_buffer.unbind(gl);
 			}
 		}
-		public void attachTo(FrameBuffer fbo) {
-			fbo.attach(m_buffer, m_attachment);
+		public void attachTo(GL3 gl, FrameBuffer fbo) {
+			fbo.attach(gl, m_buffer, m_attachment);
 		}
-		public void bind() {
-			m_buffer.bind();
+		public void bind(GL1 gl) {
+			m_buffer.bind(gl);
 		}
-		public void unbind() {
-			m_buffer.unbind();
+		public void unbind(GL1 gl) {
+			m_buffer.unbind(gl);
 		}
 		public void addDrawBuffer(IntBuffer buffer) {
 			//TODO: Change putting by unit, change to sorting by attachment
 			buffer.put(m_unit, m_attachment.getID());
 		}
-		public void setReadSampler() {
+		public void setReadSampler(GL2 gl) {
 			Program program = Program.s_getCurrent();
 			if (program != null)
-				program.getInputs(Uniform.class, m_usage).setValue(m_unit);
+				program.getInputs(Uniform.class, m_usage).setValue(m_unit, gl);
 		}
 	}
 }

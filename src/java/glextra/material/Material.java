@@ -148,39 +148,39 @@ public class Material {
 	 */
 	public void ready(GL gl) {
 		if (m_currentTechnique == null) selectTechnique();
-		if (m_currentTechnique.needsRecompile()) m_currentTechnique.recompile(m_parameters, gl);
+		if (m_currentTechnique.needsRecompile()) m_currentTechnique.recompile(gl, m_parameters);
 	}
 
 	/**
 	 * Will load the mat params again and load the globals using the GlobalParamSet
 	 */
-	public void load(GlobalParamBindingSet globals, GL gl) {
-		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters, globals.getParamMap(), gl);
+	public void load(GL gl, GlobalParamBindingSet globals) {
+		if (m_currentTechnique != null) m_currentTechnique.load(gl, m_parameters, globals.getParamMap());
 		else logger.warn("CurrentTechnique null!, params not updated");
 	}
 	
-	public void bind(GlobalParamBindingSet globals, GL gl) {
+	public void bind(GL gl, GlobalParamBindingSet globals) {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
-		m_currentTechnique.bind(m_parameters, globals.getParamMap(), gl);
+		m_currentTechnique.bind(gl, m_parameters, globals.getParamMap());
 	}
 
 	/**
 	 * Will load the mat params again
 	 */
-	public void load(HashMap<InputUsage, Loadable> globals, GL gl) {
-		if (m_currentTechnique != null) m_currentTechnique.load(m_parameters, globals, gl);
+	public void load(GL gl, HashMap<InputUsage, Loadable> globals) {
+		if (m_currentTechnique != null) m_currentTechnique.load(gl, m_parameters, globals);
 		else logger.warn("Warning, currentTechnique null!, params not updated");
 	}
 	
-	public void bind(HashMap<InputUsage, Loadable> globals, GL gl) {
+	public void bind(GL gl, HashMap<InputUsage, Loadable> globals) {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
-		m_currentTechnique.bind(m_parameters, globals, gl);
+		m_currentTechnique.bind(gl, m_parameters, globals);
 	}
 
 	
 	public void unbind(GL gl) {
 		if (m_currentTechnique == null) throw new RuntimeException("Must set currentTechnique");
-		m_currentTechnique.unbind(m_parameters, gl);
+		m_currentTechnique.unbind(gl, m_parameters);
 	}
 	
 	@Override

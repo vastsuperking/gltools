@@ -181,11 +181,11 @@ public class MaterialXMLLoader {
 	 }
 	 private static Texture2D s_parseTex2D(String value, ResourceLocator locator, GL gl) throws IOException {
 		 if (value == null || value.equals("")) return null;
-		 return TextureFactory.s_loadTexture(value, locator, gl.getGL1());
+		 return TextureFactory.s_loadTexture(gl.getGL1(), value, locator);
 	 }
 	 private static Texture1D s_parseTex1D(String value, ResourceLocator locator, GL gl) throws IOException {
 		 if (value == null || value.equals("")) return null;
-		 return TextureFactory.s_loadTexture1D(value, locator, gl.getGL1());
+		 return TextureFactory.s_loadTexture1D(gl.getGL1(), value, locator);
 	 }
 	 private static boolean s_parseBoolean(String value) {
 		 if (value == null || value.equals("")) return false;

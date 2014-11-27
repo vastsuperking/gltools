@@ -5,9 +5,12 @@ import glcommon.vector.Vector2f;
 import glextra.font.Font;
 import glextra.material.Material;
 import gltools.display.Window;
+import gltools.gl.GL;
 
 public interface Renderer2D {
 	public void init(float left, float right, float top, float bottom, Window display);
+	
+	public GL getGL();
 	
 	public void setMaterial(Material mat);
 	public Material getMaterial();

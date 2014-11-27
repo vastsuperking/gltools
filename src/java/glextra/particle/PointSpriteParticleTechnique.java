@@ -1,5 +1,6 @@
 package glextra.particle;
 
+import glcommon.BufferUtils;
 import glcommon.util.ResourceLocator.ClasspathResourceLocator;
 import glcommon.vector.Vector3f;
 import gltools.Mode;
@@ -17,10 +18,6 @@ import gltools.util.GLMatrix4f;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 public class PointSpriteParticleTechnique implements ParticleTechnique {
 	private static String PARTICLE_PROGRAM = "Programs/particle.prog";

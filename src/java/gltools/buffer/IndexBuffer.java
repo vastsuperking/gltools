@@ -14,11 +14,11 @@ public class IndexBuffer extends Buffer {
 		setUsage(BufferUsage.STATIC_DRAW);
 	}
 	
-	public void setValues(int[] values, GL1 gl) {
+	public void setValues(GL1 gl, int[] values) {
 		IntBuffer buffer = BufferUtils.createIntBuffer(values.length);
 		buffer.put(values);
 		buffer.flip();
-		bufferData(buffer, gl);
+		bufferData(gl, buffer);
 	}
 	
 	public int getOffset() { return m_offset; }

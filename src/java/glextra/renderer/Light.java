@@ -5,6 +5,8 @@ import glcommon.util.ResourceLocator.ClasspathResourceLocator;
 import glcommon.vector.Vector3f;
 import glextra.GBuffer;
 import glextra.GBuffer.GBufferMode;
+import gltools.gl.GL;
+import gltools.gl.GL3;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
@@ -21,27 +23,27 @@ public interface Light {
 	 * The light must bind its own program,
 	 * call buffer.bind(GBufferMode.READ),
 	 */
-	public void bind(GBuffer buffer);
-	public void unbind(GBuffer buffer); 
+	public void bind(GL3 gl, GBuffer buffer);
+	public void unbind(GL3 gl, GBuffer buffer); 
 	
 	public static class NoLight implements Light {
 		private static final String PROG_LOCATION = "Programs/Lights2D/no_light.prog";
 		private static Program s_program = null;
 		
-		public void bind(GBuffer buffer) {
-			s_program.bind();
-			buffer.bind(GBufferMode.READ);
+		public void bind(GL3 gl, GBuffer buffer) {
+			s_program.bind(gl);
+			buffer.bind(gl, GBufferMode.READ);
 		}
-		public void unbind(GBuffer buffer) {
-			buffer.unbind(GBufferMode.READ);
-			s_program.unbind();
+		public void unbind(GL3 gl, GBuffer buffer) {
+			buffer.unbind(gl, GBufferMode.READ);
+			s_program.unbind(gl);
 		}
 		/**
 		 * Will compile the program necessary for this light
 		 */
-		public static void init() {
+		public static void init(GL gl) {
 			try {
-				s_program = ProgramXMLLoader.s_load(PROG_LOCATION, new ClasspathResourceLocator()).get(0);
+				s_program = ProgramXMLLoader.s_load(PROG_LOCATION, new ClasspathResourceLocator(), gl).get(0);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ShaderCompileException e) {
@@ -77,32 +79,32 @@ public interface Light {
 		public Color getDiffuseColor() { return m_diffuseColor; }
 		public Color getAmbientColor() { return m_ambientColor; }
 
-		public void bind(GBuffer buffer) {
-			s_program.bind();
+		public void bind(GL3 gl, GBuffer buffer) {
+			s_program.bind(gl);
 			//Set uniforms to light values
 			s_program.getInputs(Uniform.class, 
-					new InputUsage("LIGHT_POSITION", DataType.VEC3, Uniform.class)).setValue(m_position);
+					new InputUsage("LIGHT_POSITION", DataType.VEC3, Uniform.class)).setValue(m_position, gl);
 			s_program.getInputs(Uniform.class, 
-					new InputUsage("LIGHT_DIFFUSE_COLOR", DataType.VEC4, Uniform.class)).setValue(m_diffuseColor.toVector4f());
+					new InputUsage("LIGHT_DIFFUSE_COLOR", DataType.VEC4, Uniform.class)).setValue(m_diffuseColor.toVector4f(), gl);
 			s_program.getInputs(Uniform.class, 
-					new InputUsage("LIGHT_AMBIENT_COLOR", DataType.VEC4, Uniform.class)).setValue(m_ambientColor.toVector4f());
+					new InputUsage("LIGHT_AMBIENT_COLOR", DataType.VEC4, Uniform.class)).setValue(m_ambientColor.toVector4f(), gl);
 			s_program.getInputs(Uniform.class, 
-					new InputUsage("LIGHT_ATTENUATION", DataType.VEC3, Uniform.class)).setValue(m_attenuation);
+					new InputUsage("LIGHT_ATTENUATION", DataType.VEC3, Uniform.class)).setValue(m_attenuation, gl);
 			
 			//Will bind the buffers to their correct texture units
 			//setReadSamplers() is called in the buffer
-			buffer.bind(GBufferMode.READ);
+			buffer.bind(gl, GBufferMode.READ);
 		}
-		public void unbind(GBuffer buffer) {
-			buffer.unbind(GBufferMode.READ);
-			s_program.unbind();
+		public void unbind(GL3 gl, GBuffer buffer) {
+			buffer.unbind(gl, GBufferMode.READ);
+			s_program.unbind(gl);
 		}
 		/**
 		 * Will compile the program necessary for this light
 		 */
-		public static void init() {
+		public static void init(GL gl) {
 			try {
-				s_program = ProgramXMLLoader.s_load(PROG_LOCATION, new ClasspathResourceLocator()).get(0);
+				s_program = ProgramXMLLoader.s_load(PROG_LOCATION, new ClasspathResourceLocator(), gl).get(0);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ShaderCompileException e) {
