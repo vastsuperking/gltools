@@ -41,40 +41,40 @@ public class Attribute extends Input {
 	 * These will most likely not be removed in the future, but their usage should be avoided
 	 */
 	@Deprecated
-	public void setValue(int val, GL2 gl) {
+	public void setValue(GL2 gl, int val) {
 		throw new RuntimeException("Cannot set attribute to int!!");
 	}
 	@Deprecated
-	public void setValue(boolean val, GL2 gl) {
+	public void setValue(GL2 gl, boolean val) {
 		throw new RuntimeException("Cannot set attribute to bool!!");
 	}
 	@Deprecated
-	public void setValue(float val, GL2 gl) {
+	public void setValue(GL2 gl, float val) {
 		if (!isActive()) return;
 		checkBound(gl);
 		gl.glVertexAttrib1f(getID(), val);
 	}
 	@Deprecated
-	public void setValue(Vector2f vec, GL2 gl) {
+	public void setValue(GL2 gl, Vector2f vec) {
 		if (!isActive()) return;
 		checkBound(gl);
 		gl.glVertexAttrib2f(getID(), vec.getX(), vec.getY());
 	}
 	@Deprecated
-	public void setValue(Vector3f vec, GL2 gl) {
+	public void setValue(GL2 gl, Vector3f vec) {
 		if (!isActive()) return;
 		checkBound(gl);
 		gl.glVertexAttrib3f(getID(), vec.getX(), vec.getY(), vec.getZ());
 	}
 	@Deprecated
-	public void setValue(Vector4f vec, GL2 gl) {
+	public void setValue(GL2 gl, Vector4f vec) {
 		if (!isActive()) return;
 		checkBound(gl);
 		gl.glVertexAttrib4f(getID(), vec.getX(), vec.getY(), vec.getZ(), vec.getW());
 	}
-	public void setValue(Matrix2f mat, GL2 gl) { throw new RuntimeException("Cannot set an attribute to a mat2"); }
-	public void setValue(Matrix3f mat, GL2 gl) { throw new RuntimeException("Cannot set an attribute to a mat3"); }
-	public void setValue(Matrix4f mat, GL2 gl) { throw new RuntimeException("Cannot set an attribute to a mat4"); }
+	public void setValue(GL2 gl, Matrix2f mat) { throw new RuntimeException("Cannot set an attribute to a mat2"); }
+	public void setValue(GL2 gl, Matrix3f mat) { throw new RuntimeException("Cannot set an attribute to a mat3"); }
+	public void setValue(GL2 gl, Matrix4f mat) { throw new RuntimeException("Cannot set an attribute to a mat4"); }
 	
 	public void init(GL2 gl) {
 		if (m_program != null) updateID(gl);

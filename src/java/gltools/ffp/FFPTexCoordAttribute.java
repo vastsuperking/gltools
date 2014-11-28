@@ -31,27 +31,27 @@ public class FFPTexCoordAttribute extends Attribute {
 	
 	
 	@Override
-	public void setValue(float val, GL2 gl) {
+	public void setValue(GL2 gl, float val) {
 		gl.glTexCoord1f(val);
 	}
 	
 	@Override
-	public void setValue(Vector2f val, GL2 gl) {
+	public void setValue(GL2 gl, Vector2f val) {
 		gl.glTexCoord2f(val.getX(), val.getY());
 	}
 	@Override
-	public void setValue(Vector3f val, GL2 gl) {
+	public void setValue(GL2 gl, Vector3f val) {
 		gl.glTexCoord3f(val.getX(), val.getY(), val.getZ());
 	}
 	@Override
-	public void setValue(Vector4f val, GL2 gl) {
+	public void setValue(GL2 gl, Vector4f val) {
 		gl.glTexCoord4f(val.getX(), val.getY(), val.getZ(), val.getW());
 	}
 	
 	@Override
-	public void setValue(Matrix2f val, GL2 gl) {}
+	public void setValue(GL2 gl, Matrix2f val) {}
 	@Override
-	public void setValue(Matrix3f val, GL2 gl) {}
+	public void setValue(GL2 gl, Matrix3f val) {}
 	@Override
-	public void setValue(Matrix4f val, GL2 gl) {}
+	public void setValue(GL2 gl, Matrix4f val) {}
 }

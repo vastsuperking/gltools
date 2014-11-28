@@ -8,6 +8,10 @@ import gltools.buffer.AttribArray;
 import gltools.buffer.BufferUsage;
 import gltools.buffer.Geometry;
 import gltools.buffer.VertexBuffer;
+import gltools.gl.GL;
+import gltools.gl.GL1;
+import gltools.gl.GL2;
+import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
 import gltools.shader.ProgramXMLLoader;
@@ -23,7 +27,7 @@ public class PointSpriteParticleTechnique implements ParticleTechnique {
 	private static String PARTICLE_PROGRAM = "Programs/particle.prog";
 	//3 bytes vertex, 1 byte life remaining, 1 byte size
 	private int FLOATS_PER_PARTICLE = 3 + 1;
-	private int BYTES_PER_PARTICLE = FLOATS_PER_PARTICLE * 4;
+	private int BYTES_PER_PARTICLE = FLOATS_PER_PARTICLE * DataType.FLOAT.getSize();
 	public static int POINT_TEXTURE_UNIT = 0;
 	public static int POINT_COLOR_TEXTURE_UNIT = 1;
 	public static int POINT_SIZE_TEXTURE_UNIT = 2;
@@ -57,7 +61,9 @@ public class PointSpriteParticleTechnique implements ParticleTechnique {
 	}
 	
 	@Override
-	public void init() throws Exception {
+	public void init(GL gl) throws Exception {
+		GL2 gl2 = gl.getGL2();
+		
 		m_particleGeo = new Geometry();
 		m_particleGeo.setMode(Mode.POINTS);
 		//Don't set the vertex count, that will be done in render();
@@ -65,46 +71,49 @@ public class PointSpriteParticleTechnique implements ParticleTechnique {
 		m_particleGeo.addArray(new AttribArray(m_buffer, InputUsage.PARTICLE_LIFE_REMAINING_PERCENTAGE, BYTES_PER_PARTICLE, 3 * 4));
 		//m_particleGeo.addArray(new AttribArray(m_buffer, InputUsage.POINT_SIZE, BYTES_PER_PARTICLE, 4 * 4));
 	
-		m_program = ProgramXMLLoader.s_load(PARTICLE_PROGRAM, new ClasspathResourceLocator()).get(0);
-		m_program.bind();
+		m_program = ProgramXMLLoader.s_load(gl, PARTICLE_PROGRAM, new ClasspathResourceLocator()).get(0);
+		m_program.bind(gl2);
 		m_program.getInputs(Uniform.class, InputUsage.POINT_TEXTURE_SAMPLER)
-			.setValue(POINT_TEXTURE_UNIT);
+			.setValue(gl2, POINT_TEXTURE_UNIT);
 		m_program.getInputs(Uniform.class, InputUsage.POINT_COLOR_TEXTURE_SAMPLER)
-			.setValue(POINT_COLOR_TEXTURE_UNIT);
+			.setValue(gl2, POINT_COLOR_TEXTURE_UNIT);
 		m_program.getInputs(Uniform.class, InputUsage.POINT_SIZE_TEXTURE_SAMPLER)
-			.setValue(POINT_SIZE_TEXTURE_UNIT);
-		m_program.unbind();
-		m_program.validate();
+			.setValue(gl2, POINT_SIZE_TEXTURE_UNIT);
+		m_program.unbind(gl2);
+		m_program.validate(gl2);
 	}
 	
 	@Override
-	public void render(ParticleSystem system) {
-		m_program.bind();
+	public void render(GL gl, ParticleSystem system) {
+		GL1 gl1 = gl.getGL1();
+		GL2 gl2 = gl.getGL2();
 		
-		m_projection.load();
-		m_model.load();
-		m_view.load();
+		m_program.bind(gl2);
+		
+		m_projection.load(gl);
+		m_model.load(gl);
+		m_view.load(gl);
 
 		//Set point size factor
 		Program.s_getCurrent()
 			.getInputs(Uniform.class, InputUsage.POINT_SIZE_FACTOR)
-			.setValue(m_sizeFactor);
+			.setValue(gl2, m_sizeFactor);
 	
-		m_particleTexture.bind(POINT_TEXTURE_UNIT);
-		m_colorTexture.bind(POINT_COLOR_TEXTURE_UNIT);
-		m_sizeTexture.bind(POINT_SIZE_TEXTURE_UNIT);
+		m_particleTexture.bind(gl2, POINT_TEXTURE_UNIT);
+		m_colorTexture.bind(gl2, POINT_COLOR_TEXTURE_UNIT);
+		m_sizeTexture.bind(gl2, POINT_SIZE_TEXTURE_UNIT);
 
-		GL11.glEnable(GL20.GL_VERTEX_PROGRAM_POINT_SIZE);
-		GL11.glEnable(GL20.GL_POINT_SPRITE);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA );
-	    GL11.glTexEnvi(GL20.GL_POINT_SPRITE, GL20.GL_COORD_REPLACE, GL11.GL_TRUE);
+		gl1.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
+		gl1.glEnable(GL2.GL_POINT_SPRITE);
+		gl1.glEnable(GL1.GL_BLEND);
+		gl1.glBlendFunc(GL1.GL_SRC_ALPHA, GL1.GL_ONE_MINUS_SRC_ALPHA );
+	    gl1.glTexEnvi(GL2.GL_POINT_SPRITE, GL2.GL_COORD_REPLACE, GL1.GL_TRUE);
 		
 	
 		m_particleGeo.setVertexCount(system.getParticles().size());
-		m_buffer.bind();
-		m_buffer.bufferData(generateBuffer(system));
-		m_particleGeo.render();//*/
+		m_buffer.bind(gl1);
+		m_buffer.bufferData(gl1, generateBuffer(system));
+		m_particleGeo.render(gl2);//*/
 		
 	    /*GL11.glBegin(GL11.GL_POINTS);
 		//System.out.println("R Start");
@@ -117,11 +126,11 @@ public class PointSpriteParticleTechnique implements ParticleTechnique {
 		//System.out.println("R End");
 		GL11.glEnd();//*/
 		
-		m_particleTexture.unbind();
-		m_colorTexture.unbind();
-		m_sizeTexture.unbind();
+		m_particleTexture.unbind(gl1);
+		m_colorTexture.unbind(gl1);
+		m_sizeTexture.unbind(gl1);
 		
-		m_program.unbind();
+		m_program.unbind(gl2);
 	}
 	public FloatBuffer generateBuffer(ParticleSystem system) {
 		ArrayList<Particle> particles = system.getParticles();

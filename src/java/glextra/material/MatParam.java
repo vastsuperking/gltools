@@ -30,7 +30,7 @@ public class MatParam {
 	
 	public void load(GL gl) {
 		Input input = Program.s_getCurrent().getInputs(m_usage.getInputType(), m_usage);
-		if (m_value != null) input.setValue(m_type, m_value, gl.getGL2());		
+		if (m_value != null) input.setValue(gl.getGL2(), m_type, m_value);		
 	}
 	
 	@Override

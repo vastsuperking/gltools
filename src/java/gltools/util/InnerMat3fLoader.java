@@ -31,6 +31,6 @@ public class InnerMat3fLoader implements Loadable {
 			return;
 		}
 		Program.s_getCurrent().getInputs(usage.getInputType(), usage).setValue(
-				m_matrix.getCurrentMatrix().getInnerMat3f(), gl.getGL2());
+				gl.getGL2(), m_matrix.getCurrentMatrix().getInnerMat3f());
 	}
 }

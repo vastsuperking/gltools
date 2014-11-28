@@ -38,39 +38,39 @@ public class Uniform extends Input {
 	public void setProgram(Program prog) { m_program = prog; }
 
 	
-	public void setValue(int val, GL2 gl) {
+	public void setValue(GL2 gl, int val) {
 		if (!isActive()) return;
 		checkProgBound();
 		gl.glUniform1i(getID(), val);
 	}
-	public void setValue(boolean val, GL2 gl) {
+	public void setValue(GL2 gl, boolean val) {
 		if (!isActive()) return;
 		checkProgBound();
 		gl.glUniform1i(getID(), val ? 1 : 0);
 	}
-	public void setValue(float val, GL2 gl) {
+	public void setValue(GL2 gl, float val) {
 		if (!isActive()) return;
 		checkProgBound();
 		gl.glUniform1f(getID(), val);
 	}
-	public void setValue(Vector2f vec, GL2 gl) {
+	public void setValue(GL2 gl, Vector2f vec) {
 		if (!isActive()) return;
 		checkProgBound();
 		gl.glUniform2f(getID(), vec.getX(), vec.getY());
 	}
-	public void setValue(Vector3f vec, GL2 gl) {
+	public void setValue(GL2 gl, Vector3f vec) {
 		if (!isActive()) return;
 		checkProgBound();
 		gl.glUniform3f(getID(), vec.getX(), vec.getY(), vec.getZ());
 	}
-	public void setValue(Vector4f vec, GL2 gl) {
+	public void setValue(GL2 gl, Vector4f vec) {
 		if (!isActive()) return;
 		//System.out.println("Setting " + getName() + " to " + vec);
 		//Thread.dumpStack();
 		checkProgBound();
 		gl.glUniform4f(getID(), vec.getX(), vec.getY(), vec.getZ(), vec.getW());
 	}
-	public void setValue(Matrix2f mat, GL2 gl) {
+	public void setValue(GL2 gl, Matrix2f mat) {
 		if (!isActive()) return;
 		checkProgBound();
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(9);
@@ -78,7 +78,7 @@ public class Uniform extends Input {
 		buffer.flip();
 		gl.glUniformMatrix2(getID(), false, buffer);
 	}
-	public void setValue(Matrix3f mat, GL2 gl) {
+	public void setValue(GL2 gl, Matrix3f mat) {
 		if (!isActive()) return;
 		checkProgBound();
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(9);
@@ -86,7 +86,7 @@ public class Uniform extends Input {
 		buffer.flip();
 		gl.glUniformMatrix3(getID(), false, buffer);
 	}
-	public void setValue(Matrix4f mat, GL2 gl) {
+	public void setValue(GL2 gl, Matrix4f mat) {
 		if (!isActive()) return;
 		checkProgBound();
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(16);

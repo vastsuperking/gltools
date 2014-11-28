@@ -50,62 +50,62 @@ public class InputList<T extends Input> extends Input implements Iterable<T> {
 	}
 	
 	@Override
-	public void setValue(int val, GL2 gl) {
+	public void setValue(GL2 gl, int val) {
 		for (Input i : m_inputs) {
-			i.setValue(val, gl);
+			i.setValue(gl, val);
 		}
 	}
 	@Override
-	public void setValue(boolean val, GL2 gl) {
+	public void setValue(GL2 gl, boolean val) {
 		for (Input i : m_inputs) {
-			i.setValue(val, gl);
+			i.setValue(gl, val);
 		}
 	}
 	
 	@Override
-	public void setValue(float val, GL2 gl) {
+	public void setValue(GL2 gl, float val) {
 		for (Input i : m_inputs) {
-			i.setValue(val, gl);
+			i.setValue(gl, val);
 		}
 	}
 
 	@Override
-	public void setValue(Vector2f val, GL2 gl) {
+	public void setValue(GL2 gl, Vector2f val) {
 		for (Input i : m_inputs) {
-			i.setValue(val, gl);
+			i.setValue(gl, val);
 		}
 	}
 
 	@Override
-	public void setValue(Vector3f val, GL2 gl) {
+	public void setValue(GL2 gl, Vector3f val) {
 		for (Input i : m_inputs) {
-			i.setValue(val, gl);
+			i.setValue(gl, val);
 		}
 	}
 
 	@Override
-	public void setValue(Vector4f val, GL2 gl) {
+	public void setValue(GL2 gl, Vector4f val) {
 		for (Input i : m_inputs) {
-			i.setValue(val, gl);
+			i.setValue(gl, val);
 		}
 	}
 
 	@Override
-	public void setValue(Matrix2f val, GL2 gl) {
+	public void setValue(GL2 gl, Matrix2f val) {
 		for (Input i : m_inputs) {
-			i.setValue(val, gl);
+			i.setValue(gl, val);
 		}
 	}
 	@Override
-	public void setValue(Matrix3f val, GL2 gl) {
+	public void setValue(GL2 gl, Matrix3f val) {
 		for (Input i : m_inputs) {
-			i.setValue(val, gl);
+			i.setValue(gl, val);
 		}
 	}
 	@Override
-	public void setValue(Matrix4f val, GL2 gl) {
+	public void setValue(GL2 gl, Matrix4f val) {
 		for (Input i : m_inputs) {
-			i.setValue(val, gl);
+			i.setValue(gl, val);
 		}
 	}
 	

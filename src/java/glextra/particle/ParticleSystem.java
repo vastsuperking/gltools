@@ -1,6 +1,7 @@
 package glextra.particle;
 
 import glcommon.vector.Vector3f;
+import gltools.gl.GL;
 import gltools.transform.Camera3D;
 
 import java.util.ArrayList;
@@ -16,12 +17,11 @@ public class ParticleSystem {
 
 
 	
-	public ParticleSystem(ParticleTechnique technique, int size) throws Exception {
+	public ParticleSystem(ParticleTechnique technique, int size) {
 		m_technique = technique;
 		m_particles = new ArrayList<Particle>(size);
-		m_technique.init();
 	}
-	public ParticleSystem(ParticleTechnique technique) throws Exception {
+	public ParticleSystem(ParticleTechnique technique) {
 		this(technique, 1024);
 	}
 	/** Returns a depth-sorted list of all the particles*/
@@ -31,8 +31,13 @@ public class ParticleSystem {
 		m_particles.add(particle);
 	}
 	
-	public void render() {
-		m_technique.render(this);
+	public void init(GL gl) throws Exception {
+		m_technique.init(gl);
+	}
+	
+	
+	public void render(GL gl) {
+		m_technique.render(gl, this);
 	}
 	
 	public void update(long deltaMillis, Camera3D cam) {

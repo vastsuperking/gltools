@@ -58,6 +58,6 @@ public class GLMatrix4f implements Loadable {
 			System.err.println("Warning! No current program, matrix value not set!");
 			return;
 		}
-		Program.s_getCurrent().getInputs(Uniform.class, usage).setValue(m_matrix, gl.getGL2());
+		Program.s_getCurrent().getInputs(Uniform.class, usage).setValue(gl.getGL2(), m_matrix);
 	}
 }

@@ -1,6 +1,6 @@
 package gltools.gl;
 
-public interface GL {
+public interface GL extends GL4 {
 	public GLVersion getGLVersion();
 	
 	public void init();

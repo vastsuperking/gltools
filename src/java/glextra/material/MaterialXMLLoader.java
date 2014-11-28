@@ -97,7 +97,7 @@ public class MaterialXMLLoader {
 		if (programs.size() < 1) throw new RuntimeException("Unable to find program tag");
 		Element programElement = programs.first();
 		String programLocation = programElement.attr("resource");
-		Program program = ProgramXMLLoader.s_load(programLocation, locator, gl).get(0);
+		Program program = ProgramXMLLoader.s_load(gl, programLocation, locator).get(0);
 		Technique technique = new Technique(name, program);
 		Elements definesElements = t.getElementsByTag("defines");
 		if (definesElements.size() > 0) s_parseDefines(definesElements.first(), technique);

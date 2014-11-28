@@ -43,7 +43,7 @@ public interface Light {
 		 */
 		public static void init(GL gl) {
 			try {
-				s_program = ProgramXMLLoader.s_load(PROG_LOCATION, new ClasspathResourceLocator(), gl).get(0);
+				s_program = ProgramXMLLoader.s_load(gl, PROG_LOCATION, new ClasspathResourceLocator()).get(0);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ShaderCompileException e) {
@@ -83,13 +83,13 @@ public interface Light {
 			s_program.bind(gl);
 			//Set uniforms to light values
 			s_program.getInputs(Uniform.class, 
-					new InputUsage("LIGHT_POSITION", DataType.VEC3, Uniform.class)).setValue(m_position, gl);
+					new InputUsage("LIGHT_POSITION", DataType.VEC3, Uniform.class)).setValue(gl, m_position);
 			s_program.getInputs(Uniform.class, 
-					new InputUsage("LIGHT_DIFFUSE_COLOR", DataType.VEC4, Uniform.class)).setValue(m_diffuseColor.toVector4f(), gl);
+					new InputUsage("LIGHT_DIFFUSE_COLOR", DataType.VEC4, Uniform.class)).setValue(gl, m_diffuseColor.toVector4f());
 			s_program.getInputs(Uniform.class, 
-					new InputUsage("LIGHT_AMBIENT_COLOR", DataType.VEC4, Uniform.class)).setValue(m_ambientColor.toVector4f(), gl);
+					new InputUsage("LIGHT_AMBIENT_COLOR", DataType.VEC4, Uniform.class)).setValue(gl, m_ambientColor.toVector4f());
 			s_program.getInputs(Uniform.class, 
-					new InputUsage("LIGHT_ATTENUATION", DataType.VEC3, Uniform.class)).setValue(m_attenuation, gl);
+					new InputUsage("LIGHT_ATTENUATION", DataType.VEC3, Uniform.class)).setValue(gl, m_attenuation);
 			
 			//Will bind the buffers to their correct texture units
 			//setReadSamplers() is called in the buffer
@@ -104,7 +104,7 @@ public interface Light {
 		 */
 		public static void init(GL gl) {
 			try {
-				s_program = ProgramXMLLoader.s_load(PROG_LOCATION, new ClasspathResourceLocator(), gl).get(0);
+				s_program = ProgramXMLLoader.s_load(gl, PROG_LOCATION, new ClasspathResourceLocator()).get(0);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ShaderCompileException e) {

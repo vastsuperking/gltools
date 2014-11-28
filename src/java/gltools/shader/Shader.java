@@ -52,6 +52,7 @@ public class Shader {
 	}
 	
 	public void compile(GL2 gl) throws ShaderCompileException {
+		checkValid();
 		if (m_source == null) throw new ShaderCompileException("Source not set!");
 		gl.glShaderSource(getID(), m_source.getFullSource());
 		gl.glCompileShader(getID());
@@ -66,6 +67,7 @@ public class Shader {
 	}
 	
 	public void delete(GL2 gl) {
+		checkValid();
 		gl.glDeleteShader(getID());
 	}
 

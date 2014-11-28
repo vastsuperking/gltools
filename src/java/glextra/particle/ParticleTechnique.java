@@ -1,7 +1,9 @@
 package glextra.particle;
 
+import gltools.gl.GL;
+
 
 public interface ParticleTechnique {
-	public void init() throws Exception;
-	public void render(ParticleSystem system);
+	public void init(GL gl) throws Exception;
+	public void render(GL gl, ParticleSystem system);
 }

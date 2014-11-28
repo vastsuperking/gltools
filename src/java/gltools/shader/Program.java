@@ -28,7 +28,7 @@ public class Program {
 		if (m_id == -1) m_id = gl.glCreateProgram();
 	}
 	
-	public void attachShader(Shader shader, GL2 gl) {
+	public void attachShader(GL2 gl, Shader shader) {
 		m_shaders.add(shader);
 		gl.glAttachShader(getID(), shader.getID());
 	}

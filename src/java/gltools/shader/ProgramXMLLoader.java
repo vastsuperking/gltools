@@ -24,10 +24,10 @@ import org.jsoup.select.Elements;
 public class ProgramXMLLoader {
 	private static final boolean DEBUG = false;
 	
-	public static List<Program> s_load(String resource, ResourceLocator resources, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {
-		return s_load(resources.getResource(resource), resources, gl);
+	public static List<Program> s_load(GL gl, String resource, ResourceLocator resources) throws IOException, ShaderCompileException, ProgramLinkException {
+		return s_load(gl, resources.getResource(resource), resources);
 	}
-	public static List<Program> s_load(InputStream input, ResourceLocator resources, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {
+	public static List<Program> s_load(GL gl, InputStream input, ResourceLocator resources) throws IOException, ShaderCompileException, ProgramLinkException {
 		String file = FileUtils.s_readAll(input);
 		Document doc = Jsoup.parse(file, "", Parser.xmlParser());
 		
@@ -35,11 +35,11 @@ public class ProgramXMLLoader {
 		
 		List<Program> programs = new ArrayList<Program>();
 		for (Element p : pgms) {
-			programs.add(s_parseProgram(p, resources, gl));
+			programs.add(s_parseProgram(gl, p, resources));
 		}
 		return programs;
 	}
-	private static Program s_parseProgram(Element p, ResourceLocator resources, GL gl) throws ShaderCompileException, ProgramLinkException, IOException {
+	private static Program s_parseProgram(GL gl, Element p, ResourceLocator resources) throws ShaderCompileException, ProgramLinkException, IOException {
 		Program program = new Program();
 		program.init(gl.getGL2());
 		
@@ -50,7 +50,7 @@ public class ProgramXMLLoader {
 			if (DEBUG) System.out.println("Compiling shader: " + shader);
 			shader.compile(gl.getGL2());
 			if (DEBUG) System.out.println("Done compiling shader, attaching");
-			program.attachShader(shader, gl.getGL2());
+			program.attachShader(gl.getGL2(), shader);
 		}
 		if (DEBUG) System.out.println("Linking program...");
 		program.link(gl.getGL2());

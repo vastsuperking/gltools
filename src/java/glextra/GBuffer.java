@@ -217,7 +217,7 @@ public class GBuffer {
 		public void setReadSampler(GL2 gl) {
 			Program program = Program.s_getCurrent();
 			if (program != null)
-				program.getInputs(Uniform.class, m_usage).setValue(m_unit, gl);
+				program.getInputs(Uniform.class, m_usage).setValue(gl, m_unit);
 		}
 	}
 }
