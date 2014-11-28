@@ -15,6 +15,6 @@ public class Rotation2D extends MatOp3f {
 	public void setDegrees(float degrees) { m_degrees = degrees; }
 	
 	public Matrix3f getTransform() {
-		return MatrixFactory.create2DRotationMatrix((float) Math.toRadians(m_degrees));
+		return MatrixFactory.createAffineRotationMatrix((float) Math.toRadians(m_degrees));
 	}
 }

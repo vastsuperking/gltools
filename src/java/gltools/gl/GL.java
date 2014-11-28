@@ -1,9 +1,15 @@
 package gltools.gl;
 
+import gltools.display.Display;
+
 public interface GL extends GL4 {
 	public GLVersion getGLVersion();
 	
 	public void init();
+	public void destroy();
+	
+	public void makeCurrent(Display display);
+	public void releaseCurrent();
 	
 	public GL1 getGL1();
 	public GL2 getGL2();

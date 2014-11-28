@@ -19,6 +19,6 @@ public class Translation2D extends MatOp3f {
 	public Vector2f getTranslation() { return m_translate; }
 	
 	public Matrix3f getTransform() {
-		return MatrixFactory.create2DTranslationMatrix(m_translate);
+		return MatrixFactory.createAffineTranslationMatrix(m_translate);
 	}
 }

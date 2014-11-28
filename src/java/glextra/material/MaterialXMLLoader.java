@@ -32,7 +32,7 @@ import org.jsoup.select.Elements;
 
 public class MaterialXMLLoader {
 	private static final boolean DEBUG = false;
-	public static List<Material> s_load(String resource, ResourceLocator locator, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {
+	public static List<Material> s_load(GL gl, String resource, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
 		return s_load(locator.getResource(resource), locator, gl);
 	}
 	public static List<Material> s_load(InputStream in, ResourceLocator locator, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {

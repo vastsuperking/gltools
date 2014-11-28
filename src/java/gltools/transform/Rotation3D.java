@@ -21,10 +21,10 @@ public class Rotation3D extends MatOp4f {
 	public void setAxis(Vector3f axis) { m_axis = axis; }
 	
 	public Matrix4f getTransform() {
-		return MatrixFactory.create3DRotationMatrix((float) Math.toRadians(m_degrees), m_axis);
+		return MatrixFactory.createRotationMatrix((float) Math.toRadians(m_degrees), m_axis);
 	}
 	
 	public void applyToNormal(GLMatrix3f normal) {
-		normal.getCurrentMatrix().mul(MatrixFactory.create3DRotationMatrix3f((float) Math.toRadians(m_degrees), m_axis));
+		normal.getCurrentMatrix().mul(MatrixFactory.createRotationMatrix3f((float) Math.toRadians(m_degrees), m_axis));
 	}
 }

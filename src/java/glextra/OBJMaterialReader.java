@@ -66,7 +66,7 @@ public class OBJMaterialReader {
 	
 	public static Material s_newMTL(GL gl) throws IOException {
 		try {
-			Material m = MaterialXMLLoader.s_load("Materials/M3D/obj.mat", new ClasspathResourceLocator(), gl).get(0);
+			Material m = MaterialXMLLoader.s_load(gl, "Materials/M3D/obj.mat", new ClasspathResourceLocator()).get(0);
 			return m;
 		} catch (ShaderCompileException e) {
 			e.printStackTrace();

@@ -155,7 +155,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	@Override
 	public void updateProjection(float left, float right, float top, float bottom) {
 		m_projMat.setCurrentMatrix(
-				MatrixFactory.create2DProjectionMatrix(left, right, top, bottom));		
+				MatrixFactory.createAffineProjectionMatrix(left, right, top, bottom));		
 		m_csLeft = left;
 		m_csRight = right;
 		m_csTop = top;
@@ -165,30 +165,30 @@ public class LWJGLRenderer2D implements Renderer2D {
 	@Override
 	public void viewTrans(float x, float y) {
 		m_viewMat.getCurrentMatrix().mul(
-				MatrixFactory.create2DTranslationMatrix(new Vector2f(x, y)));
+				MatrixFactory.createAffineTranslationMatrix(new Vector2f(x, y)));
 	}
 	@Override
 	public void viewScale(float x, float y) {
 		m_viewMat.getCurrentMatrix().mul(
-				MatrixFactory.create2DScaleMatrix(new Vector2f(x, y)));
+				MatrixFactory.createAffineScaleMatrix(new Vector2f(x, y)));
 	}
 	
 	
 	@Override
 	public void translate(float x, float y) {
 		m_modelMat.getCurrentMatrix().mul(
-				MatrixFactory.create2DTranslationMatrix(new Vector2f(x, y)));
+				MatrixFactory.createAffineTranslationMatrix(new Vector2f(x, y)));
 	}
 	@Override
 	public void scale(float x, float y) {
 		m_modelMat.getCurrentMatrix().mul(
-				MatrixFactory.create2DScaleMatrix(new Vector2f(x, y)));
+				MatrixFactory.createAffineScaleMatrix(new Vector2f(x, y)));
 		
 	}
 	@Override
 	public void rotate(float radians) {
 		m_modelMat.getCurrentMatrix().mul(
-				MatrixFactory.create2DRotationMatrix(radians));
+				MatrixFactory.createAffineRotationMatrix(radians));
 	}
 	
 	@Override

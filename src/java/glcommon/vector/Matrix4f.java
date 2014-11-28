@@ -377,8 +377,8 @@ public class Matrix4f extends Matrix {
 						{0f, 0f, 0f, 1f}};*/
 		//Matrix4f mat1 = new Matrix4f(m1);
 		//Matrix4f mat2 = new Matrix4f(m2);
-		Matrix4f mat1 = MatrixFactory.create3DRotationMatrix((float) (0.5 * Math.PI), new Vector3f(0f, 0f, 1f));
-		Matrix4f mat2 = MatrixFactory.create3DTranslationMatrix(new Vector3f(1, 1, 5));
+		Matrix4f mat1 = MatrixFactory.createRotationMatrix((float) (0.5 * Math.PI), new Vector3f(0f, 0f, 1f));
+		Matrix4f mat2 = MatrixFactory.createTranslationMatrix(new Vector3f(1, 1, 5));
 		
 		Matrix4f mat3 = new Matrix4f();
 		Matrix4f.mul(mat1, mat2, mat3);

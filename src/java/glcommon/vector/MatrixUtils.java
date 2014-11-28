@@ -10,13 +10,17 @@ public class MatrixUtils {
 		float c = mat.m10;
 		float d = mat.m11;
 		
-		float sX = (float) (Math.sin(a) * Math.sqrt(a*a + b*b));
-		float sY = (float) (Math.sin(d) * Math.sqrt(c*c + d*d));
+		float sX = (float) (sign(a) * Math.sqrt(a*a + b*b));
+		float sY = (float) (sign(d) * Math.sqrt(c*c + d*d));
 		return new Vector2f(sX, sY);
 	}
 	public static float getRotation(Matrix3f mat) {
 		float a = mat.m00;
 		float b = mat.m01;
 		return (float) Math.atan2(-b, a);
+	}
+	
+	private static int sign(double a) {
+		return a > 0 ? 1 : (a < 0 ? -1 : 0);
 	}
 }

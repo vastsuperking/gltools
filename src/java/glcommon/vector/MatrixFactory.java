@@ -61,9 +61,8 @@ public class MatrixFactory {//useful for creating projection matricies
 	}
 	/**
 	 * Creates a 2D projection matrix
-	 * left and top are negative
 	 */
-	public static Matrix3f create2DProjectionMatrix(float left, float right, float top, float bottom) {
+	public static Matrix3f createAffineProjectionMatrix(float left, float right, float top, float bottom) {
 		float x = (2)/(right + left);
 		float y = (2)/(top + bottom);
 		float a = -((right - left)/(right + left));
@@ -78,7 +77,7 @@ public class MatrixFactory {//useful for creating projection matricies
 	 * Will create a translation matrix given the x y and z coordinates to translate by, given in a vector3f
 	 * @param translation the x, y, z vector with the translation
 	 */
-	public static Matrix4f create3DTranslationMatrix(Vector3f translation) {
+	public static Matrix4f createTranslationMatrix(Vector3f translation) {
 		float[][] m = {{1f, 0f, 0f, translation.getX()},
 					   {0f, 1f, 0f, translation.getY()},
 					   {0f, 0f, 1f, translation.getZ()},
@@ -86,7 +85,7 @@ public class MatrixFactory {//useful for creating projection matricies
 		Matrix4f matrix = new Matrix4f(m);
 		return matrix;
 	}
-	public static Matrix3f create2DTranslationMatrix(Vector2f translation) {
+	public static Matrix3f createAffineTranslationMatrix(Vector2f translation) {
 		float[][] m = {{1f, 0f, translation.getX()},
 					   {0f, 1f, translation.getY()},
 					   {0f, 0f, 1f				  }};
@@ -97,7 +96,7 @@ public class MatrixFactory {//useful for creating projection matricies
 	 * Creates a matrix that will scale by the x y and z of the given vector
 	 * @param scale the vector that should be used to scale
 	 */
-	public static  Matrix4f create3DScaleMatrix(Vector3f scale) {
+	public static  Matrix4f createScaleMatrix(Vector3f scale) {
 		float x = scale.getX();
 		float y = scale.getY();
 		float z = scale.getZ();
@@ -110,7 +109,7 @@ public class MatrixFactory {//useful for creating projection matricies
 	/**
 	 * Creates a matrix that will scale by the given vector
 	 */
-	public static Matrix3f create2DScaleMatrix(Vector2f scale) {
+	public static Matrix3f createAffineScaleMatrix(Vector2f scale) {
 		float x = scale.getX();
 		float y = scale.getY();
 		float[][] m = {{x, 0f, 0f},
@@ -123,7 +122,7 @@ public class MatrixFactory {//useful for creating projection matricies
 	 * @param theta the rotation in radians
 	 * @param axis the axis around which to rotate
 	 */
-	public static Matrix4f create3DRotationMatrix(float theta, Vector3f axis) {
+	public static Matrix4f createRotationMatrix(float theta, Vector3f axis) {
 		float x = axis.getX();
 		float y = axis.getY();
 		float z = axis.getZ();
@@ -155,7 +154,7 @@ public class MatrixFactory {//useful for creating projection matricies
 	 * @param theta the rotation in radians
 	 * @param axis the axis around which to rotate
 	 */
-	public static Matrix3f create3DRotationMatrix3f(float theta, Vector3f axis) {
+	public static Matrix3f createRotationMatrix3f(float theta, Vector3f axis) {
 		float x = axis.getX();
 		float y = axis.getY();
 		float z = axis.getZ();
@@ -181,7 +180,7 @@ public class MatrixFactory {//useful for creating projection matricies
 
 		return new Matrix3f(m);
 	}
-	public static Matrix3f create2DRotationMatrix(float theta) {
+	public static Matrix3f createAffineRotationMatrix(float theta) {
 		float sin = (float) Math.sin(theta);
 		float cos = (float) Math.cos(theta);
 		float[][] m = {{cos,  	-sin, 0},
@@ -189,7 +188,7 @@ public class MatrixFactory {//useful for creating projection matricies
 						{0,    	0,   1}};
 		return new Matrix3f(m);
 	}
-	public static Matrix2f create2DRotationMatrix2f(float theta) {
+	public static Matrix2f createAffineRotationMatrix2f(float theta) {
 		float sin = (float) Math.sin(theta);
 		float cos = (float) Math.cos(theta);
 		float[][] m = {{cos,  	-sin},
