@@ -39,6 +39,8 @@ public class AttribArray {
 	}
 
 	public void enable(GL2 gl) {
+		if (Program.s_getCurrent() == null)
+			throw new RuntimeException("No program bound!");
 		InputList<Attribute> attributes = Program.s_getCurrent().getInputs(Attribute.class, m_usage);
 		for (Attribute a : attributes) {
 			a.enableArray(gl);

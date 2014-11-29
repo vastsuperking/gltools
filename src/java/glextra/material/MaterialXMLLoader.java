@@ -33,9 +33,9 @@ import org.jsoup.select.Elements;
 public class MaterialXMLLoader {
 	private static final boolean DEBUG = false;
 	public static List<Material> s_load(GL gl, String resource, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
-		return s_load(locator.getResource(resource), locator, gl);
+		return s_load(gl, locator.getResource(resource), locator);
 	}
-	public static List<Material> s_load(InputStream in, ResourceLocator locator, GL gl) throws IOException, ShaderCompileException, ProgramLinkException {
+	public static List<Material> s_load(GL gl, InputStream in, ResourceLocator locator) throws IOException, ShaderCompileException, ProgramLinkException {
 		String content = FileUtils.s_readAll(in);
 		Document doc = Jsoup.parse(content, "", Parser.xmlParser());
 		Elements mats = doc.getElementsByTag("material");

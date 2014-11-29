@@ -10,6 +10,8 @@ public interface GL extends GL4 {
 	public void makeCurrent();
 	public void releaseCurrent();
 	
+	public boolean isCurrent();
+	
 	public GL1 getGL1();
 	public GL2 getGL2();
 	public GL3 getGL3();

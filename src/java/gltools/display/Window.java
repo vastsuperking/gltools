@@ -17,6 +17,7 @@ public interface Window extends Display {
 	public void setX(int x);
 	public void setY(int y);
 	public void setPosition(int x, int y);
+	public void setSize(int width, int height);
 	public void setTitle(String title);
 	
 	public void addResizedListener(ResizeListener rl);
