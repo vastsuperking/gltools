@@ -1511,4 +1511,5 @@ public interface GL1 {
 	public java.nio.ByteBuffer glMapBuffer(int target, int access, java.nio.ByteBuffer old_buffer);
 	public java.nio.ByteBuffer glMapBuffer(int target, int access, int length, java.nio.ByteBuffer old_buffer);
 	public boolean glUnmapBuffer(int target);
+	public GL getContext();
 }

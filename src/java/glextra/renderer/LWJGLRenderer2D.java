@@ -22,7 +22,9 @@ import gltools.display.Window;
 import gltools.extra.GeometryFactory;
 import gltools.gl.GL;
 import gltools.gl.GL1;
+import gltools.shader.DataType;
 import gltools.shader.InputUsage;
+import gltools.texture.Texture2D;
 import gltools.texture.TextureFormat;
 import gltools.util.GLMatrix3f;
 
@@ -34,6 +36,8 @@ import java.util.HashSet;
  * If input normals(normalMap) is 
  */
 public class LWJGLRenderer2D implements Renderer2D {
+	private static final String GLYPH_TEX_PARAM = "glyphTexture";
+	
 	private static LWJGLRenderer2D INSTANCE = null;
 	
 	//Temporary list with all lights to be rendered
@@ -70,12 +74,16 @@ public class LWJGLRenderer2D implements Renderer2D {
 	
 	private GL m_gl;
 	
+	private GLTextureManager m_textureManager;
+	
 	private LWJGLRenderer2D() {
 	}
 	
 	@Override
 	public void init(float left, float right, float top, float bottom, Window window) {
 		m_gl = window.getGL();
+		
+		m_textureManager = new GLTextureManager();
 		
 		m_gBuffer = new GBuffer(window.getWidth(), window.getHeight());
 		m_gBuffer.addAttachment(new GBufferAttachment(0, AttachmentPoint.COLOR_ATTACHMENT0, InputUsage.GBUFFER_VERTEX_SAMPLER, TextureFormat.RGBA16F));
@@ -113,10 +121,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 		m_texCoordsBuf.init(m_gl.getGL1());
 		m_indicesBuf.init(m_gl.getGL1());
 
-		
-
-		
-		m_display = window;
+		m_display = window;		
 	}
 	@Override
 	public GL getGL() { return m_gl; }
@@ -293,7 +298,8 @@ public class LWJGLRenderer2D implements Renderer2D {
 		geo.setIndexBuffer(m_indicesBuf);
 		
 		geo.render(m_gl.getGL2());
-		m_material.unbind(m_gl);		
+		m_material.unbind(m_gl);	
+		
 	}
 	
 	@Override
@@ -301,6 +307,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 		//The font we will be using
 		Font font = getFont();
 		if (font == null) throw new RuntimeException("No font set!");
+		if (m_material == null) throw new RuntimeException("No material set");
 		
 		//First, push the transformation matrix
 		pushModel();
@@ -310,7 +317,20 @@ public class LWJGLRenderer2D implements Renderer2D {
 		for (char c : chars) {
 			if (c == '\n' || c == '\t') continue;
 			Glyph g = font.getGlyph(c);
-			g.renderAndTranslate(this, scale, getMaterial());
+			
+			//Translate across the xoffset and down by the yoffset
+			if (m_material.getParam(GLYPH_TEX_PARAM) == null || 
+				m_material.getParam(GLYPH_TEX_PARAM).getDataType() != DataType.SAMPLER2D)
+					throw new RuntimeException("Material does not contain " + GLYPH_TEX_PARAM + " as a parameter");
+			
+			Texture2D texture = m_textureManager.getTexture(m_gl, g.getImage());
+			m_material.setTexture2D(GLYPH_TEX_PARAM, texture);
+			//Material is already set...
+			fillRect(g.getXOff() * scale, scale * (getFont().getAscent() - g.getYOff()), 
+						scale * g.getImage().getWidth(), 
+						scale * g.getImage().getHeight());
+
+			translate(g.getXAdvance() * scale, 0);
 		}
 		
 		//Pop it to get back to what we had before
@@ -344,7 +364,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	public void startGeometry() {
 		m_modelMat.getCurrentMatrix().setIdentity();
 		m_viewMat.getCurrentMatrix().setIdentity();	
-
+		
 		m_gl.getGL1().glEnable(GL1.GL_BLEND);
 		m_gl.getGL1().glBlendFunc(GL1.GL_SRC_ALPHA,	GL1.GL_ONE_MINUS_SRC_ALPHA);
 	}

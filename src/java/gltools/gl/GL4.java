@@ -1161,4 +1161,5 @@ public interface GL4 extends GL3 {
 	public void glVertexArrayVertexBuffer(int vaobj, int bindingindex, int buffer, long offset, int stride);
 	public void glVertexArrayVertexBuffers(int vaobj, int first, java.nio.IntBuffer buffers, PointerBuffer offsets, java.nio.IntBuffer strides);
 	public void glVertexArrayVertexBuffers(int vaobj, int first, int count, java.nio.ByteBuffer buffers, java.nio.ByteBuffer offsets, java.nio.ByteBuffer strides);
+	public GL getContext();
 }

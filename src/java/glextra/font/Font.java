@@ -1,7 +1,6 @@
 package glextra.font;
 
-import glextra.material.Material;
-import glextra.renderer.Renderer2D;
+import glcommon.image.Image2D;
 
 import java.awt.Rectangle;
 
@@ -50,12 +49,14 @@ public interface Font {
 		public int getHeight();
 		public int getWidth();
 		
+		public Image2D getImage();
+		
 		/**
 		 * Renders the char but does not move the cursor
 		 * @param r the Renderer to use
 		 * @param mat the Material which will be used, must have glyphTexture param
 		 */
-		public void render(Renderer2D r, float scale, Material mat);
+//		public void render(Renderer2D r, float scale, Material mat);
 		/**
 		 * Renders the char and translates to the next char's position
 		 * Equivalent to:
@@ -67,6 +68,6 @@ public interface Font {
 		 * @param r the Renderer to use
 		 * @param mat the Material which will be used, must have glyphTexture param
 		 */
-		public void renderAndTranslate(Renderer2D r, float scale, Material mat);
+//		public void renderAndTranslate(Renderer2D r, float scale, Material mat);
 	}
 }

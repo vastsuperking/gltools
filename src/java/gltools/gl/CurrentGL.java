@@ -12,6 +12,7 @@ public class CurrentGL {
 	//Current GLContexts, used for synchronizing other objects as well
 	private static HashMap<Thread, GL> s_GLs = new HashMap<Thread, GL>();
 	
+	private static Lock s_changeContextLock = new ReentrantLock();
 	
 	public static GL s_getCurrent() {
 		synchronized(s_GLs) {
@@ -25,6 +26,7 @@ public class CurrentGL {
 	}
 	
 	public static void s_makeCurrent(GL gl) {
+		s_changeContextLock.lock();
 		Thread thread = Thread.currentThread();
 
 		//If there is a GL in the current thread, throw an exception,
@@ -38,15 +40,21 @@ public class CurrentGL {
 		}
 
 
-		//If the GL context is being draw with in a different
-		//thread, wait for that one to finish
-		if (!s_GLLocks.containsKey(gl)) s_GLLocks.put(gl, new ReentrantLock());
-		s_GLLocks.get(gl).lock();
 
+		//Grab a context-specific lock so that no one
+		//can put the context in a different thread
+		if (!s_GLLocks.containsKey(gl)) s_GLLocks.put(gl, new ReentrantLock());
+
+		//Unlock while we wait for release to free the context
+		s_changeContextLock.unlock();
+		s_GLLocks.get(gl).lock();		
+		s_changeContextLock.lock();
 		//Finally, make the context current
 		s_GLs.put(thread, gl);
+		s_changeContextLock.unlock();
 	}
 	public static void s_releaseCurrent(GL gl) {
+		s_changeContextLock.lock();
 		//If there is no opengl in this thread, throw an error
 		if (!s_GLs.containsKey(Thread.currentThread()))
 			throw new RuntimeException("No context in thread!");
@@ -63,6 +71,7 @@ public class CurrentGL {
 		}
 		//This gl context no longer belongs to a thread
 		s_contextThreads.remove(gl);
+		s_changeContextLock.unlock();
 	}
 	public static void s_disposeContext(GL gl) {
 		s_GLLocks.remove(gl);

@@ -6,7 +6,7 @@ import glcommon.util.Pair;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
-public class Image2D {
+public class Image2D extends Image {
 	private int m_width;
 	private int m_height;
 	private ByteBuffer m_data;

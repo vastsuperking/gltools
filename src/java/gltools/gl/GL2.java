@@ -287,4 +287,5 @@ public interface GL2 extends GL1 {
 	public void glUniformMatrix4x2f(int location, int count, boolean transpose, java.nio.ByteBuffer value);
 	public void glUniformMatrix4x3(int location, boolean transpose, java.nio.FloatBuffer value);
 	public void glUniformMatrix4x3f(int location, int count, boolean transpose, java.nio.ByteBuffer value);
+	public GL getContext();
 }

@@ -1,9 +1,6 @@
 package glextra.font;
 
-import glextra.material.Material;
-import glextra.renderer.Renderer2D;
-import gltools.shader.DataType;
-import gltools.texture.Texture2D;
+import glcommon.image.Image2D;
 
 import java.awt.Rectangle;
 import java.util.HashMap;
@@ -79,9 +76,8 @@ public class BMFont implements Font {
 	 * and holds important info about that character
 	 */
 	public static class BMGlyph implements Glyph {
-		public static final String GLYPH_TEX_PARAM = "glyphTexture";
 		private final char m_char;
-		private final Texture2D m_glyph;
+		private final Image2D m_glyph;
 		
 
 		private final int m_xoffset;
@@ -93,17 +89,16 @@ public class BMFont implements Font {
 		
 		private final Font m_font;
 		
-		public BMGlyph(Font f, char c, Texture2D glyphTexture, int xoff, int yoff, int xadv) {
+		public BMGlyph(Font f, char c, Image2D image, int xoff, int yoff, int xadv) {
 			m_font = f;
 			m_char = c;
-			m_glyph = glyphTexture;
+			m_glyph = image;
 			m_xoffset = xoff;
 			m_yoffset = yoff;
 			m_xadvance = xadv;
 		}
 		public Font getFont() { return m_font; }
 		public char getChar() { return m_char; }
-		public Texture2D getTexture() { return m_glyph; }
 		
 		public int getXOff() { return m_xoffset; }
 		public int getYOff() { return m_yoffset; }
@@ -112,19 +107,6 @@ public class BMFont implements Font {
 		public int getWidth() { return m_glyph.getWidth(); }
 		public int getHeight() { return m_glyph.getHeight(); }
 		
-
-		public void render(Renderer2D r, float scale, Material mat) {
-			//Translate across the xoffset and down by the yoffset
-			if (mat.getParam(GLYPH_TEX_PARAM) == null || 
-				mat.getParam(GLYPH_TEX_PARAM).getDataType() != DataType.SAMPLER2D)
-					throw new RuntimeException("Material does not contain " + GLYPH_TEX_PARAM + " as a parameter");
-			mat.setTexture2D(GLYPH_TEX_PARAM, m_glyph);
-			//Material is already set...
-			r.fillRect(m_xoffset * scale, scale * (getFont().getAscent() - m_yoffset), scale * m_glyph.getWidth(), scale * m_glyph.getHeight());
-		}
-		public void renderAndTranslate(Renderer2D r, float scale, Material mat) {
-			render(r, scale, mat);
-			r.translate(m_xadvance * scale, 0);
-		}
+		public Image2D getImage() { return m_glyph; }
 	}
 }

@@ -694,4 +694,5 @@ public interface GL3 extends GL2 {
 	public void glVertexP4u(int type, java.nio.IntBuffer value);
 	public void glVertexP4ui(int type, java.nio.ByteBuffer value);
 	public void glVertexP4ui(int type, int value);
+	public GL getContext();
 }
