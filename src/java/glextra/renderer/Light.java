@@ -6,56 +6,93 @@ import glcommon.vector.Vector3f;
 import glextra.GBuffer;
 import glextra.GBuffer.GBufferMode;
 import gltools.gl.GL;
-import gltools.gl.GL3;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
 import gltools.shader.Program;
-import gltools.shader.Program.ProgramLinkException;
 import gltools.shader.ProgramXMLLoader;
-import gltools.shader.Shader.ShaderCompileException;
 import gltools.shader.Uniform;
 
-import java.io.IOException;
+import java.util.HashMap;
 
 public interface Light {
+	
+	public LightType getType();
+	
 	/**
 	 * When bind is called, a GBuffer is supplied.
-	 * The light must bind its own program,
+	 * The light must bind its own program from the provider,
 	 * call buffer.bind(GBufferMode.READ),
 	 */
-	public void bind(GL3 gl, GBuffer buffer);
-	public void unbind(GL3 gl, GBuffer buffer); 
+	public void bind(GL gl, GBuffer buffer, LightProgramProvider provider);
+	public void unbind(GL gl, GBuffer buffer, LightProgramProvider provider); 
+
+	public Light clone();
+	
+	/**
+	 * Responsible for managing all the light's programs
+	 * Each renderer has one (programs are context-specific) 
+	 */
+	public static class LightProgramProvider {
+		private HashMap<LightType, Program> m_types = new HashMap<LightType, Program>();
+		
+		public Program get(GL gl, LightType lightType) {
+			if (!m_types.containsKey(lightType)) {
+				//Program not available, compile
+				Program p = lightType.createProgram(gl);
+				m_types.put(lightType, p);
+			}
+			return m_types.get(lightType);
+		}
+	}
+	public interface LightType {
+		public Program createProgram(GL gl);
+	}
 	
 	public static class NoLight implements Light {
 		private static final String PROG_LOCATION = "Programs/Lights2D/no_light.prog";
-		private static Program s_program = null;
+		private static LightType TYPE = new LightType() {
+			@Override
+			public Program createProgram(GL gl) {
+				try {
+					return ProgramXMLLoader.s_load(gl, PROG_LOCATION, 
+							new ClasspathResourceLocator()).get(0);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		};
 		
-		public void bind(GL3 gl, GBuffer buffer) {
-			s_program.bind(gl);
+		public LightType getType() { return TYPE; }
+		
+		public void bind(GL gl, GBuffer buffer, LightProgramProvider provider) {
+			provider.get(gl.getContext(), TYPE).bind(gl);
 			buffer.bind(gl, GBufferMode.READ);
 		}
-		public void unbind(GL3 gl, GBuffer buffer) {
+		public void unbind(GL gl, GBuffer buffer, LightProgramProvider provider) {
 			buffer.unbind(gl, GBufferMode.READ);
-			s_program.unbind(gl);
+			provider.get(gl, TYPE).unbind(gl);
 		}
-		/**
-		 * Will compile the program necessary for this light
-		 */
-		public static void init(GL gl) {
-			try {
-				s_program = ProgramXMLLoader.s_load(gl, PROG_LOCATION, new ClasspathResourceLocator()).get(0);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ShaderCompileException e) {
-				e.printStackTrace();
-			} catch (ProgramLinkException e) {
-				e.printStackTrace();
-			}
+		
+		@Override
+		public NoLight clone() {
+			return new NoLight();
 		}
 	}
 	public static class PointLight implements Light {
 		private static final String PROG_LOCATION = "Programs/Lights2D/point_light.prog";
-		private static Program s_program = null;
+		private static LightType TYPE = new LightType() {
+			@Override
+			public Program createProgram(GL gl) {
+				try {
+					return ProgramXMLLoader.s_load(gl, PROG_LOCATION, 
+							new ClasspathResourceLocator()).get(0);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		};
 		
 		private Vector3f m_position;
 		private Vector3f m_attenuation;
@@ -78,40 +115,35 @@ public interface Light {
 		public Vector3f getAttenuation() { return m_attenuation; }
 		public Color getDiffuseColor() { return m_diffuseColor; }
 		public Color getAmbientColor() { return m_ambientColor; }
+		
+		public LightType getType() { return TYPE; }
 
-		public void bind(GL3 gl, GBuffer buffer) {
-			s_program.bind(gl);
+		public void bind(GL gl, GBuffer buffer, LightProgramProvider provider) {
+			Program program = provider.get(gl, TYPE);
+			program.bind(gl);
 			//Set uniforms to light values
-			s_program.getInputs(Uniform.class, 
+			program.getInputs(Uniform.class, 
 					new InputUsage("LIGHT_POSITION", DataType.VEC3, Uniform.class)).setValue(gl, m_position);
-			s_program.getInputs(Uniform.class, 
+			program.getInputs(Uniform.class, 
 					new InputUsage("LIGHT_DIFFUSE_COLOR", DataType.VEC4, Uniform.class)).setValue(gl, m_diffuseColor.toVector4f());
-			s_program.getInputs(Uniform.class, 
+			program.getInputs(Uniform.class, 
 					new InputUsage("LIGHT_AMBIENT_COLOR", DataType.VEC4, Uniform.class)).setValue(gl, m_ambientColor.toVector4f());
-			s_program.getInputs(Uniform.class, 
+			program.getInputs(Uniform.class, 
 					new InputUsage("LIGHT_ATTENUATION", DataType.VEC3, Uniform.class)).setValue(gl, m_attenuation);
 			
 			//Will bind the buffers to their correct texture units
 			//setReadSamplers() is called in the buffer
 			buffer.bind(gl, GBufferMode.READ);
 		}
-		public void unbind(GL3 gl, GBuffer buffer) {
+		public void unbind(GL gl, GBuffer buffer, LightProgramProvider provider) {
+			Program program = provider.get(gl, TYPE);
+			
 			buffer.unbind(gl, GBufferMode.READ);
-			s_program.unbind(gl);
+			program.unbind(gl);
 		}
-		/**
-		 * Will compile the program necessary for this light
-		 */
-		public static void init(GL gl) {
-			try {
-				s_program = ProgramXMLLoader.s_load(gl, PROG_LOCATION, new ClasspathResourceLocator()).get(0);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ShaderCompileException e) {
-				e.printStackTrace();
-			} catch (ProgramLinkException e) {
-				e.printStackTrace();
-			}
+		
+		public PointLight clone() {
+			return new PointLight(m_position, m_attenuation, m_diffuseColor, m_ambientColor);
 		}
 	}
 }

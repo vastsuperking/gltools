@@ -1,8 +1,8 @@
-package glextra.font;
+package glcommon.font;
 
 import glcommon.Color;
+import glcommon.font.BMFont.BMGlyph;
 import glcommon.image.Image2D;
-import glextra.font.BMFont.BMGlyph;
 
 import java.awt.Canvas;
 import java.awt.Font;

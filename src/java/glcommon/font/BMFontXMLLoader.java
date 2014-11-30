@@ -1,8 +1,8 @@
-package glextra.font;
+package glcommon.font;
 
+import glcommon.font.BMFont.BMGlyph;
 import glcommon.image.Image2D;
 import glcommon.util.Pair;
-import glextra.font.BMFont.BMGlyph;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

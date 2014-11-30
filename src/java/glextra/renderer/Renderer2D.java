@@ -1,8 +1,8 @@
 package glextra.renderer;
 
+import glcommon.font.Font;
 import glcommon.vector.Matrix3f;
 import glcommon.vector.Vector2f;
-import glextra.font.Font;
 import glextra.material.Material;
 import gltools.display.Window;
 import gltools.gl.GL;

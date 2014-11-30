@@ -1,5 +1,7 @@
 package glextra.renderer;
 
+import glcommon.font.Font;
+import glcommon.font.Font.Glyph;
 import glcommon.vector.Matrix3f;
 import glcommon.vector.MatrixFactory;
 import glcommon.vector.MatrixUtils;
@@ -7,10 +9,10 @@ import glcommon.vector.Vector2f;
 import glextra.GBuffer;
 import glextra.GBuffer.GBufferAttachment;
 import glextra.GBuffer.GBufferMode;
-import glextra.font.Font;
-import glextra.font.Font.Glyph;
 import glextra.material.GlobalParamBindingSet;
 import glextra.material.Material;
+import glextra.renderer.Light.LightProgramProvider;
+import glextra.renderer.Light.NoLight;
 import gltools.Mode;
 import gltools.buffer.AttribArray;
 import gltools.buffer.FrameBuffer.AttachmentPoint;
@@ -37,8 +39,6 @@ import java.util.HashSet;
  */
 public class LWJGLRenderer2D implements Renderer2D {
 	private static final String GLYPH_TEX_PARAM = "glyphTexture";
-	
-	private static LWJGLRenderer2D INSTANCE = null;
 	
 	//Temporary list with all lights to be rendered
 	private ArrayList<Light> m_lights = new ArrayList<Light>();
@@ -75,15 +75,16 @@ public class LWJGLRenderer2D implements Renderer2D {
 	private GL m_gl;
 	
 	private GLTextureManager m_textureManager;
+	private LightProgramProvider m_lightPrograms;
 	
-	private LWJGLRenderer2D() {
-	}
+	public LWJGLRenderer2D() {}
 	
 	@Override
 	public void init(float left, float right, float top, float bottom, Window window) {
 		m_gl = window.getGL();
 		
 		m_textureManager = new GLTextureManager();
+		m_lightPrograms = new LightProgramProvider();
 		
 		m_gBuffer = new GBuffer(window.getWidth(), window.getHeight());
 		m_gBuffer.addAttachment(new GBufferAttachment(0, AttachmentPoint.COLOR_ATTACHMENT0, InputUsage.GBUFFER_VERTEX_SAMPLER, TextureFormat.RGBA16F));
@@ -326,7 +327,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 			Texture2D texture = m_textureManager.getTexture(m_gl, g.getImage());
 			m_material.setTexture2D(GLYPH_TEX_PARAM, texture);
 			//Material is already set...
-			fillRect(g.getXOff() * scale, scale * (getFont().getAscent() - g.getYOff()), 
+			fillRect(g.getXOff() * scale, scale * g.getYOff(), 
 						scale * g.getImage().getWidth(), 
 						scale * g.getImage().getHeight());
 
@@ -343,10 +344,22 @@ public class LWJGLRenderer2D implements Renderer2D {
 		GL1 gl = m_gl.getGL1();
 		gl.glEnable(GL1.GL_BLEND);
 		gl.glBlendFunc(GL1.GL_ONE, GL1.GL_ONE);
-		for (Light l : m_lights) {
-			l.bind(m_gl.getGL3(), m_gBuffer);
+		
+		if (m_lights.size() < 1) {
+			//The No Light will draw only
+			//where the normals are < -1
+			//which signifies unlighted
+			//Essentially, make sure unlighted stuff
+			//still gets drawn
+			Light l = new NoLight();
+			l.bind(m_gl, m_gBuffer, m_lightPrograms);
 			m_fullScreenQuad.render(m_gl.getGL2());
-			l.unbind(m_gl.getGL3(), m_gBuffer);
+			l.unbind(m_gl, m_gBuffer, m_lightPrograms);
+		}
+		for (Light l : m_lights) {
+			l.bind(m_gl, m_gBuffer, m_lightPrograms);
+			m_fullScreenQuad.render(m_gl.getGL2());
+			l.unbind(m_gl, m_gBuffer, m_lightPrograms);
 		}
 		//Disable blending after done
 		gl.glDisable(GL1.GL_BLEND);
@@ -399,10 +412,5 @@ public class LWJGLRenderer2D implements Renderer2D {
 		gl.glClear(GL1.GL_COLOR_BUFFER_BIT | 
 				 GL1.GL_DEPTH_BUFFER_BIT |
 				 GL1.GL_STENCIL_BUFFER_BIT);
-	}
-	
-	public static LWJGLRenderer2D getInstance() {
-		if (INSTANCE == null) INSTANCE = new LWJGLRenderer2D();
-		return INSTANCE;
 	}
 }

@@ -1,4 +1,4 @@
-package glextra.font;
+package glcommon.font;
 
 import glcommon.image.Image2D;
 
