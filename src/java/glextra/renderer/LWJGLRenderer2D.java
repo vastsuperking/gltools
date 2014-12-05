@@ -109,6 +109,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 		
 		window.addResizedListener(new ResizeListener() {
 			public void onResize(int width, int height) {
+				System.out.println("Resizing: " + width + " " + height);
 				m_gl.getGL1().glViewport(0, 0, width, height);
 				m_gBuffer.resize(m_gl.getGL3(), width, height);
 			}
@@ -162,6 +163,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	public void updateProjection(float left, float right, float top, float bottom) {
 		m_projMat.setCurrentMatrix(
 				MatrixFactory.createAffineProjectionMatrix(left, right, top, bottom));		
+		//System.out.println("Updating projection");
 		m_csLeft = left;
 		m_csRight = right;
 		m_csTop = top;

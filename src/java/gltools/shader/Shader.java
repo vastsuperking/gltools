@@ -74,7 +74,6 @@ public class Shader {
 	public String getInfoLog(GL2 gl) {
 		checkValid();
 		int len = gl.glGetShaderi(getID(), GL2.GL_INFO_LOG_LENGTH);
-		logger.info("Len {}", len);
 		//If there is more than a null byte
 		if (len > 1) return gl.glGetShaderInfoLog(getID(), len);
 		else return "";

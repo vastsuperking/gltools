@@ -197,9 +197,11 @@ public class GBuffer {
 				m_buffer.bind(gl);
 				m_buffer.setWidth(width);
 				m_buffer.setHeight(height);
-				m_buffer.load(gl);	
+				m_buffer.load(gl);
 				m_buffer.unbind(gl);
+				System.out.println("Resizing " + m_usage);
 			}
+			
 		}
 		public void attachTo(GL3 gl, FrameBuffer fbo) {
 			fbo.attach(gl, m_buffer, m_attachment);

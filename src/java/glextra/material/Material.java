@@ -129,7 +129,6 @@ public class Material {
 		for (Technique t : m_techniques.values()) {
 			if (renderModes.containsAll(t.getRenderModes())) {
 				if (m_currentTechnique != t) {
-					logger.debug("Selecting technique: " + t.getName() + " for " + getName());
 					m_currentTechnique = t;
 				}
 				return;
@@ -137,7 +136,6 @@ public class Material {
 		}
 
 		if (m_currentTechnique != m_defaultTechnique) {
-			logger.debug("Selecting default technique: " + m_currentTechnique.getName() + " for " + getName());
 			m_currentTechnique = m_defaultTechnique;
 		}
 	}
