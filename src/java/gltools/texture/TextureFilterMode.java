@@ -1,5 +1,6 @@
 package gltools.texture;
 
+import glcommon.image.ImageFilterMode;
 import gltools.gl.GL1;
 
 public enum TextureFilterMode {
@@ -17,4 +18,16 @@ public enum TextureFilterMode {
 	}
 	
 	public int getID() { return m_id; }
+	
+	public static TextureFilterMode s_get(ImageFilterMode mode) {
+		switch(mode) {
+		case NEAREST: return TextureFilterMode.NEAREST;
+		case LINEAR: return TextureFilterMode.LINEAR;
+		case NEAREST_MIPMAP_NEAREST: return TextureFilterMode.NEAREST_MIPMAP_NEAREST;
+		case NEAREST_MIPMAP_LINEAR: return TextureFilterMode.NEAREST_MIPMAP_LINEAR;
+		case LINEAR_MIPMAP_NEAREST: return TextureFilterMode.LINEAR_MIPMAP_NEAREST;
+		case LINEAR_MIPMAP_LINEAR: return TextureFilterMode.LINEAR_MIPMAP_LINEAR;
+		default: throw new RuntimeException("Cannot handle: " + mode);
+		}
+	}
 }

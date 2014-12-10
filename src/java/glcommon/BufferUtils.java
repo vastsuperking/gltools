@@ -32,6 +32,14 @@ public class BufferUtils {
 		public static DoubleBuffer createDoubleBuffer(int size) {
 			return createByteBuffer(size << 3).asDoubleBuffer();
 		}
+		public static String asString(ByteBuffer buffer) { 
+			int position = buffer.position();
+			buffer.rewind();
+			byte[] dest = new byte[buffer.capacity()];
+			buffer.get(dest);
+			buffer.position(position);
+			return Arrays.toString(dest);
+		}
 		public static String asString(FloatBuffer buffer) { 
 			int position = buffer.position();
 			buffer.rewind();
@@ -47,10 +55,5 @@ public class BufferUtils {
 			buffer.get(dest);
 			buffer.position(position);
 			return Arrays.toString(dest);
-		}
-		public static void main(String[] args) {
-			FloatBuffer buffer = BufferUtils.createFloatBuffer(3);
-			buffer.put(10f).put(15f).put(20f);
-			System.out.println(asString(buffer));
 		}
 }

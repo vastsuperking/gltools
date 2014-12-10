@@ -1,6 +1,7 @@
 package gltools.texture;
 
 import glcommon.image.Image2D;
+import glcommon.image.ImageFormat;
 
 import java.nio.ByteBuffer;
 
@@ -32,9 +33,16 @@ public class Texture2DBuilder {
 	
 	public Texture2DBuilder setImage(Image2D image) {
 		//TODO: Set format
+		if (image.getFormat() != ImageFormat.RGBA) throw new RuntimeException("Must be RGBA");
+		
 		setData(image.getData());
 		setWidth(image.getWidth());
 		setHeight(image.getHeight());
+		setSWrapMode(TextureWrapMode.s_get(image.getSWrapMode()));
+		setTWrapMode(TextureWrapMode.s_get(image.getTWrapMode()));
+		setMinFilterMode(TextureFilterMode.s_get(image.getMinFilterMode()));
+		setMaxFilterMode(TextureFilterMode.s_get(image.getMaxFilterMode()));
+		
 		return this;
 	}
 	

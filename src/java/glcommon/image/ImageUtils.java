@@ -42,7 +42,8 @@ public class ImageUtils {
 		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 
 		ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * BYTES_PER_PIXEL_RGBA); //4 for RGBA, 3 for RGB
-
+		
+		//Do row by row
 		for(int y = 0; y < image.getHeight(); y++){
 			for(int x = 0; x < image.getWidth(); x++){
 				int pixel = pixels[y * image.getWidth() + x];
