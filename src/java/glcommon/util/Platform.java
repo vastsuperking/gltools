@@ -7,7 +7,7 @@ public enum Platform {
 	LINUX;
 	
 	public static Platform s_get() {
-		String os = System.getProperty("os.name");
+		String os = System.getProperty("os.name").toLowerCase();
 		if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) {
 			return OSX; 
 		} else if (os.indexOf("win") >= 0) {
