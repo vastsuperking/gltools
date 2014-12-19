@@ -1,6 +1,6 @@
-package gltools.input;
+package glcommon.input;
 
-import gltools.input.InputTrigger.TriggerListener;
+import glcommon.input.InputTrigger.TriggerListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;

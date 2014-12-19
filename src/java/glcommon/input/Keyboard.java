@@ -1,4 +1,4 @@
-package gltools.input;
+package glcommon.input;
 
 import glcommon.util.ResourceLocator;
 

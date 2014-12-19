@@ -1,22 +1,35 @@
-package gltools.input;
+package glcommon.input;
 
 /**
  * An immutable class with all the data of a key
  * This class does not actually store if the key is down
  */
 public class Key {
+	//TODO: Change to enum
+	private boolean m_isShiftKey;
+	private boolean m_isCapsKey;
+	private boolean m_isModKey;
+	
 	private char m_char;
 	private String m_name;
 	private int m_id;
 	
-	public Key(char c, String name, int id) {
+	public Key(char c, String name, int id, boolean isShift, boolean isMod) {
 		m_char = c;
 		m_name = name;
 		m_id = id;
+		m_isShiftKey = isShift;
+		m_isModKey = isMod;
+	}
+	public Key(String name, int id, boolean isShift, boolean isMod) {
+		this('\0', name, id, isShift, isMod);
 	}
 	public Key(char c, int id) {
-		this(c, Character.toString(c), id);
+		this(c, Character.toString(c), id, false, false);
 	}
+	
+	public boolean isShift() { return m_isShiftKey; }
+	public boolean isMod() { return m_isModKey; }
 	
 	/**
 	 * @return the char
@@ -39,6 +52,7 @@ public class Key {
 	
 	@Override
 	public String toString() {
+		if (getChar() == '\u0000') return getID() + ":" + getName();
 		return getID() + ":" + getName() + ":" + getChar(); 
 	}
 	

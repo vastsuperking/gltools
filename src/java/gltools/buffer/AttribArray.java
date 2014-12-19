@@ -23,6 +23,8 @@ public class AttribArray {
 	 * @param stride the number of bytes between the beginning of one attribute to the beginning of the next
 	 */
 	public AttribArray(VertexBuffer vbo, InputUsage usage, int stride, long offset) {
+		if (!usage.getInputType().equals(Attribute.class))
+			throw new IllegalArgumentException("Usage(" + usage + ") must be an attribute");
 		m_vbo = vbo;
 		m_usage = usage;
 		m_stride = stride;

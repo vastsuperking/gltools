@@ -1,10 +1,10 @@
 package gltools.transform;
 
+import glcommon.input.Keyboard;
+import glcommon.input.Mouse;
+import glcommon.input.MouseListener;
+import glcommon.input.Mouse.MouseButton;
 import glcommon.vector.Vector2f;
-import gltools.input.Keyboard;
-import gltools.input.Mouse;
-import gltools.input.Mouse.MouseButton;
-import gltools.input.MouseListener;
 
 
 /**

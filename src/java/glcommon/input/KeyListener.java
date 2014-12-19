@@ -1,4 +1,4 @@
-package gltools.input;
+package glcommon.input;
 
 public interface KeyListener {
 	public void keyPressed(Keyboard k, Key key);

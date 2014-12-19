@@ -42,6 +42,8 @@ public class InputUsage {
 	public static final InputUsage VIEW_MATRIX_2D = new InputUsage("VIEW_MATRIX", DataType.MAT3, Uniform.class);
 	public static final InputUsage PROJECTION_MATRIX_2D = new InputUsage("PROJECTION_MATRIX", DataType.MAT3, Uniform.class);
 
+	public static final InputUsage GLYPH_SAMPLER = new InputUsage("GLYPH_SAMPLER", DataType.SAMPLER2D, Uniform.class);
+	
 	//----------------------------------------
 	private final String m_usage;
 	private final Class<? extends Input> m_inputType;

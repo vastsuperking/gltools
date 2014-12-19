@@ -22,13 +22,6 @@ public class GLImageInstance implements ImageInstance {
 	public GLImageInstance(GL1 gl, Image2D image) {
 		m_gl = gl;
 		m_glTexture = TextureFactory.s_loadTexture(gl, image);
-		
-		//Setup repeating
-		m_glTexture.bind(gl);
-		m_glTexture.setTWrapMode(TextureWrapMode.REPEAT);
-		m_glTexture.setSWrapMode(TextureWrapMode.REPEAT);
-		m_glTexture.loadParams(gl);
-		m_glTexture.unbind(gl);
 	}
 	
 	public Texture2D getGLTexture() { return m_glTexture; }

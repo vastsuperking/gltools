@@ -1,11 +1,11 @@
 package gltools.transform;
 
+import glcommon.input.Mouse;
+import glcommon.input.MouseListener;
+import glcommon.input.Mouse.MouseButton;
 import glcommon.vector.Vector2f;
 import glcommon.vector.Vector3f;
 import glcommon.vector.Vector4f;
-import gltools.input.Mouse;
-import gltools.input.Mouse.MouseButton;
-import gltools.input.MouseListener;
 
 public class FocusCamera3DController implements Camera3DController, MouseListener {
 	private Vector3f m_focalPoint = new Vector3f();

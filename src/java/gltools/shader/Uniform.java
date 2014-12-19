@@ -147,7 +147,8 @@ public class Uniform extends Input {
 	
 	//------------------------
 	private void checkProgBound() {
-		//System.out.println("Current program: " + Program.s_getCurrent() + " looking for: " + m_program);
+		//System.out.println("Current program: " + Program.s_getCurrent() + " looking for: " + m_program + " for " + getName());
+		//Thread.dumpStack();
 		if (Program.s_getCurrent() != m_program) throw new RuntimeException("Program must be bound before setValue()!");
 	}
 }

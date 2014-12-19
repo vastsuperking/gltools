@@ -47,7 +47,8 @@ public class CurrentGL {
 
 		//Unlock while we wait for release to free the context
 		s_changeContextLock.unlock();
-		s_GLLocks.get(gl).lock();		
+		Lock l = s_GLLocks.get(gl);
+		l.lock();		
 		s_changeContextLock.lock();
 		//Finally, make the context current
 		s_GLs.put(thread, gl);
@@ -63,7 +64,8 @@ public class CurrentGL {
 		//We are done with this context,
 		//other threads can now use it
 		if (s_GLLocks.containsKey(gl)) {
-			s_GLLocks.get(gl).unlock();
+			Lock l = s_GLLocks.get(gl);
+			l.unlock();
 			//Remove the lock so the
 			//garbage collector can remove
 			//the context if need be

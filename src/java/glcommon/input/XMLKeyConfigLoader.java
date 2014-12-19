@@ -1,4 +1,4 @@
-package gltools.input;
+package glcommon.input;
 
 import java.io.InputStream;
 
@@ -53,7 +53,7 @@ public class XMLKeyConfigLoader {
 		int id = Integer.parseInt(element.getAttribute("id"));
 		String charString = element.getAttribute("char");
 		char c = '\0';
-		if (charString.length() > 0) c = charString.charAt(0);
+		if (charString.length() > 0) c = s_parseChar(charString);
 		
 		String name = element.getAttribute("name");
 		if (name.equals("")) name = Character.toString(c);
@@ -61,9 +61,17 @@ public class XMLKeyConfigLoader {
 		boolean shiftKey = Boolean.parseBoolean(element.getAttribute("isShift"));
 		boolean modKey = Boolean.parseBoolean(element.getAttribute("isMod"));
 		
-		Key key = new Key(c, name, id);
+		Key key = new Key(c, name, id, shiftKey, modKey);
 		k.addKey(key);
 		if (shiftKey) k.addShiftKey(key);
 		if (modKey) k.addModKey(key);
+	}
+	
+	private static char s_parseChar(String string) {
+		if (string.equals("%0")) return '\0';
+		else if (string.equals("%t")) return '\t';
+		else if (string.equals("%n")) return '\n';
+		else if (string.equals("%b")) return '\b';
+		else return string.charAt(0);
 	}
 }

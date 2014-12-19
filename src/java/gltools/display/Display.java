@@ -1,8 +1,8 @@
 package gltools.display;
 
+import glcommon.input.Keyboard;
+import glcommon.input.Mouse;
 import gltools.gl.GL;
-import gltools.input.Keyboard;
-import gltools.input.Mouse;
 
 public interface Display {
 	public int getWidth();
