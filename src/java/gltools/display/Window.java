@@ -20,7 +20,6 @@ public interface Window extends Display {
 	public void setSize(int width, int height);
 	public void setTitle(String title);
 	
-	public void addResizedListener(ResizeListener rl);
 	public void addFileDropListener(FileDropListener fl);
 	public void addMoveListener(MoveListener ml);
 	public void addStateListener(WindowStateListener sl);

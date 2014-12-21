@@ -9,10 +9,11 @@ public interface Display {
 	public int getHeight();
 	
 	public GL getGL();
+
+	public void addResizedListener(ResizeListener resizeListener);
 	
 	public Mouse getMouse();
 	public Keyboard getKeyboard();
-
 	
 	public void init();
 	public void destroy();

@@ -6,21 +6,21 @@ import glcommon.vector.Matrix3f;
 import glcommon.vector.MatrixFactory;
 import glcommon.vector.MatrixUtils;
 import glcommon.vector.Vector2f;
-import glextra.GBuffer;
-import glextra.GBuffer.GBufferAttachment;
-import glextra.GBuffer.GBufferMode;
+import glextra.FBuffer;
+import glextra.FBuffer.FBufferAttachment;
+import glextra.FBuffer.FBufferMode;
 import glextra.material.GlobalParamBindingSet;
 import glextra.material.Material;
 import glextra.renderer.Light.LightProgramProvider;
 import glextra.renderer.Light.NoLight;
 import gltools.Mode;
 import gltools.buffer.AttribArray;
+import gltools.buffer.FrameBuffer;
 import gltools.buffer.FrameBuffer.AttachmentPoint;
 import gltools.buffer.Geometry;
 import gltools.buffer.IndexBuffer;
 import gltools.buffer.VertexBuffer;
-import gltools.display.ResizeListener;
-import gltools.display.Window;
+import gltools.display.Display;
 import gltools.extra.GeometryFactory;
 import gltools.gl.GL;
 import gltools.gl.GL1;
@@ -32,19 +32,22 @@ import gltools.util.GLMatrix3f;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Stack;
 
 /*
  * Notes on non-lighted rendering in deferred (startLighting()) mode
  * If input normals(normalMap) is 
  */
-public class LWJGLRenderer2D implements Renderer2D {
+public class GLRenderer2D implements Renderer2D {
 	private static final String GLYPH_TEX_PARAM = "glyphTexture";
 	
 	//Temporary list with all lights to be rendered
 	private ArrayList<Light> m_lights = new ArrayList<Light>();
 	private Geometry m_fullScreenQuad;
 	
-	private GBuffer m_gBuffer;
+	//Previously attached framebuffers
+	private Stack<FrameBuffer> m_prevFrameBuffers = new Stack<FrameBuffer>();
+	private FBuffer m_gBuffer;
 	
 	public GLMatrix3f m_modelMat;
 	public GLMatrix3f m_viewMat;
@@ -60,7 +63,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	private float m_csRight;
 	private float m_csLeft;
 	
-	private Window m_display;
+	private Display m_display;
 	
 	//private GlobalParamProvider m_provider;
 	
@@ -77,20 +80,23 @@ public class LWJGLRenderer2D implements Renderer2D {
 	private GLTextureManager m_textureManager;
 	private LightProgramProvider m_lightPrograms;
 	
-	public LWJGLRenderer2D() {}
+	public GLRenderer2D() {}
 	
 	@Override
-	public void init(float left, float right, float top, float bottom, Window window) {
-		m_gl = window.getGL();
+	public void init(float left, float right, float top, float bottom,
+					 GL gl, int width, int height) {
+		m_gl = gl;
 		
 		m_textureManager = new GLTextureManager();
 		m_lightPrograms = new LightProgramProvider();
 		
-		m_gBuffer = new GBuffer(window.getWidth(), window.getHeight());
-		m_gBuffer.addAttachment(new GBufferAttachment(0, AttachmentPoint.COLOR_ATTACHMENT0, InputUsage.GBUFFER_VERTEX_SAMPLER, TextureFormat.RGBA16F));
-		m_gBuffer.addAttachment(new GBufferAttachment(1, AttachmentPoint.COLOR_ATTACHMENT1, InputUsage.GBUFFER_NORMAL_SAMPLER, TextureFormat.RGBA16F));
-		m_gBuffer.addAttachment(new GBufferAttachment(2, AttachmentPoint.COLOR_ATTACHMENT2, InputUsage.GBUFFER_DIFFUSE_SAMPLER, TextureFormat.RGBA8));
+		m_gBuffer = new FBuffer(width, height);
+		m_gBuffer.addAttachment(new FBufferAttachment(0, AttachmentPoint.COLOR_ATTACHMENT0, InputUsage.GBUFFER_VERTEX_SAMPLER, TextureFormat.RGBA16F));
+		m_gBuffer.addAttachment(new FBufferAttachment(1, AttachmentPoint.COLOR_ATTACHMENT1, InputUsage.GBUFFER_NORMAL_SAMPLER, TextureFormat.RGBA16F));
+		m_gBuffer.addAttachment(new FBufferAttachment(2, AttachmentPoint.COLOR_ATTACHMENT2, InputUsage.GBUFFER_DIFFUSE_SAMPLER, TextureFormat.RGBA8));
+		FrameBuffer prev = FrameBuffer.s_getCurrent();
 		m_gBuffer.init(m_gl.getGL3());
+		if (prev != null) prev.bind(m_gl);
 		
 		m_fullScreenQuad = GeometryFactory.s_generateFullScreenQuad(m_gl.getGL2());
 		
@@ -107,13 +113,6 @@ public class LWJGLRenderer2D implements Renderer2D {
 		
 		updateProjection(left, right, top, bottom);
 		
-		window.addResizedListener(new ResizeListener() {
-			public void onResize(int width, int height) {
-				m_gl.getGL1().glViewport(0, 0, width, height);
-				m_gBuffer.resize(m_gl.getGL3(), width, height);
-			}
-		});
-		
 		m_verticesBuf = new VertexBuffer();
 		m_texCoordsBuf = new VertexBuffer();
 		m_indicesBuf = new IndexBuffer();
@@ -121,9 +120,15 @@ public class LWJGLRenderer2D implements Renderer2D {
 		m_verticesBuf.init(m_gl.getGL1());
 		m_texCoordsBuf.init(m_gl.getGL1());
 		m_indicesBuf.init(m_gl.getGL1());
-
-		m_display = window;		
 	}
+	
+	public void resize(int width, int height) {
+		FrameBuffer prev = FrameBuffer.s_getCurrent();
+		m_gBuffer.resize(m_gl.getGL3(), width, height);
+		
+		if (prev != null) prev.bind(m_gl);
+	}
+	
 	@Override
 	public GL getGL() { return m_gl; }
 	
@@ -156,7 +161,7 @@ public class LWJGLRenderer2D implements Renderer2D {
 	public float getCSHeight() { return m_csTop + m_csBottom; }
 	
 	@Override
-	public Window getDisplay() { return m_display; }
+	public Display getDisplay() { return m_display; }
 	
 	@Override
 	public void updateProjection(float left, float right, float top, float bottom) {
@@ -391,12 +396,18 @@ public class LWJGLRenderer2D implements Renderer2D {
 	
 	@Override
 	public void startLighted() {
-		m_gBuffer.bind(m_gl.getGL3(), GBufferMode.WRITE);	
+		//If there is an FBO bound, save it
+		FrameBuffer buffer = FrameBuffer.s_getCurrent();
+		if (buffer != null) m_prevFrameBuffers.push(buffer);
+		
+		m_gBuffer.bind(m_gl.getGL3(), FBufferMode.WRITE);	
 		m_usingDeferred = true;
 	}
 	@Override
 	public void finishLighted() {
-		m_gBuffer.unbind(m_gl.getGL3(), GBufferMode.WRITE);
+		m_gBuffer.unbind(m_gl.getGL3(), FBufferMode.WRITE);
+		if (!m_prevFrameBuffers.isEmpty())
+			m_prevFrameBuffers.pop().bind(m_gl);
 		m_usingDeferred = false;
 	}
 	
@@ -405,11 +416,15 @@ public class LWJGLRenderer2D implements Renderer2D {
 	public void clear() {
 		GL1 gl = m_gl.getGL1();
 		//Bind gbuffer and clear that too
-		m_gBuffer.bind(m_gl.getGL3(), GBufferMode.WRITE);
+		FrameBuffer prev = FrameBuffer.s_getCurrent();
+		m_gBuffer.bind(m_gl.getGL3(), FBufferMode.WRITE);
+		gl.glClearColor(0, 0, 0, 1);
 		gl.glClear(GL1.GL_COLOR_BUFFER_BIT | 
 				 GL1.GL_DEPTH_BUFFER_BIT |
 				 GL1.GL_STENCIL_BUFFER_BIT);
-		m_gBuffer.unbind(m_gl.getGL3(), GBufferMode.WRITE);
+		m_gBuffer.unbind(m_gl.getGL3(), FBufferMode.WRITE);
+		if (prev != null) prev.bind(m_gl);
+		
 		gl.glClear(GL1.GL_COLOR_BUFFER_BIT | 
 				 GL1.GL_DEPTH_BUFFER_BIT |
 				 GL1.GL_STENCIL_BUFFER_BIT);

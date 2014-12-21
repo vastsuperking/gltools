@@ -3,8 +3,8 @@ package glextra.renderer;
 import glcommon.Color;
 import glcommon.util.ResourceLocator.ClasspathResourceLocator;
 import glcommon.vector.Vector3f;
-import glextra.GBuffer;
-import glextra.GBuffer.GBufferMode;
+import glextra.FBuffer;
+import glextra.FBuffer.FBufferMode;
 import gltools.gl.GL;
 import gltools.shader.DataType;
 import gltools.shader.InputUsage;
@@ -23,8 +23,8 @@ public interface Light {
 	 * The light must bind its own program from the provider,
 	 * call buffer.bind(GBufferMode.READ),
 	 */
-	public void bind(GL gl, GBuffer buffer, LightProgramProvider provider);
-	public void unbind(GL gl, GBuffer buffer, LightProgramProvider provider); 
+	public void bind(GL gl, FBuffer buffer, LightProgramProvider provider);
+	public void unbind(GL gl, FBuffer buffer, LightProgramProvider provider); 
 
 	public Light clone();
 	
@@ -65,12 +65,12 @@ public interface Light {
 		
 		public LightType getType() { return TYPE; }
 		
-		public void bind(GL gl, GBuffer buffer, LightProgramProvider provider) {
+		public void bind(GL gl, FBuffer buffer, LightProgramProvider provider) {
 			provider.get(gl.getContext(), TYPE).bind(gl);
-			buffer.bind(gl, GBufferMode.READ);
+			buffer.bind(gl, FBufferMode.READ);
 		}
-		public void unbind(GL gl, GBuffer buffer, LightProgramProvider provider) {
-			buffer.unbind(gl, GBufferMode.READ);
+		public void unbind(GL gl, FBuffer buffer, LightProgramProvider provider) {
+			buffer.unbind(gl, FBufferMode.READ);
 			provider.get(gl, TYPE).unbind(gl);
 		}
 		
@@ -118,7 +118,7 @@ public interface Light {
 		
 		public LightType getType() { return TYPE; }
 
-		public void bind(GL gl, GBuffer buffer, LightProgramProvider provider) {
+		public void bind(GL gl, FBuffer buffer, LightProgramProvider provider) {
 			Program program = provider.get(gl, TYPE);
 			program.bind(gl);
 			//Set uniforms to light values
@@ -133,12 +133,12 @@ public interface Light {
 			
 			//Will bind the buffers to their correct texture units
 			//setReadSamplers() is called in the buffer
-			buffer.bind(gl, GBufferMode.READ);
+			buffer.bind(gl, FBufferMode.READ);
 		}
-		public void unbind(GL gl, GBuffer buffer, LightProgramProvider provider) {
+		public void unbind(GL gl, FBuffer buffer, LightProgramProvider provider) {
 			Program program = provider.get(gl, TYPE);
 			
-			buffer.unbind(gl, GBufferMode.READ);
+			buffer.unbind(gl, FBufferMode.READ);
 			program.unbind(gl);
 		}
 		

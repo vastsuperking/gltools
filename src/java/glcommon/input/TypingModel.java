@@ -24,12 +24,11 @@ public class TypingModel {
 				key.getChar() == '\n') &&
 				!key.isShift() && !key.isMod()) {
 			if (m_combinationKeys.size() != 0) {
-				processCombo();
-				clearCombo();
+				processCombo(m_combinationKeys);
 			}
-			m_combinationKeys.add(key);
-			processCombo();
-			clearCombo();
+			ArrayList<Key> tmp = new ArrayList<Key>();
+			tmp.add(key);
+			processCombo(tmp);
 			return;
 		}
 
@@ -43,7 +42,7 @@ public class TypingModel {
 	public void release(Key key) {
 		m_pressedKeys.remove(key);
 		
-		if (m_comboActive) processCombo();
+		if (m_comboActive) processCombo(m_combinationKeys);
 		
 		m_combinationKeys.remove(key);
 		
@@ -57,10 +56,9 @@ public class TypingModel {
 	private void clearCombo() {
 		m_combinationKeys.clear();
 	}
-	private void processCombo() {
-		System.out.println("Combination done: " + m_combinationKeys);
+	private void processCombo(ArrayList<Key> combo) {
 		boolean caps = false;
-		for (Key k : m_combinationKeys) {
+		for (Key k : combo) {
 			if (k.isShift()) caps = true;
 			else if (k.isMod());
 			else if (k.getChar() != '\u0000') {

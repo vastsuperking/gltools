@@ -18,9 +18,11 @@ public class Timer {
 	}
 	
 	public long getDeltaMillis() {
+		if (m_preMarkTime == -1) return 0;
 		return m_markTime - m_preMarkTime;
 	}
 	public float getDeltaSeconds() {
+		if (m_preMarkTime == -1) return 0;
 		return (float) ((m_markTime - m_preMarkTime) * 0.001);
 	}
 }
