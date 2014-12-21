@@ -9,14 +9,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public abstract class Keyboard {
-	private HashSet<Key> m_shiftKeys = new HashSet<Key>();
-	private HashSet<Key> m_modKeys = new HashSet<Key>();
+	protected HashSet<Key> m_shiftKeys = new HashSet<Key>();
+	protected HashSet<Key> m_modKeys = new HashSet<Key>();
 
-	private HashMap<Integer, Key> m_keyIds = new HashMap<Integer, Key>();
-	private HashMap<String, Key> m_keyNames = new HashMap<String, Key>();
-	private HashMap<Key, Boolean> m_state = new HashMap<Key, Boolean>();
+	protected HashMap<Integer, Key> m_keyIds = new HashMap<Integer, Key>();
+	protected HashMap<String, Key> m_keyNames = new HashMap<String, Key>();
+	protected HashMap<Character, Key> m_keyChars = new HashMap<Character, Key>();
 	
-	private ArrayList<KeyListener> m_listeners = new ArrayList<KeyListener>();
+	protected HashMap<Key, Boolean> m_state = new HashMap<Key, Boolean>();
+	
+	protected ArrayList<KeyListener> m_listeners = new ArrayList<KeyListener>();
 	
 	public void addModKey(Key key) { m_modKeys.add(key); }
 	public void addShiftKey(Key key) { m_shiftKeys.add(key); }
@@ -24,6 +26,8 @@ public abstract class Keyboard {
 	public void addKey(Key key) {
 		m_keyIds.put(key.getID(), key);
 		m_keyNames.put(key.getName(), key);
+		if (key.getChar() != '\0')
+			m_keyChars.put(Character.toUpperCase(key.getChar()), key);
 		m_state.put(key, false);
 	}
 	
@@ -47,24 +51,31 @@ public abstract class Keyboard {
 	public HashSet<Key> getShiftKeys() { return m_shiftKeys; }
 	
 	public Key getKey(String name) {
+		if (!m_keyNames.containsKey(name))
+			throw new RuntimeException("No key for name: " + name);
 		return m_keyNames.get(name);
 	}
 	public Key getKey(int id) {
+		if (!m_keyIds.containsKey(id))
+			throw new RuntimeException("No key for id: " + id);
 		return m_keyIds.get(id);
 	}
 	public Key getKey(char c) {
-		//Search for the key with the uppercase version of the char as its name
-		String upper = Character.toString(Character.toUpperCase(c));
-		return m_keyNames.get(upper);
+		if (!m_keyChars.containsKey(Character.toUpperCase(c)))
+			throw new RuntimeException("No key for char: " + c);
+		return m_keyChars.get(c);
 	}
 	
 	public boolean isKeyPressed(Key k) {
+		if (k == null) return false;
 		return m_state.get(k);
 	}
 	public boolean isModKey(Key k) {
+		if (k == null) return false;
 		return m_modKeys.contains(k);
 	}
 	public boolean isShiftKey(Key k) {
+		if (k == null) return false;
 		return m_shiftKeys.contains(k);
 	}
 	

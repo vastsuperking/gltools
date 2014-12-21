@@ -30,12 +30,17 @@ public abstract class Mouse {
 		m_listeners.remove(l);
 	}
 	public MouseButton getButton(String name) {
+		if (!m_buttonNames.containsKey(name))
+			throw new RuntimeException("No mouse button with name: " + name);
 		return m_buttonNames.get(name);
 	}
 	public MouseButton getButton(int id) {
+		if (!m_buttonIds.containsKey(id))
+			throw new RuntimeException("No mouse button with id: " + id);
 		return m_buttonIds.get(id);
 	}
 	public boolean isButtonDown(MouseButton button) {
+		if (button == null) return false;
 		return m_buttonStates.get(button);
 	}
 	
@@ -67,7 +72,7 @@ public abstract class Mouse {
 			}
 		}
 	}
-	protected void mouseScrolled(float dx, float dy) {
+	protected void mouseWheelMoved(float dx, float dy) {
 		for (MouseListener l : m_listeners) {
 			l.mouseScroll(this, dx, dy);
 		}
