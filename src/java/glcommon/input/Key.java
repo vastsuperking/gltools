@@ -14,22 +14,23 @@ public class Key {
 	private String m_name;
 	private int m_id;
 	
-	public Key(char c, String name, int id, boolean isShift, boolean isMod) {
+	public Key(char c, String name, int id, boolean isShift, boolean isMod, boolean isCaps) {
 		m_char = c;
 		m_name = name;
 		m_id = id;
 		m_isShiftKey = isShift;
 		m_isModKey = isMod;
 	}
-	public Key(String name, int id, boolean isShift, boolean isMod) {
-		this('\0', name, id, isShift, isMod);
+	public Key(String name, int id, boolean isShift, boolean isMod, boolean isCaps) {
+		this('\0', name, id, isShift, isMod, isCaps);
 	}
 	public Key(char c, int id) {
-		this(c, Character.toString(c), id, false, false);
+		this(c, Character.toString(c), id, false, false, false);
 	}
 	
 	public boolean isShift() { return m_isShiftKey; }
 	public boolean isMod() { return m_isModKey; }
+	public boolean isCaps() { return m_isCapsKey; }
 	
 	/**
 	 * @return the char

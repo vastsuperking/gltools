@@ -5,7 +5,6 @@ import glcommon.vector.Matrix3f;
 import glcommon.vector.Vector2f;
 import glextra.material.Material;
 import gltools.display.Display;
-import gltools.display.Window;
 import gltools.gl.GL;
 
 public interface Renderer2D {

@@ -6,7 +6,6 @@ import glcommon.image.ImageInstance;
 import gltools.gl.GL1;
 import gltools.texture.Texture2D;
 import gltools.texture.TextureFactory;
-import gltools.texture.TextureWrapMode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,5 +1,6 @@
 package glextra.renderer;
 
+import glcommon.BufferUtils;
 import glcommon.font.Font;
 import glcommon.font.Font.Glyph;
 import glcommon.vector.Matrix3f;
@@ -30,6 +31,8 @@ import gltools.texture.Texture2D;
 import gltools.texture.TextureFormat;
 import gltools.util.GLMatrix3f;
 
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
@@ -44,6 +47,10 @@ public class GLRenderer2D implements Renderer2D {
 	//Temporary list with all lights to be rendered
 	private ArrayList<Light> m_lights = new ArrayList<Light>();
 	private Geometry m_fullScreenQuad;
+	
+	private FloatBuffer m_quadVertices;
+	private FloatBuffer m_quadTexCoords;
+	private IntBuffer m_quadIndices;
 	
 	//Previously attached framebuffers
 	private Stack<FrameBuffer> m_prevFrameBuffers = new Stack<FrameBuffer>();
@@ -120,6 +127,10 @@ public class GLRenderer2D implements Renderer2D {
 		m_verticesBuf.init(m_gl.getGL1());
 		m_texCoordsBuf.init(m_gl.getGL1());
 		m_indicesBuf.init(m_gl.getGL1());
+		
+		m_quadVertices = BufferUtils.createFloatBuffer(8);
+		m_quadTexCoords = BufferUtils.createFloatBuffer(8);
+		m_quadIndices = BufferUtils.createIntBuffer(6);
 	}
 	
 	public void resize(int width, int height) {
@@ -274,27 +285,36 @@ public class GLRenderer2D implements Renderer2D {
 		//to the correct attachments
 		m_gBuffer.setDrawBuffers(m_gl.getGL2());
 		//For bottom left origin
-		float vertices[] = {x + width, y + height,
-							 x, y + height,
-							 x, y,
-							 x + width, y };
+		m_quadVertices.rewind();
+		m_quadVertices.put(x + width).put(y + height);
+		m_quadVertices.put(x).put(y + height);
+		m_quadVertices.put(x).put(y);
+		m_quadVertices.put(x + width).put(y);
+
+		m_quadTexCoords.rewind();
+		m_quadTexCoords.put(texCoordWidth).put(texCoordHeight);
+		m_quadTexCoords.put(0).put(texCoordHeight);
+		m_quadTexCoords.put(0).put(0);
+		m_quadTexCoords.put(texCoordWidth).put(0);
 		
-		float texCoords[] = {texCoordWidth, texCoordHeight,
-							  0.0f, texCoordHeight,
-							  0.0f, 0.0f,
-							  texCoordWidth, 0 };
-		int indices[] = {0, 1, 2, 0, 2, 3};
+		m_quadIndices.rewind();
+		m_quadIndices.put(0).put(1).put(2);
+		m_quadIndices.put(0).put(2).put(3);
+
+		m_quadVertices.flip();
+		m_quadTexCoords.flip();
+		m_quadIndices.flip();
 		
 		m_verticesBuf.bind(m_gl.getGL1());
-		m_verticesBuf.setValues(m_gl.getGL1(), vertices);
+		m_verticesBuf.bufferData(m_gl, m_quadVertices);
 		m_verticesBuf.unbind(m_gl.getGL1());
 		
 		m_texCoordsBuf.bind(m_gl.getGL1());
-		m_texCoordsBuf.setValues(m_gl.getGL1(), texCoords);
+		m_texCoordsBuf.bufferData(m_gl.getGL1(), m_quadTexCoords);
 		m_texCoordsBuf.unbind(m_gl.getGL1());
 		
 		m_indicesBuf.bind(m_gl.getGL1());
-		m_indicesBuf.setValues(m_gl.getGL1(), indices);
+		m_indicesBuf.bufferData(m_gl.getGL1(), m_quadIndices);
 		m_indicesBuf.unbind(m_gl.getGL1());
 		
 		Geometry geo = new Geometry();
@@ -305,8 +325,8 @@ public class GLRenderer2D implements Renderer2D {
 		geo.setIndexBuffer(m_indicesBuf);
 		
 		geo.render(m_gl.getGL2());
+		m_gl.glFlush();
 		m_material.unbind(m_gl);	
-		
 	}
 	
 	@Override

@@ -60,8 +60,9 @@ public class XMLKeyConfigLoader {
 
 		boolean shiftKey = Boolean.parseBoolean(element.getAttribute("isShift"));
 		boolean modKey = Boolean.parseBoolean(element.getAttribute("isMod"));
+		boolean capsKey = Boolean.parseBoolean(element.getAttribute("isCaps"));
 		
-		Key key = new Key(c, name, id, shiftKey, modKey);
+		Key key = new Key(c, name, id, shiftKey, modKey, capsKey);
 		k.addKey(key);
 		if (shiftKey) k.addShiftKey(key);
 		if (modKey) k.addModKey(key);
