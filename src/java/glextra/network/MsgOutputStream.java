@@ -13,4 +13,8 @@ public class MsgOutputStream {
 	public void write(Msg msg) throws IOException {
 		msg.write(m_out);
 	}
+	
+	public void flush() throws IOException {
+		m_out.flush();
+	}
 }

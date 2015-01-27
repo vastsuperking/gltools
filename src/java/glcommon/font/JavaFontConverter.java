@@ -3,6 +3,7 @@ package glcommon.font;
 import glcommon.Color;
 import glcommon.font.BMFont.BMGlyph;
 import glcommon.image.Image2D;
+import glcommon.image.ImageFilterMode;
 
 import java.awt.Canvas;
 import java.awt.Font;
@@ -53,7 +54,8 @@ public class JavaFontConverter {
 			g2d.dispose();
 			
 			Image2D img = new Image2D(image);
-			
+			img.setMinFilterMode(ImageFilterMode.LINEAR);
+			img.setMaxFilterMode(ImageFilterMode.LINEAR);
 			//Add a one pixel extra offset to the xadvance
 			BMGlyph glyph = new BMGlyph(bmfont, c, img, 0, 0, width + 1);
 			bmfont.addGlyph(c, glyph);

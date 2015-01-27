@@ -43,7 +43,7 @@ public abstract class Texture {
 	public TextureFormat 		getFormat()			{ return m_format;			}
 	public ByteBuffer 			getData()			{ return m_data;			}
 
-	public int 				getID() 			{ return m_id;			}
+	public int 					getID() 			{ return m_id;			    }
 	
 	public boolean				isBound()			{ return s_currentTextures.containsValue(this); }
 

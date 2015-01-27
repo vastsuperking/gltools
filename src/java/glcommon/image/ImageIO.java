@@ -1,11 +1,20 @@
 package glcommon.image;
 
+import glcommon.util.ResourceLocator;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class ImageIO {
+	public static Image2D s_read(String resource, ResourceLocator locator) throws IOException {
+		return s_read(locator.getResource(resource));
+	}
+	public static Image1D s_readImage1D(String resource, ResourceLocator locator) throws IOException {
+		return s_readImage1D(locator.getResource(resource));
+	}
+	
 	public static Image2D s_read(File file) throws IOException {
 		FileInputStream is = new FileInputStream(file);
 		try {
