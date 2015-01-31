@@ -1,5 +1,13 @@
 package glextra.network;
 
+import glcommon.BufferUtils;
+import glcommon.util.StringUtils;
+import glextra.network.Field.ByteField;
+import glextra.network.Field.FloatField;
+import glextra.network.Field.IntField;
+import glextra.network.Field.LongField;
+import glextra.network.Field.StringField;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,13 +16,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import glcommon.BufferUtils;
-import glcommon.util.StringUtils;
-import glextra.network.Field.ByteField;
-import glextra.network.Field.FloatField;
-import glextra.network.Field.IntField;
-import glextra.network.Field.StringField;
 
 public class Msg {
 	private String m_typeName;
@@ -40,12 +41,17 @@ public class Msg {
 		m_fieldNames.put(f.getName(), f);
 	}
 	
+	public Field getField(String field) {
+		return m_fieldNames.get(field);
+	}
+	
 	public int getLength() {
 		//Start with 1 for type byte
 		int len = 1;
 		for (Field f : m_fields) len += f.getSize();
 		return len;
 	}
+
 	public void setByte(String field, byte b) {
 		Field f = m_fieldNames.get(field);
 		if (f == null) throw new RuntimeException("Could not find field: " + field);
@@ -60,17 +66,55 @@ public class Msg {
 	}
 	public void setFloat(String field, float f) {
 		Field fd = m_fieldNames.get(field);
-		if (fd == null) throw new RuntimeException("Could not find field: " + fd);
-		if (!(fd instanceof FloatField)) throw new RuntimeException("Field(" + fd + "is not a byte field!");
+		if (fd == null) throw new RuntimeException("Could not find field: " + field);
+		if (!(fd instanceof FloatField)) throw new RuntimeException("Field(" + fd + "is not a float field!");
 		((FloatField) fd).set(f);
+	}
+	public void setLong(String field, long f) {
+		Field fd = m_fieldNames.get(field);
+		if (fd == null) throw new RuntimeException("Could not find field: " + field);
+		if (!(fd instanceof LongField)) throw new RuntimeException("Field(" + fd + "is not a long field!");
+		((LongField) fd).set(f);
 	}
 	public void setString(String field, String s) {
 		Field f = m_fieldNames.get(field);
 		if (f == null) throw new RuntimeException("Could not find field: " + field);
-		if (!(f instanceof StringField)) throw new RuntimeException("Field(" + f + "is not a byte field!");
+		if (!(f instanceof StringField)) throw new RuntimeException("Field(" + f + "is not a string field!");
 		((StringField) f).set(s);
 	}
-
+	
+	public byte getByte(String field) {
+		Field f = m_fieldNames.get(field);
+		if (f == null) throw new RuntimeException("Could not find field: " + field);
+		if (!(f instanceof ByteField)) throw new RuntimeException("Field(" + f + "is not a byte field!");
+		return ((ByteField) f).get();
+	}
+	public int getInt(String field) {
+		Field f = m_fieldNames.get(field);
+		if (f == null) throw new RuntimeException("Could not find field: " + field);
+		if (!(f instanceof IntField)) throw new RuntimeException("Field(" + f + "is not a int field!");
+		return ((IntField) f).get();
+	}
+	public float getFloat(String field) {
+		Field fd = m_fieldNames.get(field);
+		if (fd == null) throw new RuntimeException("Could not find field: " + field);
+		if (!(fd instanceof FloatField)) throw new RuntimeException("Field(" + fd + "is not a float field!");
+		return ((FloatField) fd).get();
+	}
+	public long getLong(String field) {
+		Field fd = m_fieldNames.get(field);
+		if (fd == null) throw new RuntimeException("Could not find field: " + field);
+		if (!(fd instanceof LongField)) throw new RuntimeException("Field(" + fd + "is not a long field!");
+		return ((LongField) fd).get();
+	}
+	public String getString(String field) {
+		Field f = m_fieldNames.get(field);
+		if (f == null) throw new RuntimeException("Could not find field: " + field);
+		if (!(f instanceof StringField)) throw new RuntimeException("Field(" + f + "is not a string field!");
+		return ((StringField) f).get();
+	}
+	
+	
 	public void read(ByteBuffer buffer) {
 		read(buffer, null);
 	}
@@ -97,6 +141,7 @@ public class Msg {
 			f.read(buffer);
 		}
 	}
+	
 	public void read(InputStream in, MsgDefines defines) throws IOException {
 		int t = in.read();
 		if (t == -1) throw new EOFException();
@@ -147,7 +192,7 @@ public class Msg {
 		m_fieldNames.clear();
 		
 		for (Field f : msg.getFields()) {
-			addField(f);
+			addField(f.copy());
 		}
 	}
 	

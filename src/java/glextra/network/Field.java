@@ -28,7 +28,7 @@ public abstract class Field {
 	
 	public abstract void read(InputStream in) throws IOException;
 	public abstract void write(OutputStream out) throws IOException;
-
+	
 	public abstract Field copy();
 	
 	public static class ByteField extends Field {
@@ -105,6 +105,44 @@ public abstract class Field {
 		}
 		
 		public IntField copy() { return new IntField(getName(), m_value); }
+	}
+	public static class LongField extends Field {
+		private long m_value = 0;
+		
+		public LongField(String name) {
+			super(name);
+		}
+		public LongField(String name, long val) {
+			super(name);
+			m_value = val;
+		}
+		
+		
+		public void set(long f) { m_value = f; }
+		public long get() { return m_value; }
+		
+		public int getSize() { return 4; }
+		
+		public void addTo(ByteBuffer buffer) {
+			buffer.putLong(m_value);
+		}
+		public void read(ByteBuffer buffer) {
+			m_value = buffer.getInt();
+		}
+		
+		public void read(InputStream in) throws IOException {
+			m_value = s_readLong(in);
+		}
+		public void write(OutputStream out) throws IOException {
+			s_writeLong(out, m_value);
+		}
+		
+		@Override
+		public String toString() {
+			return getName() + ":" + m_value;
+		}
+		
+		public LongField copy() { return new LongField(getName(), m_value); }
 	}
 	public static class FloatField extends Field {
 		private float m_value = 0;
@@ -204,6 +242,29 @@ public abstract class Field {
 			throw new EOFException();
 		return ((ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4 << 0));
 	}
+	
+	private static void s_writeLong(OutputStream out, long value) throws IOException {
+		out.write((byte) (value >>> 56));
+		out.write((byte) (value >>> 48));
+		out.write((byte) (value >>> 40));
+		out.write((byte) (value >>> 32));
+		out.write((byte) (value >>> 24));
+		out.write((byte) (value >>> 16));
+		out.write((byte) (value >>> 8));
+		out.write((byte) (value >>> 0));
+	}
+	private static long s_readLong(InputStream in) throws IOException {
+		long l = ((in.read() & 0xFF) << 56) +
+				 ((in.read() & 0xFF) << 48) +
+				 ((in.read() & 0xFF) << 40) +
+				 ((in.read() & 0xFF) << 32) +
+				 ((in.read() & 0xFF) << 24) +
+				 ((in.read() & 0xFF) << 16) +
+				 ((in.read() & 0xFF) << 8) +
+				 ((in.read() & 0xFF) << 0);
+		return l;
+	}
+	
 	private static void s_writeFloat(OutputStream out, float value) throws IOException {
 		s_writeInt(out, Float.floatToIntBits(value));
 	}
@@ -217,7 +278,7 @@ public abstract class Field {
 		return new String(tmp.toByteArray(), Charset.forName("UTF-8"));
 	}
 	private static void s_writeString(OutputStream out, String s) throws IOException {
-		out.write(s.getBytes(Charset.forName("UTF-8")));
+		if (s != null) out.write(s.getBytes(Charset.forName("UTF-8")));
 		out.write(0x00);
 	}
 }

@@ -5,6 +5,7 @@ import glcommon.util.StringUtils;
 import glextra.network.Field.ByteField;
 import glextra.network.Field.FloatField;
 import glextra.network.Field.IntField;
+import glextra.network.Field.LongField;
 import glextra.network.Field.StringField;
 
 import java.io.IOException;
@@ -51,6 +52,7 @@ public class MsgXMLLoader {
 		case "byte": return s_parseByteField(name, val);
 		case "int": return s_parseIntField(name, val);
 		case "float": return s_parseFloatField(name, val);
+		case "long": return s_parseLongField(name, val);
 		case "string": return s_parseStringField(name, val);
 		default: throw new RuntimeException("Cannot parse: " + e);
 		}
@@ -62,6 +64,10 @@ public class MsgXMLLoader {
 	private static IntField s_parseIntField(String name, String val) {
 		if (val == null) return new IntField(name);
 		else return new IntField(name, Integer.parseInt(val));
+	}
+	private static LongField s_parseLongField(String name, String val) {
+		if (val == null) return new LongField(name);
+		else return new LongField(name, Long.parseLong(val));
 	}
 	private static FloatField s_parseFloatField(String name, String val) {
 		if (val == null) return new FloatField(name);

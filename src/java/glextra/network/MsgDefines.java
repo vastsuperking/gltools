@@ -11,6 +11,17 @@ public class MsgDefines {
 	private HashMap<Byte, Msg> m_messageTypes = new HashMap<Byte, Msg>();
 	private HashMap<String, Msg> m_messageNameTypes = new HashMap<String, Msg>();
 	
+	public Collection<Msg> getAllDefs() { 
+		return m_messageTypes.values();
+	}
+
+	public Msg getDefinition(byte type) {
+		return m_messageTypes.get(type);
+	}
+	public Msg getDefinition(String name) {
+		return m_messageNameTypes.get(name);
+	}
+	
 	public void addDefinition(Msg msg) {
 		m_messageTypes.put(msg.getTypeByte(), msg);
 		m_messageNameTypes.put(msg.getTypeName(), msg);
@@ -19,13 +30,6 @@ public class MsgDefines {
 		for (Msg m : msgs) {
 			addDefinition(m);
 		}
-	}
-	
-	protected Msg getDefinition(byte type) {
-		return m_messageTypes.get(type);
-	}
-	protected Msg getDefinition(String name) {
-		return m_messageNameTypes.get(name);
 	}
 	
 	public void loadXML(InputStream in) throws IOException {

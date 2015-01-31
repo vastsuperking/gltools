@@ -1,11 +1,11 @@
 package glextra.network.test;
 
+import glextra.network.Msg;
+import glextra.network.MsgDefines;
 import glextra.network.Field.ByteField;
 import glextra.network.Field.FloatField;
 import glextra.network.Field.IntField;
 import glextra.network.Field.StringField;
-import glextra.network.Msg;
-import glextra.network.MsgDefines;
 import glextra.network.tcp.TCPConnection;
 import glextra.network.tcp.TCPServer;
 import glextra.network.tcp.TCPServerListener;
@@ -36,7 +36,7 @@ public class MsgServerTest {
 			@Override
 			public void clientConnected(TCPConnection client) {
 				System.out.println("Client connected: " + client);
-				client.listen();
+				client.setDefines(m_defines);
 				try {
 					client.write(send);
 				} catch (IOException e) {

@@ -8,6 +8,7 @@ import glextra.network.MsgOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashSet;
 
 public class TCPClient implements TCPConnection, Runnable {
@@ -121,6 +122,12 @@ public class TCPClient implements TCPConnection, Runnable {
 					for (TCPConnectionListener l : m_listeners) l.msg(m);;
 				}
 				if (Thread.currentThread().isInterrupted()) break;
+			} catch(SocketException e) {
+				//The connection has closed, exit silently
+				synchronized(m_listeners) {
+					for (TCPConnectionListener l : m_listeners) l.connectionClosed();;
+				}
+				return;
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.out.println("Error! Stopping listening!");
